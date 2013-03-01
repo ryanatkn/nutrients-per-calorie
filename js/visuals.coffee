@@ -50,22 +50,16 @@ visuals.factory "Styles", ->
   }
 
 
-# Draws a pie chart from `data` on the `element` with the given `radius`.
+# Draws a pie chart from `data` on the `vis` with the given `radius`.
 # Returns the d3 visualization.
-drawPieChart = (data, element, radius, options = {}) ->
-  {width, height, xOffset, yOffset} = options
-  width ?= radius * 2
-  height ?= radius * 2
-  xOffset ?= 0
-  yOffset ?= 0
+drawPieChart = (vis, data, radius, options = {}) ->
+  {radius, x, y} = options
+  x ?= radius
+  y ?= radius
 
-  vis = d3.select(element[0])
-    .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-    .append("g")
-      .data([data])
-      .attr("transform", "translate(#{radius + xOffset}, #{radius + yOffset})")
+  vis.append("g")
+    .data([data])
+    .attr("transform", "translate(#{x}, #{y})")
 
   arc = d3.svg.arc()
     .outerRadius(radius)
@@ -94,6 +88,11 @@ visuals.directive "foodPieChart", (Styles) ->
     food: "="
   link: (scope, element, attrs) ->
 
+    vis = d3.select(element[0])
+      .append("svg")
+        .attr("width", Styles.pieChartRadius * 2)
+        .attr("height", Styles.pieChartRadius * 2)
+
     data = [
       value: scope.food["Total lipid (fat)"]
       color: Styles.colors.red
@@ -108,7 +107,7 @@ visuals.directive "foodPieChart", (Styles) ->
       color: Styles.colors.lightGray
     ]
 
-    drawPieChart data, element, Styles.pieChartRadius
+    drawPieChart vis, data, Styles.pieChartRadius
 
 
 # Displays a labeled pie chart to explain how to interpret them.
@@ -129,12 +128,15 @@ visuals.directive "foodPieChartLegend", (Styles) ->
     ]
 
     xOffset = 50
+    
+    vis = d3.select(element[0])
+      .append("svg")
+        .attr("width", Styles.pieChartRadius * 2 + xOffset)
+        .attr("height", Styles.pieChartRadius * 2)
 
     # Draw the pie chart
-    vis = drawPieChart data, element, Styles.pieChartRadius,
-      width: Styles.pieChartRadius * 2 + xOffset
-      height: Styles.pieChartRadius * 2
-      xOffset: xOffset
+    drawPieChart vis, data, Styles.pieChartRadius, 
+      x: Styles.pieChartRadius + xOffset
 
     # Draw labels on the pie chart
     labelData = [

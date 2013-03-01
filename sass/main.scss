@@ -1,0 +1,115 @@
+@import "./sassy";
+
+[ng-cloak] {
+  display: none;
+}
+
+#header-container {
+  position: absolute;
+  z-index: 1;
+  top: 45px;
+  left: $body-padding;
+  padding-left: $horizontal-padding;
+}
+
+.food-list {
+  width: 900px;
+}
+
+.food-list-item {
+  padding: 2px $horizontal-padding;
+  @include selectable;
+
+  .food-label {
+    width: 100%;
+  }
+
+  .food-group {
+    float: right;
+  }
+}
+
+.search-form {
+  padding: 0 $horizontal-padding $horizontal-padding;
+}
+
+
+$comparison-list-width: 280px;
+$comparison-header-height: 140px; // comparisonHeaderHeight in visuals.coffee
+$comparison-row-height: 46px; // comparisonRowHeight in visuals.coffee
+
+food-comparison {
+  position: relative;
+}
+
+.food-comparison-list {
+  width: $comparison-list-width;
+  position: absolute;
+  left: 0;
+  top: $comparison-header-height;
+  z-index: 1;
+
+  li {
+    position: relative;
+    height: $comparison-row-height;
+  }
+
+  .food-label {
+    height: 100%;
+    width: 100%;
+    padding-right: 52px;
+    display: table; // vertical centering hack for variable height children
+
+    span {
+      display: table-cell;
+      vertical-align: middle;
+      @include selectable;
+      padding: 0 $horizontal-padding;
+    }
+  }
+
+  .pie-chart-wrapper {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-top: 3px;
+    padding-right: $horizontal-padding;
+  }
+
+  .remove-button {
+    position: absolute;
+    left: -16px;
+    top: 14px;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    padding-left: $horizontal-padding;
+
+    &:hover {
+      font-weight: bold;
+      color: darken($red, 20%);
+    }
+  }
+}
+
+.food-comparison-graph {
+  margin-left: $comparison-list-width;
+}
+
+food-pie-chart-legend {
+  text-align: right;
+  position: absolute;
+  right: $horizontal-padding;
+  top: 3px;
+}
+
+.clear-selected-button {
+  position: relative;
+  top: 10px;
+  margin-left: $horizontal-padding;
+}
+
+.nutrient-label {
+  cursor: pointer;
+}

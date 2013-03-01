@@ -1,0 +1,25 @@
+@import "sassy-variables";
+
+@mixin border($color: $border-color) {
+  border: 1px solid $color;
+}
+
+@mixin selectable {
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: $border-radius;
+
+  &:hover {
+    background-color: $highlight-hover-color;
+    border-color: $highlight-color;
+  }
+
+  &.selected {
+    background-color: $highlight-color;
+    border-color: $highlight-border-color;
+  }
+
+  &:active {
+    background-color: $highlight-active-color;
+  }
+}

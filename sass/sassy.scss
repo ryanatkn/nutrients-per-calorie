@@ -1,0 +1,86 @@
+@import "compass/reset";
+@import "compass/css3";
+@import "compass/typography";
+@import "compass/utilities";
+@import "sassy-variables";
+@import "sassy-mixins";
+@import "sassy-classes";
+
+* {
+  box-sizing: border-box;
+}
+ 
+body {
+  padding: $body-padding;
+  font-size: $font-size;
+  line-height: $line-height;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1 {
+  font-size: 3em;
+  line-height: 1em;
+  margin-bottom: 0.2em;
+}
+h2 {
+  font-size: 2em;
+  line-height: 1em;
+  margin-bottom: 0.2em;
+}
+h3 {
+  font-size: 1.5em;
+  line-height: 1em;
+  margin-bottom: 0.2em;
+}
+
+input[type="text"] {
+  font-size: $font-size;
+  padding: 6px 6px;
+  margin: 0;
+  border-radius: $border-radius;
+  @include border;
+  outline: none;
+  width: 268px;
+
+  &:hover {
+    border-color: $border-color-active;
+  }
+
+  &:focus {
+    border-color: $border-color-master;
+  }
+}
+
+input[type="checkbox"] {
+  position: relative;
+  top: 1px;
+}
+
+button {
+  font-size: $font-size;
+  cursor: pointer;
+  padding: 6px 8px;
+  margin: 0;
+  border-radius: $border-radius;
+  @include border;
+  @include background-image(linear-gradient(#eee, #fff 15%, #eee));
+  color: #444;
+
+  &:hover {
+    border-color: $border-color-active;
+    @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.1));
+    @include background-image(linear-gradient(#e7e7e7, #fff 15%, #e7e7e7));
+  }
+
+  &:active {
+    @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.08) inset, 0 0 8px 1px rgba(0, 0, 0, 0.1) inset);
+  }
+}
+
+// Pseudo classes don't support a comma between selectors, and -moz is still required for Firefox
+::selection {
+  background: $master-color;
+}
+::-moz-selection {
+  background: $master-color;
+}

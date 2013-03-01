@@ -1,0 +1,24 @@
+$font-size: 14px;
+$line-height: 15px;
+$body-padding: 28px;
+$horizontal-padding: 6px;
+
+$red: rgb(255, 106, 97);
+$yellow: rgb(255, 212, 113);
+$green: rgb(148, 228, 109);
+$blue: rgb(110, 210, 239);
+$violet: rgb(208, 146, 244);
+
+$rainbow: $red mix($red, $yellow) $yellow mix($yellow, $green) $green
+  mix($green, $blue) $blue mix($blue, $violet) $violet mix($violet, $red);
+
+$master-color: $blue;
+$highlight-color: $blue;
+$highlight-hover-color: transparentize($highlight-color, 0.4);
+$highlight-active-color: transparentize($highlight-color, 0.2);
+$highlight-border-color: darken($highlight-color, 20%);
+
+$border-radius: 2px;
+$border-color: #bbb;
+$border-color-active: darken($border-color, 10%);
+$border-color-master: darken($master-color, 20%);

@@ -1,0 +1,19 @@
+<ul class="food-comparison-list" ng-show="foodData.selectedFoods.length">
+  <li ng-repeat="food in foodData.selectedFoods" class="food-compare-item">
+    <div ng-click="foodData.toggleSelect(food)" class="remove-button">-</div>
+    <div class="food-label">
+      <span onclick="javascript: alert('TODO: single food detail')">{{food.Long_Desc}}</span>
+    </div>
+    <div class="pie-chart-wrapper">
+      <food-pie-chart food="food"></food-pie-chart>
+    </div>
+  </li>
+  <li class="food-compare-item">
+    <button class="clear-selected-button" ng-click="foodData.clearSelected()" ng-show="foodData.selectedFoods.length">
+      Remove all
+    </button>
+    <food-pie-chart-legend></food-pie-chart-legend>
+  </li>
+</ul>
+
+<div class="food-comparison-graph"></div>

@@ -16,6 +16,11 @@ visuals.factory "Styles", ->
   blueViolet = d3.interpolateRgb(blue, violet)(0.5)
   violetRed = d3.interpolateRgb(violet, red)(0.5)
 
+  rainbow = [
+    green, greenBlue, blue, blueViolet, violet,
+    violetRed, red, redYellow, yellow, yellowGreen
+  ]
+
   comparisonRowHeight = 46
 
   Styles = {
@@ -23,9 +28,10 @@ visuals.factory "Styles", ->
     smallFontLineHeight: 13
     largeFontSize: 28
     horizontalPadding: 6
-    comparisonHeaderHeight: 140 # $comparison-header-height in main.scss
+    comparisonHeaderHeight: 80 # $comparison-header-height in main.scss
     comparisonRowHeight # $comparison-row-height in main.scss
     comparisonCellWidth: 20
+    comparisonHorizontalSpacing: 44
     pieChartRadius: (comparisonRowHeight / 2) - 3
     colors: {
       red
@@ -38,10 +44,11 @@ visuals.factory "Styles", ->
       blueViolet
       violet
       violetRed
-      rainbow: [
-        green, greenBlue, blue, blueViolet, violet,
-        violetRed, red, redYellow, yellow, yellowGreen
-      ]
+      rainbow
+      getRainbowColor: (i) ->      
+        count = rainbow.length
+        i -= count while i >= count
+        rainbow[i]
       lightGray: "#bbb"
       blueText: d3.rgb(blue).darker(0.3) # for readability of small text
       greenText: d3.rgb(green).darker(0.3)
@@ -50,251 +57,202 @@ visuals.factory "Styles", ->
   }
 
 
-# Draws a pie chart from `data` on the `vis` with the given `radius`.
-# Returns the d3 visualization.
-drawPieChart = (vis, data, radius, options = {}) ->
-  {radius, x, y} = options
-  x ?= radius
-  y ?= radius
+# Drawing helpers
+visuals.factory "DrawingHelpers", (Styles, FoodData) ->
 
-  vis.append("g")
-    .data([data])
-    .attr("transform", "translate(#{x}, #{y})")
+  # Draws a pie chart from `data` on the `vis` with the given `radius`.
+  # Returns the d3 visualization.
+  drawPieChart = (vis, data, radius, options = {}) ->
+    {x, y} = options
+    x ?= radius
+    y ?= radius
 
-  arc = d3.svg.arc()
-    .outerRadius(radius)
+    g = vis.append("g")
+      .data([data])
+      .attr("transform", "translate(#{x}, #{y})")
 
-  pie = d3.layout.pie()
-    .value((d) -> d.value)
-    .sort((d) -> data.indexOf(d))
+    arc = d3.svg.arc()
+      .outerRadius(radius)
 
-  arcs = vis.selectAll("g.slice")
-    .data(pie)
-    .enter()
-      .append("g")
-        .attr("class", "slice")
+    pie = d3.layout.pie()
+      .value((d) -> d.value)
+      .sort((d) -> data.indexOf(d))
 
-  arcs.append("path")
-    .attr("fill", (d, i) -> d.data.color)
-    .attr("d", arc)
+    arcs = g.selectAll("g.slice")
+      .data(pie)
+      .enter()
+        .append("g")
+          .attr("class", "slice")
 
-  vis
+    arcs.append("path")
+      .attr("fill", (d, i) -> d.data.color)
+      .attr("d", arc)
 
+  # Draws a vertical list of pie charts and a legend for the given foods
+  drawPieCharts = (vis, foods) ->
+    svg = vis.append("svg")
+      .attr("height", vis.attr("height"))
+      .attr("width", (Styles.pieChartRadius * 2) + Styles.comparisonHorizontalSpacing)
 
-# Displays in a pie chart the % calorie contributions of protein, fat, carbs, and alcohol for a `food`.
-visuals.directive "foodPieChart", (Styles) ->
-  restrict: "E"
-  scope:
-    food: "="
-  link: (scope, element, attrs) ->
-
-    vis = d3.select(element[0])
-      .append("svg")
-        .attr("width", Styles.pieChartRadius * 2)
-        .attr("height", Styles.pieChartRadius * 2)
-
-    data = [
-      value: scope.food["Total lipid (fat)"]
-      color: Styles.colors.red
-    ,
-      value: scope.food["Protein"]
-      color: Styles.colors.blue
-    ,
-      value: scope.food["Carbohydrate, by difference"]
-      color: Styles.colors.green
-    ,
-      value: scope.food["Alcohol, ethyl"]
-      color: Styles.colors.lightGray
-    ]
-
-    drawPieChart vis, data, Styles.pieChartRadius
-
-
-# Displays a labeled pie chart to explain how to interpret them.
-visuals.directive "foodPieChartLegend", (Styles) ->
-  restrict: "E"
-  scope: {}
-  link: (scope, element, attrs) ->
-    
-    data = [
-      value: 0.3333
-      color: Styles.colors.red
-    ,
-      value: 0.3333
-      color: Styles.colors.blue
-    ,
-      value: 0.3333
-      color: Styles.colors.green
-    ]
-
-    xOffset = 50
-    
-    vis = d3.select(element[0])
-      .append("svg")
-        .attr("width", Styles.pieChartRadius * 2 + xOffset)
-        .attr("height", Styles.pieChartRadius * 2)
-
-    # Draw the pie chart
-    drawPieChart vis, data, Styles.pieChartRadius, 
-      x: Styles.pieChartRadius + xOffset
-
-    # Draw labels on the pie chart
+    # Displays the pie chart labels to explain how to interpret them.
     labelData = [
-      text: "protein"
-      color: Styles.colors.blueText
+      text: "fat"
+      color: Styles.colors.redText
     ,
       text: "carbs"
       color: Styles.colors.greenText
     ,
-      text: "fat"
-      color: Styles.colors.redText
+      text: "protein"
+      color: Styles.colors.blueText
     ]
-
-    vis.selectAll("text.pie-chart-legend-label")
+    svg.selectAll("text.pie-chart-legend-label")
       .data(labelData)
       .enter()
         .append("text")
         .attr("class", "pie-chart-legend-label")
-        .attr("x", -Styles.pieChartRadius - Styles.horizontalPadding)
-        .attr("y", (d, i) -> i * Styles.smallFontLineHeight - 8)
-        .attr("text-anchor", "end")
+        .attr("x", (parseInt(svg.attr("width")) - Styles.comparisonHorizontalSpacing) / 2)
+        .attr("y", (d, i) -> (i * Styles.smallFontLineHeight) + Styles.comparisonRowHeight)
+        .attr("text-anchor", "middle")
         .text((d) -> d.text)
         .style("font-size", Styles.smallFontSize)
         .style("fill", (d) -> d.color)
 
+    # Draw each item in the list
+    for foodIndex in [0...foods.length]
+      food = foods[foodIndex]
+      foodY = Styles.comparisonHeaderHeight + foodIndex * Styles.comparisonRowHeight
+
+      # Draw the pie chart
+      pieChartData = [
+        value: food["Total lipid (fat)"]
+        color: Styles.colors.red
+      ,
+        value: food["Protein"]
+        color: Styles.colors.blue
+      ,
+        value: food["Carbohydrate, by difference"]
+        color: Styles.colors.green
+      ,
+        value: food["Alcohol, ethyl"]
+        color: Styles.colors.lightGray
+      ]
+      drawPieChart svg, pieChartData, Styles.pieChartRadius,
+        x: Styles.pieChartRadius
+        y: foodY + Styles.pieChartRadius
+
+  # Draws a set of nutrients
+  drawNutrients = (vis, foods, nutrients) ->
+    vis.append("text")
+      .attr("y", parseInt(vis.attr("height")) - 12)
+      .attr("x", (parseInt(vis.attr("width")) - Styles.comparisonHorizontalSpacing) / 2)
+      .attr("class", "nutrient-section-label")
+      .attr("text-anchor", "middle")
+      .style("font-size", Styles.largeFontSize)
+      .style("fill", nutrients.color)
+      .text(nutrients.text)
+
+    # Draw each nutrient label
+    getLabelX = (i) -> i * Styles.comparisonCellWidth + 9
+    labelY = Styles.comparisonHeaderHeight + Styles.horizontalPadding - 8
+    vis.selectAll("text.nutrient-label")
+      .data(nutrients)
+      .enter()
+        .append("text")
+          .attr("onclick", "javascript: alert('TODO: nutrient detail')")
+          .attr("class", "nutrient-label")
+          .attr("transform", (d, i) -> 
+            "rotate(-45 #{getLabelX(i)} #{labelY})")
+          .attr("x", (d, i) -> getLabelX(i))
+          .attr("y", labelY)
+          .style("font-size", Styles.smallFontSize)
+          .style("fill", (d, i) -> Styles.colors.getRainbowColor(i))
+          .text((d) -> FoodData.getKeyAlias(d))
+
+     # Draw each item in the list
+    for foodIndex in [0...foods.length]
+      food = foods[foodIndex]
+      foodY = Styles.comparisonHeaderHeight + (foodIndex * Styles.comparisonRowHeight)
+
+      # Draw each bar graph data point
+      for keyIndex in [0...nutrients.length]
+        key = nutrients[keyIndex]
+        value = food[key + "_Compared"]
+        
+        # Draw nothing if no data
+        continue unless value?
+
+        # Cycle through the rainbow colors
+        color = Styles.colors.getRainbowColor(keyIndex)
+
+        nutrientX = keyIndex * Styles.comparisonCellWidth
+        
+        # Create the background
+        vis.append("rect")
+          .attr("x", nutrientX)
+          .attr("y", foodY)
+          .attr("width", Styles.comparisonCellWidth)
+          .attr("height", Styles.comparisonRowHeight)
+          .attr("fill", "#000")
+          .attr("opacity", 0.08)
+          .attr("title", key)
+        
+        # Create the bar
+        vis.append("rect")
+          .attr("x", nutrientX + (Styles.comparisonCellWidth / 2) - (((Styles.comparisonCellWidth * value)) / 2))
+          .attr("y", foodY)
+          .attr("width", Styles.comparisonCellWidth * value)
+          .attr("height", Styles.comparisonRowHeight)
+          .attr("fill", color)
+          .attr("title", key)
+
+  # Draws every array of nutrients in `groups`
+  drawNutrientGroups = (vis, foods, groups) ->
+    for nutrients in groups
+      svg = vis.append("svg")
+        .attr("width", (nutrients.length * Styles.comparisonCellWidth) + Styles.comparisonHorizontalSpacing)
+        .attr("height", parseInt(vis.attr("height")))
+      DrawingHelpers.drawNutrients svg, foods, nutrients
+    
+  DrawingHelpers = {
+    drawPieChart
+    drawPieCharts
+    drawNutrients
+    drawNutrientGroups
+  }
+  
 
 # Displays a list of foods' nutrients relative to one another.
-visuals.directive "foodComparison", (Styles, FoodData) ->
-
-  barGraphKeys = FoodData.vitaminKeys.concat(FoodData.mineralKeys).concat(FoodData.aminoAcidKeys)
-
+visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
   restrict: "E"
   templateUrl: "partials/food-comparison.html"
   scope:
     foodData: "="
   link: (scope, element, attrs) ->
 
-    vis = d3.select(element[0]).select(".food-comparison-graph")
-      .append("svg")
-        .attr("width", barGraphKeys.length * Styles.comparisonCellWidth)
-        .attr("height", Styles.comparisonHeaderHeight)
+    width = (FoodData.nutrientKeys.length * Styles.comparisonCellWidth) + Styles.horizontalPadding + Styles.pieChartRadius
+
+    vis = d3.select(element[0]).select(".food-comparison-graphs")
 
     render = ->
-      # Clear the visualization
       vis.selectAll("*").remove()
 
-      numSelected = scope.foodData.selectedFoods.length
+      foods = scope.foodData.selectedFoods
+      numSelected = foods.length
+      if !numSelected
+        vis.style "display", "none"
+        return
+      vis.style "display", "block"
 
-      # Set the height based on the number of selected foods
-      height = Styles.comparisonHeaderHeight + Styles.comparisonRowHeight * numSelected
-      
-      # Make room for the visualization key if there are items
-      if numSelected > 0
-        height += Styles.comparisonRowHeight
-      
-      vis.attr("height", height)
+      height = Styles.comparisonHeaderHeight + (Styles.comparisonRowHeight * (numSelected + 1))
+      vis.attr "height", height
 
-      return unless numSelected
+      DrawingHelpers.drawPieCharts vis, foods
 
-      # Draw each nutrient section label
-      vitaminsWidth = FoodData.vitaminKeys.length * Styles.comparisonCellWidth
-      mineralsWidth = FoodData.mineralKeys.length * Styles.comparisonCellWidth
-      aminoAcidsWidth = FoodData.aminoAcidKeys.length * Styles.comparisonCellWidth
-      nutrientSectionData = [
-        text: "vitamins"
-        color: Styles.colors.green
-        width: vitaminsWidth
-        x: 0
-        midpoint: vitaminsWidth / 2
-      ,
-        text: "minerals"
-        color: Styles.colors.violet
-        width: mineralsWidth
-        x: vitaminsWidth
-        midpoint: vitaminsWidth + (mineralsWidth / 2)
-      ,
-        text: "amino acids"
-        color: Styles.colors.blue
-        width: aminoAcidsWidth
-        x: vitaminsWidth + mineralsWidth
-        midpoint: vitaminsWidth + mineralsWidth + (aminoAcidsWidth / 2)
+      nutrientGroups = [ # TODO add a control to toggle these
+        FoodData.miscKeys, FoodData.vitaminKeys, FoodData.mineralKeys,
+        FoodData.aminoAcidKeys, FoodData.sugarKeys
       ]
-      vis.selectAll("text.nutrient-section-label")
-        .data(nutrientSectionData)
-        .enter()
-          .append("text")
-            .attr("y", height - 12)
-            .attr("x", (d) -> d.midpoint)
-            .attr("class", "nutrient-section-label")
-            .attr("text-anchor", "middle")
-            .style("font-size", Styles.largeFontSize)
-            .style("fill", (d) -> d.color)
-            .text((d) -> d.text)
-
-      # Draw the nutrient section demarcations
-      vis.selectAll("rect.nutrient-section-demarcation")
-        .data(nutrientSectionData)
-        .enter()
-          .append("rect")
-            .attr("y", height - Styles.comparisonRowHeight)
-            .attr("x", (d) -> d.x)
-            .attr("width", (d) -> d.width)
-            .attr("height", 3)
-            .style("fill", (d) -> d.color)
-
-      # Draw each nutrient label
-      vis.selectAll("text.nutrient-label")
-        .data(barGraphKeys)
-        .enter()
-          .append("text")
-            .attr("onclick", "javascript: alert('TODO: nutrient detail')")
-            .attr("class", "nutrient-label")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -Styles.comparisonHeaderHeight + Styles.horizontalPadding)
-            .attr("y", (d, i) -> i * Styles.comparisonCellWidth + 15)
-            .style("font-size", Styles.smallFontSize)
-            .text((d) -> FoodData.getKeyAlias(d))
-
-      # Draw each item in the list
-      for foodIndex in [0...numSelected]
-        food = scope.foodData.selectedFoods[foodIndex]
-
-        # Draw each data point
-        for keyIndex in [0...barGraphKeys.length]
-          key = barGraphKeys[keyIndex]
-          value = food[key + "_Compared"]
-          
-          # Draw nothing if no data
-          continue unless value?
-
-          # Cycle through the rainbow colors
-          rainbowIndex = keyIndex
-          rainbowCount = Styles.colors.rainbow.length
-          while rainbowIndex >= rainbowCount
-            rainbowIndex -= rainbowCount
-          color = Styles.colors.rainbow[rainbowIndex]
-
-          # Calculate the y position for this food
-          y = Styles.comparisonHeaderHeight + foodIndex * Styles.comparisonRowHeight
-          
-          # Create the background
-          vis.append("rect")
-            .attr("x", keyIndex * Styles.comparisonCellWidth)
-            .attr("y", y)
-            .attr("width", Styles.comparisonCellWidth)
-            .attr("height", Styles.comparisonRowHeight)
-            .attr("fill", color)
-            .attr("opacity", 0.5)
-            .attr("title", key)
-          
-          # Create the bar
-          vis.append("rect")
-            .attr("x", keyIndex * Styles.comparisonCellWidth)
-            .attr("y", y)
-            .attr("width", Styles.comparisonCellWidth * value)
-            .attr("height", Styles.comparisonRowHeight)
-            .attr("fill", color)
-            .attr("title", key)
+      DrawingHelpers.drawNutrientGroups vis, foods, nutrientGroups
 
     # Redraw when items are selected or deselected
     scope.$watch "foodData.selectedFoods.length", ->

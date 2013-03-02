@@ -8,14 +8,14 @@
 # [x] Compare n foods against one another.
 # [ ] What are the best sources of nutrient x?
 # [ ] What does food x look like in detail?
-# [ ] Do the above with food set x. (vegan, vegetarian, raw, etc)
+# [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
 
 
 app = angular.module("nutrients-per-calorie", ["visuals"])
 
 
 # Provides food data and related state from data/nutrients.csv and data/foods.csv
-app.factory "FoodData", ($rootScope) ->
+app.factory "FoodData", ($rootScope, Styles) ->
 
   # `allFoods` proxies data between `FoodData.foods` and `FoodData.selectedFoods`
   allFoods = {} # key is NDB_No
@@ -50,6 +50,7 @@ app.factory "FoodData", ($rootScope) ->
   ]
 
   keyAliases =
+    "Fiber, total dietary":           "Fiber"
     "Vitamin A, RAE":                 "Vitamin A" 
     "Vitamin C, total ascorbic acid": "Vitamin C"
     "Vitamin D (D2 + D3)":            "Vitamin D"
@@ -75,7 +76,15 @@ app.factory "FoodData", ($rootScope) ->
     "Alcohol, ethyl"
   ]
 
-  vitaminKeys = [
+  miscKeys = _.extend [
+    "Fiber, total dietary"
+    "Lutein + zeaxanthin"
+    "Choline, total"
+  ],
+    text: "misc"
+    color: Styles.colors.yellow
+
+  vitaminKeys = _.extend [
     "Vitamin A, RAE"
     "Vitamin C, total ascorbic acid"
     "Vitamin D (D2 + D3)"
@@ -88,11 +97,11 @@ app.factory "FoodData", ($rootScope) ->
     "Vitamin B-6"
     "Folate, total"
     "Vitamin B-12"
-    "Choline, total"
-    "Lutein + zeaxanthin"
-  ]
+  ],
+    text: "vitamins"
+    color: Styles.colors.green
 
-  mineralKeys = [
+  mineralKeys = _.extend [
     "Calcium, Ca"
     "Iron, Fe"
     "Magnesium, Mg"
@@ -101,9 +110,11 @@ app.factory "FoodData", ($rootScope) ->
     "Potassium, K"
     "Sodium, Na"
     "Zinc, Zn"
-  ]
+  ],
+    text: "minerals"
+    color: Styles.colors.violet
 
-  aminoAcidKeys = [
+  aminoAcidKeys = _.extend [
     "Histidine"
     "Isoleucine"
     "Leucine"
@@ -113,9 +124,25 @@ app.factory "FoodData", ($rootScope) ->
     "Threonine"
     "Tryptophan"
     "Valine"
-  ]
+  ],
+    text: "amino acids"
+    color: Styles.colors.blue
 
-  unusedKeys = _.difference(allKeys, macronutrientKeys, vitaminKeys, mineralKeys, aminoAcidKeys)
+  sugarKeys = _.extend [
+    "Fructose"
+    "Galactose"
+    "Glucose (dextrose)"
+    "Lactose"
+    "Maltose"
+    "Sucrose"
+    "Sugars, total"
+  ],
+    text: "sugars"
+    color: Styles.colors.red
+
+  nutrientKeys = _.union(miscKeys, vitaminKeys, mineralKeys, aminoAcidKeys, sugarKeys)
+
+  unusedKeys = _.difference(allKeys, macronutrientKeys, nutrientKeys)
 
   FoodData = {
     loaded: false
@@ -127,9 +154,12 @@ app.factory "FoodData", ($rootScope) ->
       includeFoodGroups: false
     
     macronutrientKeys
+    nutrientKeys
+    miscKeys
     vitaminKeys
     mineralKeys
     aminoAcidKeys
+    sugarKeys
 
     getKeyAlias: (key) ->
       keyAliases[key] or key

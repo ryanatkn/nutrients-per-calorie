@@ -4,16 +4,12 @@
     <div class="food-label">
       <span onclick="javascript: alert('TODO: single food detail')">{{food.Long_Desc}}</span>
     </div>
-    <div class="pie-chart-wrapper">
-      <food-pie-chart food="food"></food-pie-chart>
-    </div>
   </li>
   <li class="food-compare-item">
     <button class="clear-selected-button" ng-click="foodData.clearSelected()" ng-show="foodData.selectedFoods.length">
       Remove all
     </button>
-    <food-pie-chart-legend></food-pie-chart-legend>
   </li>
 </ul>
 
-<div class="food-comparison-graph"></div>
+<div class="food-comparison-graphs"></div>

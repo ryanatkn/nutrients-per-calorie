@@ -12,6 +12,8 @@ $violet: rgb(208, 146, 244);
 $rainbow: $red mix($red, $yellow) $yellow mix($yellow, $green) $green
   mix($green, $blue) $blue mix($blue, $violet) $violet mix($violet, $red);
 
+$black-text: #222;
+
 $master-color: $blue;
 $highlight-color: $blue;
 $highlight-hover-color: transparentize($highlight-color, 0.4);

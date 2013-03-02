@@ -5,10 +5,6 @@
 }
 
 #header-container {
-  position: absolute;
-  z-index: 1;
-  top: 45px;
-  left: $body-padding;
   padding-left: $horizontal-padding;
 }
 
@@ -34,8 +30,8 @@
 }
 
 
-$comparison-list-width: 280px;
-$comparison-header-height: 140px; // comparisonHeaderHeight in visuals.coffee
+$comparison-list-width: 230px;
+$comparison-header-height: 80px; // comparisonHeaderHeight in visuals.coffee
 $comparison-row-height: 46px; // comparisonRowHeight in visuals.coffee
 
 food-comparison {
@@ -52,12 +48,12 @@ food-comparison {
   li {
     position: relative;
     height: $comparison-row-height;
+    padding-right: $horizontal-padding;
   }
 
   .food-label {
     height: 100%;
     width: 100%;
-    padding-right: 52px;
     display: table; // vertical centering hack for variable height children
 
     span {
@@ -66,15 +62,6 @@ food-comparison {
       @include selectable;
       padding: 0 $horizontal-padding;
     }
-  }
-
-  .pie-chart-wrapper {
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding-top: 3px;
-    padding-right: $horizontal-padding;
   }
 
   .remove-button {
@@ -93,15 +80,13 @@ food-comparison {
   }
 }
 
-.food-comparison-graph {
-  margin-left: $comparison-list-width;
-}
+.food-comparison-graphs {
+  white-space: nowrap;
+  margin-left: $comparison-list-width + $horizontal-padding;
 
-food-pie-chart-legend {
-  text-align: right;
-  position: absolute;
-  right: $horizontal-padding;
-  top: 3px;
+  svg {
+    margin-left: -4px; // to prevent text disappearance problems
+  }
 }
 
 .clear-selected-button {

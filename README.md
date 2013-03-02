@@ -3,7 +3,7 @@ Nutrients per Calorie
 
 an interface to the nutritional data available at the [USDA National Nutrient Database](http://ndb.nal.usda.gov/)
 
-[Try it here!](http://ryanatkn.github.com/nutrients-per-calorie) (tested only with Chrome, is a little wonky in Firefox)
+[Try it here!](http://ryanatkn.github.com/nutrients-per-calorie) (works best with Chrome, is a little wonky in Firefox)
 
 written with [Angular](http://angularjs.org/) and [d3](http://d3js.org/)
 

@@ -1,5 +1,5 @@
-Nutrients Per Calorie
-=====================
+:dolphin: Nutrients Per Calorie
+===============================
 
 *an interface to the nutritional data available at the [USDA National Nutrient Database](http://ndb.nal.usda.gov/)*
 
@@ -8,8 +8,8 @@ Nutrients Per Calorie
 *made with [Angular](http://angularjs.org/) and [d3](http://d3js.org/)*
 
 
-How to run locally
-==================
+:elephant: How to run locally
+=============================
 
 1. Download and unzip [everything](https://github.com/ryanatkn/nutrients-per-calorie/archive/master.zip).
 
@@ -22,8 +22,8 @@ How to run locally
 4. Compare foods!
 
 
-How to make changes
-===================
+:monkey: How to make changes
+============================
 
 1. You'll need [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/). 
 
@@ -32,8 +32,8 @@ How to make changes
   <pre>bash ba.sh</pre>
 
 
-License
-=======
+:snake: License
+===============
 
 The MIT License (MIT)
 

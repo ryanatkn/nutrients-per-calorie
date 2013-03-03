@@ -16,17 +16,21 @@
 
 <div ng-app="nutrients-per-calorie">
 
-  <div ng-controller="MainCtrl" ng-cloak>
+  <div ng-controller="MainCtrl" id="wrapper" ng-cloak>
   
     <div id="header-container">
-      <h1>Nutrients Per Calorie</h1>
-      <h2 ng-show="foodData.loaded">{{getSelectedText()}}</h2>
-      <h2 ng-show="!foodData.loaded">loading the database...</h2>
+      <h1 id="title">Nutrients Per Calorie</h1>
+      <div id="nav-container">
+        <h3 id="loading-message" ng-show="!foodData.loaded">Loading</h3>
+        <ul class="tabs" ng-show="foodData.loaded">
+          <li ng-repeat="navLink in navLinks" ng-class="{active: navLinks.isActive(navLink)}">
+            <a href="{{navLink.href}}">{{navLink.text}}</a>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <food-comparison food-data="foodData" ng-show="foodData.loaded"></food-comparison>
-
-    <food-search food-data="foodData" ng-show="foodData.loaded"></food-search>
+    <ng-view ng-show="foodData.loaded"></ng-view>
 
   </div>
   
@@ -42,6 +46,7 @@
 -->
 <script src="js/app.js"></script>
 <script src="js/visuals.js"></script>
+<script src="js/data.js"></script>
 
 </body>
 

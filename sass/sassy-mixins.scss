@@ -23,3 +23,14 @@
     background-color: $highlight-active-color;
   }
 }
+
+@mixin rainbow {
+  $length: length($rainbow);
+  $i: 1;
+  @while $i <= $length {
+    :nth-child(#{$length}n + #{$i}) {
+      background-color: nth($rainbow, $i);
+    }
+    $i: $i + 1;
+  }
+}

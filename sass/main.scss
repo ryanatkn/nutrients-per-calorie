@@ -4,12 +4,36 @@
   display: none;
 }
 
+#wrapper {
+  position: relative;
+}
+
 #header-container {
-  padding-left: $horizontal-padding;
+  white-space: nowrap;
+  padding-bottom: $body-padding;
+}
+
+#title {
+  display: inline-block;
+}
+
+#nav-container {
+  display: inline-block;
+  position: relative;
+  left: 20px;
+}
+
+#loading-message {
+  width: $tab-width;
+  height: $tab-height;
+  line-height: $tab-height;
+  border-bottom: 2px dashed $black-text;
+  opacity: $faded-opacity;
+  text-align: center;
 }
 
 .food-list {
-  width: 900px;
+  width: 976px;
 }
 
 .food-list-item {
@@ -97,4 +121,20 @@ food-comparison {
 
 .nutrient-label {
   cursor: pointer;
+}
+
+.text-with-icon {
+  $icon-size: 48px;
+  position: relative;
+  padding-left: $icon-size + $horizontal-padding * 2;
+  min-height: $icon-size;
+  margin-bottom: $font-size * 2;
+
+  img {
+    width: $icon-size;
+    height: $icon-size;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 }

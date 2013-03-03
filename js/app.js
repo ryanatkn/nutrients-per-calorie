@@ -50,20 +50,20 @@
     return $scope.navLinks = _.extend([
       {
         text: "Compare",
-        href: "/#/compare"
+        href: "#/compare"
       }, {
         text: "Foods",
-        href: "/#/foods"
+        href: "#/foods"
       }, {
         text: "Nutrients",
-        href: "/#/nutrients"
+        href: "#/nutrients"
       }, {
         text: "About",
-        href: "/#/about"
+        href: "#/about"
       }
     ], {
       isActive: function(navLink) {
-        return navLink.href === "/#" + $location.path();
+        return navLink.href === "#" + $location.path();
       }
     });
   });

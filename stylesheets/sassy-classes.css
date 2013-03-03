@@ -1,40 +1,40 @@
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 1) {
   background-color: #ff6a61;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 2) {
   background-color: #ff9f69;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 3) {
   background-color: #ffd471;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 4) {
   background-color: #c9dc6f;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 5) {
   background-color: #94e46d;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 6) {
   background-color: #81dbae;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 7) {
   background-color: #6ed2ef;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 8) {
   background-color: #9fb2f1;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 9) {
   background-color: #d092f4;
 }
-/* line 8, ../sass/sassy-classes.scss */
+/* line 31, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 10) {
   background-color: #e77eaa;
 }

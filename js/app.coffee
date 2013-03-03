@@ -59,19 +59,19 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
 
   $scope.navLinks = _.extend [
     text: "Compare"
-    href: "/#/compare"
+    href: "#/compare"
   ,
     text: "Foods"
-    href: "/#/foods"
+    href: "#/foods"
   ,
     text: "Nutrients"
-    href: "/#/nutrients"
+    href: "#/nutrients"
   ,
     text: "About"
-    href: "/#/about"
+    href: "#/about"
   ],
     isActive: (navLink) ->
-      navLink.href is "/#" + $location.path()
+      navLink.href is "#" + $location.path()
 
 
 # Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true

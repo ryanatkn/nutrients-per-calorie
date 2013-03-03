@@ -2,7 +2,7 @@
 (function() {
   var visuals;
 
-  visuals = angular.module("visuals", []);
+  visuals = angular.module("food-visuals", []);
 
   visuals.factory("Styles", function() {
     var Styles, blue, blueViolet, comparisonRowHeight, green, greenBlue, rainbow, red, redYellow, violet, violetRed, yellow, yellowGreen;

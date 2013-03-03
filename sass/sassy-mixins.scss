@@ -4,6 +4,17 @@
   border: 1px solid $color;
 }
 
+@mixin rainbow {
+  $length: length($rainbow);
+  $i: 1;
+  @while $i <= $length {
+    :nth-child(#{$length}n + #{$i}) {
+      background-color: nth($rainbow, $i);
+    }
+    $i: $i + 1;
+  }
+}
+
 @mixin selectable {
   cursor: pointer;
   border: 1px solid transparent;
@@ -21,16 +32,5 @@
 
   &:active {
     background-color: $highlight-active-color;
-  }
-}
-
-@mixin rainbow {
-  $length: length($rainbow);
-  $i: 1;
-  @while $i <= $length {
-    :nth-child(#{$length}n + #{$i}) {
-      background-color: nth($rainbow, $i);
-    }
-    $i: $i + 1;
   }
 }

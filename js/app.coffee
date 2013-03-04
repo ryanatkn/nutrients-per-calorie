@@ -68,7 +68,7 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
 
   $scope.data =
     compare:
-      query: # TODO MOVE
+      query: # TODO MOVE if we can figure out how to persist state on each page, separately...
         text: ""
         includeFoodGroups: false
       selectedFoods: []
@@ -85,7 +85,7 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
           FoodData.findFoodById(food.NDB_No).selected = false
         @selectedFoods = []
     foods:
-      query: # TODO MOVE
+      query: # TODO MOVE if we can figure out how to persist state on each page, separately...
         text: ""
         includeFoodGroups: false
       selectedFood: null
@@ -97,7 +97,7 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
         else
           @selectedFood = _.clone(food)
     nutrients:
-      query: # TODO MOVE
+      query: # TODO MOVE if we can figure out how to persist state on each page, separately...
         text: ""
         includeFoodGroups: false
       selectedNutrient: null
@@ -109,11 +109,16 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
         else
           @selectedNutrient = _.clone(nutrient)
       getNutrientData: (food) ->
-        console.log "GET DATA", food, @selectedNutrient if !food
         if @selectedNutrient
           food[@selectedNutrient.NutrDesc]
         else
           null
+      orderBy: (food) ->
+        value = food[$scope.data.nutrients.selectedNutrient?.NutrDesc]
+        if value?
+          value
+        else
+          -1
 
 
 app.controller "CompareCtrl", ($scope, $routeParams) ->

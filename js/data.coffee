@@ -40,7 +40,10 @@ data.factory "FoodData", ($rootScope, Styles) ->
   ]
 
   keyAliases =
+    "Total lipid (fat)":              "Fat"
+    "Carbohydrate, by difference":    "Carbohydrate"
     "Fiber, total dietary":           "Fiber"
+    "Alcohol, ethyl":                 "Alcohol"
     "Vitamin A, RAE":                 "Vitamin A" 
     "Vitamin C, total ascorbic acid": "Vitamin C"
     "Vitamin D (D2 + D3)":            "Vitamin D"
@@ -57,7 +60,6 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Sodium, Na":                     "Sodium"
     "Zinc, Zn":                       "Zinc"
     "Glucose (dextrose)":             "Glucose"
-    "Total lipid (fat)":              "Fat"
 
   comparedKeys = _.difference(allKeys, ["NDB_No", "Long_Desc", "FdGrp_Desc"])
 
@@ -197,7 +199,10 @@ data.factory "FoodData", ($rootScope, Styles) ->
       calories = item[calorieKey]
       for k, v of item
         if typeof v is "number" and not _.contains(ignoredKeys, k)
-          item[k] = v / calories
+          if calories
+            item[k] = v / calories
+          else
+            item[k] = v # water...
 
       # Convert fat, protein, carbohydrate, and alcohol to percentages of the whole
       calculatedCalorieKey = "Calories, calculated"

@@ -56,6 +56,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Potassium, K":                   "Potassium"
     "Sodium, Na":                     "Sodium"
     "Zinc, Zn":                       "Zinc"
+    "Glucose (dextrose)":             "Glucose"
+    "Total lipid (fat)":              "Fat"
 
   comparedKeys = _.difference(allKeys, ["NDB_No", "Long_Desc", "FdGrp_Desc"])
 
@@ -148,9 +150,6 @@ data.factory "FoodData", ($rootScope, Styles) ->
     aminoAcidKeys
     sugarKeys
 
-    getKeyAlias: (key) ->
-      keyAliases[key] or key
-
     findNutrientById: (Nutr_No) -> _.find(@nutrients, (n) -> n.Nutr_No is Nutr_No)
 
     findFoodById: (NDB_No) -> _.find(@foods, (f) -> f.NDB_No is NDB_No)
@@ -176,6 +175,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     data = {}
     for item in rawNutrients
       data[item.NutrDesc] = item
+      item.text = keyAliases[item.NutrDesc] or item.NutrDesc
     data
 
   # Prepare food data using the formula nutrients/calories

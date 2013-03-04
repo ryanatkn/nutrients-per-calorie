@@ -51,6 +51,8 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
   $scope.navLinks = _.extend [
     text: "Compare"
     href: routes.compare
+    getHash: -> 
+      routes.compare + $scope.data.compare.selectedFoods.join("+")
   ,
     text: "Foods"
     href: routes.foods
@@ -70,7 +72,6 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
       query:
         text: ""
         includeFoodGroups: false
-      getHash: -> routes.compare + @selectedFoods.join("+")
       selected: (food) ->
         !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
       toggle: (food) ->
@@ -91,13 +92,19 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
       selected: (food) ->
         @selectedFood?.NDB_No is food?.NDB_No
       toggle: (food) ->
-        food = _.clone(food)
         if @selected(food)
           @selectedFood = null
         else
           @selectedFood = _.clone(food)
     nutrients:
-      selected: null
+      selectedNutrient: null
+      selected: (nutrient) ->
+        nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
+      toggle: (nutrient) ->
+        if @selected(nutrient)
+          @selectedNutrient = null
+        else
+          @selectedNutrient = _.clone(nutrient)
 
 
 app.controller "CompareCtrl", ($scope, $routeParams) ->
@@ -115,13 +122,21 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData) ->
 
   
 # Provides a search box and food list from which foods can be selected.
-app.directive "foodSearch", (Styles) ->
+app.directive "foodSearch", ->
   restrict: "E"
   templateUrl: "partials/food-search.html"
   scope:
     foods: "="
     helpers: "="
     
+
+app.directive "nutrientList", ->
+  restrict: "E"
+  templateUrl: "partials/nutrient-list.html"
+  scope:
+    nutrients: "="
+    helpers: "="
+
 
 # Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true
 # The search text is case- and order-insensitive

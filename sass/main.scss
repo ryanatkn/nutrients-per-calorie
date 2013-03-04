@@ -36,18 +36,27 @@ $content-width: 976px;
 
 .food-list {
   width: $content-width;
+
+  .food-list-item {
+    padding: 2px $horizontal-padding;
+    @include selectable;
+
+    .food-label {
+      width: 100%;
+    }
+
+    .food-group {
+      float: right;
+    }
+  }
 }
 
-.food-list-item {
-  padding: 2px $horizontal-padding;
-  @include selectable;
+.nutrient-list {
+  width: 300px;
 
-  .food-label {
-    width: 100%;
-  }
-
-  .food-group {
-    float: right;
+  li {
+    padding: 2px $horizontal-padding;
+    @include selectable;
   }
 }
 

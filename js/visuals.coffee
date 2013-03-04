@@ -172,7 +172,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
           .attr("y", labelY)
           .style("font-size", Styles.smallFontSize)
           .style("fill", (d, i) -> Styles.colors.getRainbowColor(i))
-          .text((d) -> FoodData.getKeyAlias(d))
+          .text((d) -> FoodData.nutrients[d].text)
 
      # Draw each item in the list
     for foodIndex in [0...foods.length]

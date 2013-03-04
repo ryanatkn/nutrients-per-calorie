@@ -10,9 +10,6 @@ data = angular.module("food-data", [])
 # Provides food data and related state from data/nutrients.csv and data/foods.csv
 data.factory "FoodData", ($rootScope, Styles) ->
 
-  # `allFoods` proxies data between `FoodData.foods` and `FoodData.selectedFoods`
-  allFoods = {} # key is NDB_No
-
   allKeys = [
     "NDB_No", "Long_Desc", "FdGrp_Desc", "10:0" , "12:0", "13:0", "14:0", "14:1", "15:0",
     "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0",
@@ -142,9 +139,6 @@ data.factory "FoodData", ($rootScope, Styles) ->
     foods: null
     nutrients: null
     selectedFoods: []
-    searchQuery: # TODO is there a better place for this?
-      text: ""
-      includeFoodGroups: false
     
     macronutrientKeys
     nutrientKeys
@@ -159,33 +153,16 @@ data.factory "FoodData", ($rootScope, Styles) ->
 
     findNutrientById: (Nutr_No) -> _.find(@nutrients, (n) -> n.Nutr_No is Nutr_No)
 
-    findFoodById: (NDB_No) -> allFoods[NDB_No]
+    findFoodById: (NDB_No) -> _.find(@foods, (f) -> f.NDB_No is NDB_No)
 
-    toggleSelect: (food) ->
-      food = _.find(@foods, (f) -> f.NDB_No is food.NDB_No)
-      if not food.selected
-        food.selected = true
-        @selectedFoods.push _.clone(allFoods[food.NDB_No])
-      else
-        food.selected = false
-        @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
-      @calculateRelativeValues()
-      @
-
-    clearSelected: ->
-      for food in @selectedFoods
-        _.find(@foods, (f) -> f.NDB_No is food.NDB_No).selected = false
-      @selectedFoods = []
-      @
-
-    calculateRelativeValues: ->
+    calculateRelativeValues: (foods) ->
       for key in comparedKeys
         comparedKey = key + "_Compared"
-        max = _.max(@selectedFoods, (f) -> f[key])[key]
-        for food in @selectedFoods
+        max = _.max(foods, (f) -> f[key])[key]
+        for food in foods
           if food[key]?
             food[comparedKey] = food[key] / max or 0
-      @
+      foods
   }
 
   loadCsvData = (path, cb) ->
@@ -240,13 +217,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
       item[proteinKey] /= item[calculatedCalorieKey]
       item[carbohydrateKey] /= item[calculatedCalorieKey]
       item[alcoholKey] /= item[calculatedCalorieKey]
-
-    # Store foods in `allFoods` hashed by NDB_No
-    for f in rawFoods
-      allFoods[f.NDB_No] = f
-
-    # Return only the minimum keys needed to render the big list of foods
-    _.map rawFoods, (f) -> _.pick f, ["NDB_No", "Long_Desc", "FdGrp_Desc"]
+      
+    rawFoods
   
   # Asynchronously load the data
   loadCsvData "data/nutrients.csv", (rawNutrients) ->

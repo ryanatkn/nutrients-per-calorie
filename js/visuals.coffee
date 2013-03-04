@@ -231,8 +231,6 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
 visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
   restrict: "E"
   templateUrl: "partials/food-comparison.html"
-  scope:
-    foodData: "="
   link: (scope, element, attrs) ->
 
     width = (FoodData.nutrientKeys.length * Styles.comparisonCellWidth) + Styles.horizontalPadding + Styles.pieChartRadius
@@ -242,7 +240,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
     render = ->
       vis.selectAll("*").remove()
 
-      foods = scope.foodData.selectedFoods
+      foods = scope.data.compare.foods
       numSelected = foods.length
       if !numSelected
         vis.style "display", "none"
@@ -261,7 +259,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
       DrawingHelpers.drawNutrientGroups vis, foods, nutrientGroups
 
     # Redraw when items are selected or deselected
-    scope.$watch "foodData.selectedFoods.length", ->
+    scope.$watch "data.compare.foods.length", ->
       render()
   
 
@@ -269,5 +267,3 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
 visuals.directive "foodSearch", (Styles) ->
   restrict: "E"
   templateUrl: "partials/food-search.html"
-  scope:
-    foodData: "="

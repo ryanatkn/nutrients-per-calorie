@@ -42,21 +42,55 @@ app.config ($routeProvider) ->
 app.controller "MainCtrl", ($scope, $location, FoodData) ->
   $scope.foodData = FoodData
 
+  routes =
+    compare:   "#/compare"
+    foods:     "#/foods"
+    nutrients: "#/nutrients"
+    about:     "#/about"
+
   $scope.navLinks = _.extend [
     text: "Compare"
-    href: "#/compare"
+    href: routes.compare
   ,
     text: "Foods"
-    href: "#/foods"
+    href: routes.foods
   ,
     text: "Nutrients"
-    href: "#/nutrients"
+    href: routes.nutrients
   ,
     text: "About"
-    href: "#/about"
+    href: routes.about
   ],
     isActive: (navLink) ->
       _.contains "#" + $location.path(), navLink.href
+
+  $scope.data =
+    compare:
+      foods: []
+      query:
+        text: ""
+        includeFoodGroups: false
+      getHash: -> routes.compare + @foods.join("+")
+      toggle: (food) ->
+        console.log "TOGGLE", food
+        food = FoodData.findFoodById(food.NDB_No)
+        if not food.selected
+          food.selected = true
+          @foods.push _.clone(food) # clone so we can add relative values without polluting the singleton data
+        else
+          food.selected = false
+          @foods = _.reject(@foods, (f) -> f.NDB_No is food.NDB_No)
+        FoodData.calculateRelativeValues @foods
+        @
+      clear: ->
+        for food in @foods
+          FoodData.findFoodById(food.NDB_No).selected = false
+        @foods = []
+        @
+    foods:
+      selected: null
+    nutrients:
+      selected: null
 
 
 app.controller "CompareCtrl", ($scope, $routeParams) ->
@@ -64,21 +98,21 @@ app.controller "CompareCtrl", ($scope, $routeParams) ->
 
 
 app.controller "FoodsCtrl", ($scope, $routeParams, FoodData) ->
-  $scope.foods = 
-    selected: if $routeParams.food then FoodData.findFoodById($routeParams.food) else null
+  if $routeParams.food
+    $scope.data.foods.selected = FoodData.findFoodById($routeParams.food)
 
 
 app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData) ->
-  $scope.nutrients =
-    selected: if $routeParams.nutrient then FoodData.findNutrientById($routeParams.nutrient) else null
+  if $routeParams.nutrient
+    $scope.data.nutrients.selected = FoodData.findNutrientById($routeParams.nutrient)
 
 
 # Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true
 # The search text is case- and order-insensitive
 # The characters in `negativeSearchPrefixes` exclude results
 app.filter "searchFoods", ->
-  (foods, searchQuery) ->
-    {text, includeFoodGroups} = searchQuery
+  (foods, query) ->
+    {text, includeFoodGroups} = query
     if text
       filteredFoods = []
       negativeSearchPrefixes = ["!", "-"]

@@ -1,11 +1,11 @@
 <div class="search-form">
-  <input type="text" ng-model="foodData.searchQuery.text" placeholder="Search foods, using - to exclude results" />
-  <input type="checkbox" ng-model="foodData.searchQuery.includeFoodGroups" id="include-food-groups" />
+  <input type="text" ng-model="data.compare.query.text" placeholder="Search foods, using - to exclude results" />
+  <input type="checkbox" ng-model="data.compare.query.includeFoodGroups" id="include-food-groups" />
   <label for="include-food-groups">Include food groups</label>
 </div>
 <ul class="food-list">
-  <li ng-repeat="food in foodData.foods | searchFoods: foodData.searchQuery | limitTo: 50"
-      ng-click="foodData.toggleSelect(food)" ng-class="{selected: food.selected}"
+  <li ng-repeat="food in foodData.foods | searchFoods: data.compare.query | limitTo: 50"
+      ng-click="data.compare.toggle(food)" ng-class="{selected: food.selected}"
       class="food-list-item">
     <span class="food-label">{{food.Long_Desc}}</span>
     <span class="food-group">{{food.FdGrp_Desc}}</span>

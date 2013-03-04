@@ -110,7 +110,10 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData) ->
 app.directive "foodSearch", (Styles) ->
   restrict: "E"
   templateUrl: "partials/food-search.html"
-
+  scope:
+    foods: "="
+    helpers: "="
+    
 
 # Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true
 # The search text is case- and order-insensitive

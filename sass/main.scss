@@ -1,5 +1,7 @@
 @import "./sassy";
 
+$content-width: 976px;
+
 [ng-cloak] {
   display: none;
 }
@@ -33,7 +35,7 @@
 }
 
 .food-list {
-  width: 976px;
+  width: $content-width;
 }
 
 .food-list-item {
@@ -129,6 +131,7 @@ food-comparison {
 }
 
 .text-with-icon {
+  width: $content-width;
   $icon-size: 48px;
   position: relative;
   padding-left: $icon-size + $horizontal-padding * 2;

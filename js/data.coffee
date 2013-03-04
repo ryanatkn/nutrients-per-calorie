@@ -71,7 +71,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Lutein + zeaxanthin"
     "Choline, total"
   ],
-    text: "misc"
+    text: ""
     color: Styles.colors.yellow
 
   vitaminKeys = _.extend [

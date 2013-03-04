@@ -1,3 +1,28 @@
-nutrients {{data.nutrients.selectedNutrient}}
+<div class="column-wrapper">
+  <div class="column">
+    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.macronutrientKeys"></nutrient-list>
+    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.miscKeys"></nutrient-list>
+  </div>
+  <div class="column">
+    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.vitaminKeys"></nutrient-list>
+    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.mineralKeys"></nutrient-list>
+  </div>
+  <div class="column">
+    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.aminoAcidKeys"></nutrient-list>
+    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.sugarKeys"></nutrient-list>
+  </div>
+</div>
 
-<nutrient-list helpers="data.nutrients" nutrients="foodData.nutrients"></nutrient-list>
+nutrients {{data.nutrients.selectedNutrient}}
+<div class="search-form">
+  <input type="text" ng-model="data.nutrients.query.text" placeholder="Search foods, using - to exclude results" />
+  <input type="checkbox" ng-model="data.nutrients.query.includeFoodGroups" id="include-food-groups" />
+  <label for="include-food-groups">Include food groups</label>
+</div>
+<ul class="food-list">
+  <li ng-repeat="food in foodData.foods | searchFoods: data.nutrients.query | limitTo: 50">
+    <span class="nutrient-graph">{{data.nutrients.getNutrientData(food)}}</span>
+    <span class="food-label">{{food.Long_Desc}}</span>
+    <span class="food-group">{{food.FdGrp_Desc}}</span>
+  </li>
+</ul>

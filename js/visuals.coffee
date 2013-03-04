@@ -32,7 +32,7 @@ visuals.factory "Styles", ->
   Styles = {
     smallFontSize: 12
     smallFontLineHeight: 13
-    largeFontSize: 28
+    largeFontSize: 24
     horizontalPadding: 6
     comparisonHeaderHeight: 80 # $comparison-header-height in main.scss
     comparisonRowHeight # $comparison-row-height in main.scss
@@ -155,7 +155,9 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
       .attr("text-anchor", "middle")
       .style("font-size", Styles.largeFontSize)
       .style("fill", nutrients.color)
-      .text(nutrients.text)
+      .text(switch nutrients.text
+        when "Special" then ""
+        else nutrients.text)
 
     # Draw each nutrient label
     getLabelX = (i) -> i * Styles.comparisonCellWidth + 9

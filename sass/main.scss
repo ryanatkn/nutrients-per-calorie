@@ -1,7 +1,5 @@
 @import "./sassy";
 
-$content-width: 976px;
-
 [ng-cloak] {
   display: none;
 }
@@ -37,9 +35,8 @@ $content-width: 976px;
 .food-list {
   width: $content-width;
 
-  .food-list-item {
+  li {
     padding: 2px $horizontal-padding;
-    @include selectable;
 
     .food-label {
       width: 100%;
@@ -56,7 +53,6 @@ $content-width: 976px;
 
   li {
     padding: 2px $horizontal-padding;
-    @include selectable;
   }
 }
 
@@ -154,4 +150,9 @@ food-comparison {
     left: 0;
     top: 0;
   }
+}
+
+nutrient-list {
+  display: block;
+  margin-bottom: $vertical-padding;
 }

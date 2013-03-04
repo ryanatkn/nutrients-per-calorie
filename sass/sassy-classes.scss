@@ -4,3 +4,18 @@
 .rainbow {
   @include rainbow;
 }
+
+.selectable {
+  @include selectable;
+}
+
+.column-wrapper {
+  white-space: nowrap;
+}
+
+.column {
+  display: inline-block;
+  vertical-align: top;
+  width: $column-width;
+  padding: $horizontal-padding;
+}

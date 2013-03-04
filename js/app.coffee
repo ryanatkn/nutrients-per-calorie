@@ -68,10 +68,10 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
 
   $scope.data =
     compare:
-      selectedFoods: []
-      query:
+      query: # TODO MOVE
         text: ""
         includeFoodGroups: false
+      selectedFoods: []
       selected: (food) ->
         !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
       toggle: (food) ->
@@ -85,10 +85,10 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
           FoodData.findFoodById(food.NDB_No).selected = false
         @selectedFoods = []
     foods:
-      selectedFood: null
-      query:
+      query: # TODO MOVE
         text: ""
         includeFoodGroups: false
+      selectedFood: null
       selected: (food) ->
         @selectedFood?.NDB_No is food?.NDB_No
       toggle: (food) ->
@@ -97,6 +97,9 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
         else
           @selectedFood = _.clone(food)
     nutrients:
+      query: # TODO MOVE
+        text: ""
+        includeFoodGroups: false
       selectedNutrient: null
       selected: (nutrient) ->
         nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
@@ -105,6 +108,12 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
           @selectedNutrient = null
         else
           @selectedNutrient = _.clone(nutrient)
+      getNutrientData: (food) ->
+        console.log "GET DATA", food, @selectedNutrient if !food
+        if @selectedNutrient
+          food[@selectedNutrient.NutrDesc]
+        else
+          null
 
 
 app.controller "CompareCtrl", ($scope, $routeParams) ->
@@ -130,12 +139,14 @@ app.directive "foodSearch", ->
     helpers: "="
     
 
-app.directive "nutrientList", ->
+app.directive "nutrientList", (FoodData) ->
   restrict: "E"
   templateUrl: "partials/nutrient-list.html"
   scope:
-    nutrients: "="
+    nutrientKeys: "="
     helpers: "="
+  link: (scope, element, attrs) ->
+    scope.nutrients = _.map(scope.nutrientKeys, (n) -> FoodData.nutrients[n])
 
 
 # Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true

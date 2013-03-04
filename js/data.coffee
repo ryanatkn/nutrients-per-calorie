@@ -61,19 +61,20 @@ data.factory "FoodData", ($rootScope, Styles) ->
 
   comparedKeys = _.difference(allKeys, ["NDB_No", "Long_Desc", "FdGrp_Desc"])
 
-  macronutrientKeys = [
+  macronutrientKeys = _.extend [
     "Total lipid (fat)"
     "Protein"
     "Carbohydrate, by difference"
     "Alcohol, ethyl"
-  ]
+  ],
+    text: "Macronutrients"
 
   miscKeys = _.extend [
     "Fiber, total dietary"
     "Lutein + zeaxanthin"
     "Choline, total"
   ],
-    text: ""
+    text: "Special"
     color: Styles.colors.yellow
 
   vitaminKeys = _.extend [
@@ -90,7 +91,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Folate, total"
     "Vitamin B-12"
   ],
-    text: "vitamins"
+    text: "Vitamins"
     color: Styles.colors.green
 
   mineralKeys = _.extend [
@@ -103,7 +104,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Sodium, Na"
     "Zinc, Zn"
   ],
-    text: "minerals"
+    text: "Minerals"
     color: Styles.colors.violet
 
   aminoAcidKeys = _.extend [
@@ -117,7 +118,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Tryptophan"
     "Valine"
   ],
-    text: "amino acids"
+    text: "Amino Acids"
     color: Styles.colors.blue
 
   sugarKeys = _.extend [
@@ -129,7 +130,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Sucrose"
     "Sugars, total"
   ],
-    text: "sugars"
+    text: "Sugars"
     color: Styles.colors.red
 
   nutrientKeys = _.union(miscKeys, vitaminKeys, mineralKeys, aminoAcidKeys, sugarKeys)

@@ -66,25 +66,25 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
 
   $scope.data =
     compare:
-      foods: []
+      selectedFoods: []
       query:
         text: ""
         includeFoodGroups: false
-      getHash: -> routes.compare + @foods.join("+")
+      getHash: -> routes.compare + @selectedFoods.join("+")
       toggle: (food) ->
         food = FoodData.findFoodById(food.NDB_No)
         if not food.selected
           food.selected = true
-          @foods.push _.clone(food) # clone so we can add relative values without polluting the singleton data
+          @selectedFoods.push _.clone(food) # clone so we can add relative values without polluting the singleton data
         else
           food.selected = false
-          @foods = _.reject(@foods, (f) -> f.NDB_No is food.NDB_No)
-        FoodData.calculateRelativeValues @foods
+          @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
+        FoodData.calculateRelativeValues @selectedFoods
         @
       clear: ->
-        for food in @foods
+        for food in @selectedFoods
           FoodData.findFoodById(food.NDB_No).selected = false
-        @foods = []
+        @selectedFoods = []
         @
     foods:
       selected: null

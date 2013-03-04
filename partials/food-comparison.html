@@ -1,12 +1,12 @@
-<ul class="food-comparison-list" ng-show="data.compare.foods.length">
-  <li ng-repeat="food in data.compare.foods" class="food-compare-item">
+<ul class="food-comparison-list" ng-show="data.compare.selectedFoods.length">
+  <li ng-repeat="food in data.compare.selectedFoods" class="food-compare-item">
     <div ng-click="data.compare.toggle(food)" class="remove-button">-</div>
     <div class="food-label">
       <a href="#foods/{{food.NDB_No}}">{{food.Long_Desc}}</a>
     </div>
   </li>
   <li class="food-compare-item">
-    <button class="clear-selected-button" ng-click="data.compare.clear()" ng-show="data.compare.foods.length">
+    <button class="clear-selected-button" ng-click="data.compare.clear()" ng-show="data.compare.selectedFoods.length">
       Remove all
     </button>
   </li>

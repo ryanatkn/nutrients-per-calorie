@@ -261,9 +261,3 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
     # Redraw when items are selected or deselected
     scope.$watch "data.compare.foods.length", ->
       render()
-  
-
-# Provides a search box and food list from which foods can be selected.
-visuals.directive "foodSearch", (Styles) ->
-  restrict: "E"
-  templateUrl: "partials/food-search.html"

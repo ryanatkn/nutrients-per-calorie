@@ -72,7 +72,6 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
         includeFoodGroups: false
       getHash: -> routes.compare + @foods.join("+")
       toggle: (food) ->
-        console.log "TOGGLE", food
         food = FoodData.findFoodById(food.NDB_No)
         if not food.selected
           food.selected = true
@@ -105,6 +104,12 @@ app.controller "FoodsCtrl", ($scope, $routeParams, FoodData) ->
 app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData) ->
   if $routeParams.nutrient
     $scope.data.nutrients.selected = FoodData.findNutrientById($routeParams.nutrient)
+
+  
+# Provides a search box and food list from which foods can be selected.
+app.directive "foodSearch", (Styles) ->
+  restrict: "E"
+  templateUrl: "partials/food-search.html"
 
 
 # Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true

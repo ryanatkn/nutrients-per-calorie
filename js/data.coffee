@@ -157,6 +157,10 @@ data.factory "FoodData", ($rootScope, Styles) ->
     getKeyAlias: (key) ->
       keyAliases[key] or key
 
+    findNutrientById: (Nutr_No) -> _.find(@nutrients, (n) -> n.Nutr_No is Nutr_No)
+
+    findFoodById: (NDB_No) -> allFoods[NDB_No]
+
     toggleSelect: (food) ->
       food = _.find(@foods, (f) -> f.NDB_No is food.NDB_No)
       if not food.selected

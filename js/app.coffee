@@ -16,42 +16,27 @@ app = angular.module("nutrients-per-calorie", ["food-visuals", "food-data"])
 
 app.config ($routeProvider) ->
   $routeProvider
-    .when("/compare",
+    .when "/compare",
       templateUrl: "partials/compare.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/compare/:foods"
+      controller: "CompareCtrl"
+    .when "/compare/:foods",
       templateUrl: "partials/compare.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/foods"
+      controller: "CompareCtrl"
+    .when "/foods",
       templateUrl: "partials/foods.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/foods/:food"
+      controller: "FoodsCtrl"
+    .when "/foods/:food",
       templateUrl: "partials/foods.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/nutrients"
+      controller: "FoodsCtrl"
+    .when "/nutrients",
       templateUrl: "partials/nutrients.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/nutrients/:nutrient"
+      controller: "NutrientsCtrl"
+    .when "/nutrients/:nutrient",
       templateUrl: "partials/nutrients.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/about"
+      controller: "NutrientsCtrl"
+    .when "/about",
       templateUrl: "partials/about.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .otherwise(redirectTo: "/compare")
+    .otherwise redirectTo: "/compare"
 
 
 app.controller "MainCtrl", ($scope, $location, FoodData) ->
@@ -71,7 +56,21 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
     href: "#/about"
   ],
     isActive: (navLink) ->
-      navLink.href is "#" + $location.path()
+      _.contains "#" + $location.path(), navLink.href
+
+
+app.controller "CompareCtrl", ($scope, $routeParams) ->
+  console.log "COMPARE CTRL", $routeParams
+
+
+app.controller "FoodsCtrl", ($scope, $routeParams, FoodData) ->
+  $scope.foods = 
+    selected: if $routeParams.food then FoodData.findFoodById($routeParams.food) else null
+
+
+app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData) ->
+  $scope.nutrients =
+    selected: if $routeParams.nutrient then FoodData.findNutrientById($routeParams.nutrient) else null
 
 
 # Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true

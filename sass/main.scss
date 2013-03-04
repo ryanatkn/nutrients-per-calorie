@@ -80,11 +80,16 @@ food-comparison {
     width: 100%;
     display: table; // vertical centering hack for variable height children
 
-    span {
+    a {
       display: table-cell;
       vertical-align: middle;
-      @include selectable;
       padding: 0 $horizontal-padding;
+      color: $black-text;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 

@@ -64,7 +64,7 @@ visuals.factory "Styles", ->
 
 
 # Drawing helpers
-visuals.factory "DrawingHelpers", (Styles, FoodData) ->
+visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
 
   # Draws a pie chart from `data` on the `vis` with the given `radius`.
   # Returns the d3 visualization.
@@ -164,7 +164,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData) ->
       .data(nutrients)
       .enter()
         .append("text")
-          .attr("onclick", "javascript: alert('TODO: nutrient detail')")
+          .attr("onclick", (d) -> "javascript: window.location.hash = '#/nutrients/#{FoodData.nutrients[d].Nutr_No}';")
           .attr("class", "nutrient-label")
           .attr("transform", (d, i) -> 
             "rotate(-45 #{getLabelX(i)} #{labelY})")

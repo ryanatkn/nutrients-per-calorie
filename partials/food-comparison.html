@@ -2,7 +2,7 @@
   <li ng-repeat="food in foodData.selectedFoods" class="food-compare-item">
     <div ng-click="foodData.toggleSelect(food)" class="remove-button">-</div>
     <div class="food-label">
-      <span onclick="javascript: alert('TODO: single food detail')">{{food.Long_Desc}}</span>
+      <a href="#foods/{{food.NDB_No}}">{{food.Long_Desc}}</a>
     </div>
   </li>
   <li class="food-compare-item">

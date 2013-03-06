@@ -40,6 +40,7 @@
 
     .food-label {
       width: 100%;
+      color: $black-text;
     }
 
     .food-group {
@@ -90,11 +91,6 @@ food-comparison {
       vertical-align: middle;
       padding: 0 $horizontal-padding;
       color: $black-text;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
     }
   }
 
@@ -160,6 +156,8 @@ nutrient-list {
   width: 100px;
   height: 16px;
   background-color: transparentize($green, 0.5);
+  position: relative;
+  top: 3px;
 }
 
 .nutrient-bar {

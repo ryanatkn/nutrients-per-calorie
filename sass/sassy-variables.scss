@@ -32,6 +32,8 @@ $rainbow: $red mix($red, $yellow) $yellow mix($yellow, $green) $green
 $black-text: #222;
 
 $master-color: $green;
+$master-text-color: saturate(darken($master-color, 35%), 30%);
+
 $highlight-border-color: $master-color;
 $highlight-color: transparentize($highlight-border-color, 0.75);
 $highlight-hover-color: transparentize($highlight-border-color, 0.85);

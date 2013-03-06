@@ -31,11 +31,12 @@ $rainbow: $red mix($red, $yellow) $yellow mix($yellow, $green) $green
 
 $black-text: #222;
 
-$master-color: $blue;
-$highlight-color: $blue;
-$highlight-hover-color: transparentize($highlight-color, 0.4);
-$highlight-active-color: transparentize($highlight-color, 0.2);
-$highlight-border-color: darken($highlight-color, 20%);
+$master-color: $green;
+$highlight-border-color: $master-color;
+$highlight-color: transparentize($highlight-border-color, 0.75);
+$highlight-hover-color: transparentize($highlight-border-color, 0.85);
+$highlight-active-color: transparentize($highlight-border-color, 0.8);
+$highlight-hover-border-color: transparentize($highlight-border-color, 0.4);
 
 $border-radius: 2px;
 $border-color: #bbb;

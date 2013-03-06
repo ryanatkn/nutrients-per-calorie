@@ -17,7 +17,7 @@
 
   <pre>python -m http.server</pre>
   
-3. Go to localhost:3000 in your browser, or wherever your server is.
+3. Go to localhost:8000 in your browser, or wherever your server is.
 
 4. Compare foods!
 

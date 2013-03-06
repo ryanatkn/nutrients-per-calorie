@@ -1,4 +1,4 @@
-/* line 17, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 17, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -20,88 +20,123 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
 
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 1) {
   background-color: #ff6a61;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 2) {
   background-color: #ff9f69;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 3) {
   background-color: #ffd471;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 4) {
   background-color: #c9dc6f;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 5) {
   background-color: #94e46d;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 6) {
   background-color: #81dbae;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 7) {
   background-color: #6ed2ef;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 8) {
   background-color: #9fb2f1;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 9) {
   background-color: #d092f4;
 }
-/* line 31, ../sass/sassy-mixins.scss */
+/* line 11, ../sass/sassy-mixins.scss */
 .rainbow :nth-child(10n + 10) {
   background-color: #e77eaa;
+}
+
+/* line 8, ../sass/sassy-classes.scss */
+.selectable {
+  cursor: pointer;
+  border: 2px dashed transparent;
+  border-radius: 2px;
+}
+/* line 23, ../sass/sassy-mixins.scss */
+.selectable:hover {
+  background-color: rgba(148, 228, 109, 0.15);
+  border-color: rgba(148, 228, 109, 0.6);
+}
+/* line 28, ../sass/sassy-mixins.scss */
+.selectable.selected {
+  background-color: rgba(148, 228, 109, 0.25);
+  border-color: #94e46d;
+}
+/* line 33, ../sass/sassy-mixins.scss */
+.selectable:active {
+  background-color: rgba(148, 228, 109, 0.2);
+  border-color: #94e46d;
+}
+
+/* line 12, ../sass/sassy-classes.scss */
+.column-wrapper {
+  white-space: nowrap;
+}
+
+/* line 16, ../sass/sassy-classes.scss */
+.column {
+  display: inline-block;
+  vertical-align: top;
+  width: 195.2px;
+  padding: 6px;
 }
 
 /* line 9, ../sass/sassy.scss */
@@ -164,7 +199,7 @@ input[type="text"]:hover {
 }
 /* line 53, ../sass/sassy.scss */
 input[type="text"]:focus {
-  border-color: #19b2de;
+  border-color: #5ac625;
 }
 
 /* line 58, ../sass/sassy.scss */
@@ -209,12 +244,12 @@ button:active {
 
 /* line 85, ../sass/sassy.scss */
 ::selection {
-  background: #6ed2ef;
+  background: #94e46d;
 }
 
 /* line 88, ../sass/sassy.scss */
 ::-moz-selection {
-  background: #6ed2ef;
+  background: #94e46d;
 }
 
 /* line 94, ../sass/sassy.scss */
@@ -249,6 +284,20 @@ button:active {
 .tabs li.active a {
   border-bottom-color: #222222;
   opacity: 1.0;
+}
+
+/* line 130, ../sass/sassy.scss */
+a {
+  color: #349e01;
+  text-decoration: none;
+}
+/* line 134, ../sass/sassy.scss */
+a:visited {
+  color: #349e01;
+}
+/* line 138, ../sass/sassy.scss */
+a:hover {
+  text-decoration: underline;
 }
 
 /* line 3, ../sass/main.scss */
@@ -293,48 +342,36 @@ button:active {
 .food-list {
   width: 976px;
 }
-
-/* line 39, ../sass/main.scss */
-.food-list-item {
+/* line 38, ../sass/main.scss */
+.food-list li {
   padding: 2px 6px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  border-radius: 2px;
 }
-/* line 12, ../sass/sassy-mixins.scss */
-.food-list-item:hover {
-  background-color: rgba(110, 210, 239, 0.6);
-  border-color: #6ed2ef;
-}
-/* line 17, ../sass/sassy-mixins.scss */
-.food-list-item.selected {
-  background-color: #6ed2ef;
-  border-color: #19b2de;
-}
-/* line 22, ../sass/sassy-mixins.scss */
-.food-list-item:active {
-  background-color: rgba(110, 210, 239, 0.8);
-}
-/* line 43, ../sass/main.scss */
-.food-list-item .food-label {
+/* line 41, ../sass/main.scss */
+.food-list li .food-label {
   width: 100%;
+  color: #222222;
 }
-/* line 47, ../sass/main.scss */
-.food-list-item .food-group {
+/* line 46, ../sass/main.scss */
+.food-list li .food-group {
   float: right;
 }
 
-/* line 52, ../sass/main.scss */
+/* line 53, ../sass/main.scss */
+.nutrient-list li {
+  padding: 2px 6px;
+}
+
+/* line 58, ../sass/main.scss */
 .search-form {
   padding: 0 6px 6px;
 }
 
-/* line 61, ../sass/main.scss */
+/* line 67, ../sass/main.scss */
 food-comparison {
   position: relative;
 }
 
-/* line 65, ../sass/main.scss */
+/* line 71, ../sass/main.scss */
 .food-comparison-list {
   width: 230px;
   position: absolute;
@@ -342,42 +379,26 @@ food-comparison {
   top: 80px;
   z-index: 1;
 }
-/* line 72, ../sass/main.scss */
+/* line 78, ../sass/main.scss */
 .food-comparison-list li {
   position: relative;
   height: 46px;
   padding-right: 6px;
 }
-/* line 78, ../sass/main.scss */
+/* line 84, ../sass/main.scss */
 .food-comparison-list .food-label {
   height: 100%;
   width: 100%;
   display: table;
 }
-/* line 83, ../sass/main.scss */
-.food-comparison-list .food-label span {
+/* line 89, ../sass/main.scss */
+.food-comparison-list .food-label a {
   display: table-cell;
   vertical-align: middle;
-  cursor: pointer;
-  border: 1px solid transparent;
-  border-radius: 2px;
   padding: 0 6px;
+  color: #222222;
 }
-/* line 12, ../sass/sassy-mixins.scss */
-.food-comparison-list .food-label span:hover {
-  background-color: rgba(110, 210, 239, 0.6);
-  border-color: #6ed2ef;
-}
-/* line 17, ../sass/sassy-mixins.scss */
-.food-comparison-list .food-label span.selected {
-  background-color: #6ed2ef;
-  border-color: #19b2de;
-}
-/* line 22, ../sass/sassy-mixins.scss */
-.food-comparison-list .food-label span:active {
-  background-color: rgba(110, 210, 239, 0.8);
-}
-/* line 91, ../sass/main.scss */
+/* line 97, ../sass/main.scss */
 .food-comparison-list .remove-button {
   position: absolute;
   left: -16px;
@@ -387,46 +408,69 @@ food-comparison {
   height: 16px;
   padding-left: 6px;
 }
-/* line 100, ../sass/main.scss */
+/* line 106, ../sass/main.scss */
 .food-comparison-list .remove-button:hover {
   font-weight: bold;
   color: #fa0e00;
 }
 
-/* line 107, ../sass/main.scss */
+/* line 113, ../sass/main.scss */
 .food-comparison-graphs {
   white-space: nowrap;
   margin-left: 236px;
 }
-/* line 111, ../sass/main.scss */
+/* line 117, ../sass/main.scss */
 .food-comparison-graphs svg {
   margin-left: -4px;
 }
 
-/* line 116, ../sass/main.scss */
+/* line 122, ../sass/main.scss */
 .clear-selected-button {
   position: relative;
   top: 10px;
   margin-left: 6px;
 }
 
-/* line 122, ../sass/main.scss */
+/* line 128, ../sass/main.scss */
 .nutrient-label {
   cursor: pointer;
 }
 
-/* line 126, ../sass/main.scss */
+/* line 132, ../sass/main.scss */
 .text-with-icon {
+  width: 976px;
   position: relative;
   padding-left: 60px;
   min-height: 48px;
   margin-bottom: 28px;
 }
-/* line 133, ../sass/main.scss */
+/* line 140, ../sass/main.scss */
 .text-with-icon img {
   width: 48px;
   height: 48px;
   position: absolute;
   left: 0;
   top: 0;
+}
+
+/* line 149, ../sass/main.scss */
+nutrient-list {
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* line 154, ../sass/main.scss */
+.nutrient-graph {
+  display: inline-block;
+  width: 100px;
+  height: 16px;
+  background-color: rgba(148, 228, 109, 0.5);
+  position: relative;
+  top: 3px;
+}
+
+/* line 163, ../sass/main.scss */
+.nutrient-bar {
+  background-color: #94e46d;
+  height: 16px;
 }

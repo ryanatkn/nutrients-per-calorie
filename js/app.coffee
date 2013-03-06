@@ -67,67 +67,76 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
       _.contains "#" + $location.path(), navLink.href
 
 
-app.controller "CompareCtrl", ($scope, $routeParams, FoodData) ->
-  $scope.compare =
-    query:
-      text: ""
-      includeFoodGroups: false
-    selectedFoods: []
-    selected: (food) ->
-      !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
-    toggle: (food) ->
-      if @selected(food)
-        @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
-      else
-        @selectedFoods.push _.clone(food)
-      FoodData.calculateRelativeValues @selectedFoods
-    clear: ->
-      for food in @selectedFoods
-        FoodData.findFoodById(food.NDB_No).selected = false
-      @selectedFoods = []    
+app.factory "ComparePage", (FoodData) ->
+  query:
+    text: ""
+    includeFoodGroups: false
+  selectedFoods: []
+  selected: (food) ->
+    !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
+  toggle: (food) ->
+    if @selected(food)
+      @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
+    else
+      @selectedFoods.push _.clone(food)
+    FoodData.calculateRelativeValues @selectedFoods
+  clear: ->
+    for food in @selectedFoods
+      FoodData.findFoodById(food.NDB_No).selected = false
+    @selectedFoods = []
 
 
-app.controller "FoodsCtrl", ($scope, $routeParams, FoodData) ->
+app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
+  $scope.compare = ComparePage
+
+
+app.factory "FoodsPage", ->
+  query:
+    text: ""
+    includeFoodGroups: false
+  selectedFood: null
+  selected: (food) ->
+    @selectedFood?.NDB_No is food?.NDB_No
+  toggle: (food) ->
+    if @selected(food)
+      @selectedFood = null
+    else
+      @selectedFood = _.clone(food)
+
+
+app.controller "FoodsCtrl", ($scope, $routeParams, FoodData, FoodsPage) ->
   if $routeParams.food
     $scope.foods.selectedFood = FoodData.findFoodById($routeParams.food)
 
-  $scope.foods =
-    query:
-      text: ""
-      includeFoodGroups: false
-    selectedFood: null
-    selected: (food) ->
-      @selectedFood?.NDB_No is food?.NDB_No
-    toggle: (food) ->
-      if @selected(food)
-        @selectedFood = null
-      else
-        @selectedFood = _.clone(food)
+  $scope.foods = FoodsPage
 
 
-app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData, $filter) ->
+app.factory "NutrientsPage", (FoodData) ->
+  query:
+    text: ""
+    includeFoodGroups: false
+  selectedNutrient: null
+  filteredFoods: FoodData.foods
+  selected: (nutrient) ->
+    nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
+  toggle: (nutrient) ->
+    if @selected(nutrient)
+      @selectedNutrient = null
+    else
+      @selectedNutrient = _.clone(nutrient)
+  orderBy: (food) ->
+    value = food.nutrientValue
+    if value?
+      value
+    else
+      -1
+
+
+app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData, $filter, NutrientsPage) ->
   if $routeParams.nutrient
     $scope.nutrients.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient)
 
-  $scope.nutrients =
-    query:
-      text: ""
-      includeFoodGroups: false
-    selectedNutrient: null
-    filteredFoods: FoodData.foods
-    selected: (nutrient) ->
-      nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
-    toggle: (nutrient) ->
-      if @selected(nutrient)
-        @selectedNutrient = null
-      else
-        @selectedNutrient = _.clone(nutrient)
-    orderBy: (food) ->
-      value = food.nutrientValue
-      if value?
-        value
-      else
-        -1
+  $scope.nutrients = NutrientsPage
 
   filteredFoodsWithoutValues = null
   maxValue = null
@@ -181,6 +190,7 @@ app.directive "foodSearch", ->
     helpers: "="
     
 
+# Provides a selectable list of nutrients.
 app.directive "nutrientList", (FoodData) ->
   restrict: "E"
   templateUrl: "partials/nutrient-list.html"

@@ -1,1 +1,1 @@
-coffee -cw js/*.coffee & compass watch & python -m SimpleHTTPServer 3000
+coffee -cwj js/app.js js/app.coffee js/data.coffee js/visuals.coffee & compass watch & python -m http.server

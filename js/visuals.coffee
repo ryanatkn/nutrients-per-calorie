@@ -32,7 +32,7 @@ visuals.factory "Styles", ->
   Styles = {
     smallFontSize: 12
     smallFontLineHeight: 13
-    largeFontSize: 28
+    largeFontSize: 24
     horizontalPadding: 6
     comparisonHeaderHeight: 80 # $comparison-header-height in main.scss
     comparisonRowHeight # $comparison-row-height in main.scss
@@ -64,7 +64,7 @@ visuals.factory "Styles", ->
 
 
 # Drawing helpers
-visuals.factory "DrawingHelpers", (Styles, FoodData) ->
+visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
 
   # Draws a pie chart from `data` on the `vis` with the given `radius`.
   # Returns the d3 visualization.
@@ -155,7 +155,9 @@ visuals.factory "DrawingHelpers", (Styles, FoodData) ->
       .attr("text-anchor", "middle")
       .style("font-size", Styles.largeFontSize)
       .style("fill", nutrients.color)
-      .text(nutrients.text)
+      .text(switch nutrients.text
+        when "Special" then ""
+        else nutrients.text)
 
     # Draw each nutrient label
     getLabelX = (i) -> i * Styles.comparisonCellWidth + 9
@@ -164,7 +166,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData) ->
       .data(nutrients)
       .enter()
         .append("text")
-          .attr("onclick", "javascript: alert('TODO: nutrient detail')")
+          .attr("onclick", (d) -> "javascript: window.location.hash = '#/nutrients/#{FoodData.nutrients[d].Nutr_No}';")
           .attr("class", "nutrient-label")
           .attr("transform", (d, i) -> 
             "rotate(-45 #{getLabelX(i)} #{labelY})")
@@ -172,7 +174,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData) ->
           .attr("y", labelY)
           .style("font-size", Styles.smallFontSize)
           .style("fill", (d, i) -> Styles.colors.getRainbowColor(i))
-          .text((d) -> FoodData.getKeyAlias(d))
+          .text((d) -> FoodData.nutrients[d].text)
 
      # Draw each item in the list
     for foodIndex in [0...foods.length]
@@ -231,8 +233,6 @@ visuals.factory "DrawingHelpers", (Styles, FoodData) ->
 visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
   restrict: "E"
   templateUrl: "partials/food-comparison.html"
-  scope:
-    foodData: "="
   link: (scope, element, attrs) ->
 
     width = (FoodData.nutrientKeys.length * Styles.comparisonCellWidth) + Styles.horizontalPadding + Styles.pieChartRadius
@@ -242,7 +242,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
     render = ->
       vis.selectAll("*").remove()
 
-      foods = scope.foodData.selectedFoods
+      foods = scope.compare.selectedFoods
       numSelected = foods.length
       if !numSelected
         vis.style "display", "none"
@@ -261,13 +261,5 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
       DrawingHelpers.drawNutrientGroups vis, foods, nutrientGroups
 
     # Redraw when items are selected or deselected
-    scope.$watch "foodData.selectedFoods.length", ->
+    scope.$watch "compare.selectedFoods.length", ->
       render()
-  
-
-# Provides a search box and food list from which foods can be selected.
-visuals.directive "foodSearch", (Styles) ->
-  restrict: "E"
-  templateUrl: "partials/food-search.html"
-  scope:
-    foodData: "="

@@ -10,9 +10,6 @@ data = angular.module("food-data", [])
 # Provides food data and related state from data/nutrients.csv and data/foods.csv
 data.factory "FoodData", ($rootScope, Styles) ->
 
-  # `allFoods` proxies data between `FoodData.foods` and `FoodData.selectedFoods`
-  allFoods = {} # key is NDB_No
-
   allKeys = [
     "NDB_No", "Long_Desc", "FdGrp_Desc", "10:0" , "12:0", "13:0", "14:0", "14:1", "15:0",
     "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0",
@@ -43,7 +40,10 @@ data.factory "FoodData", ($rootScope, Styles) ->
   ]
 
   keyAliases =
+    "Total lipid (fat)":              "Fat"
+    "Carbohydrate, by difference":    "Carbohydrate"
     "Fiber, total dietary":           "Fiber"
+    "Alcohol, ethyl":                 "Alcohol"
     "Vitamin A, RAE":                 "Vitamin A" 
     "Vitamin C, total ascorbic acid": "Vitamin C"
     "Vitamin D (D2 + D3)":            "Vitamin D"
@@ -59,22 +59,24 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Potassium, K":                   "Potassium"
     "Sodium, Na":                     "Sodium"
     "Zinc, Zn":                       "Zinc"
+    "Glucose (dextrose)":             "Glucose"
 
   comparedKeys = _.difference(allKeys, ["NDB_No", "Long_Desc", "FdGrp_Desc"])
 
-  macronutrientKeys = [
+  macronutrientKeys = _.extend [
     "Total lipid (fat)"
     "Protein"
     "Carbohydrate, by difference"
     "Alcohol, ethyl"
-  ]
+  ],
+    text: "Macronutrients"
 
   miscKeys = _.extend [
     "Fiber, total dietary"
     "Lutein + zeaxanthin"
     "Choline, total"
   ],
-    text: "misc"
+    text: "Special"
     color: Styles.colors.yellow
 
   vitaminKeys = _.extend [
@@ -91,7 +93,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Folate, total"
     "Vitamin B-12"
   ],
-    text: "vitamins"
+    text: "Vitamins"
     color: Styles.colors.green
 
   mineralKeys = _.extend [
@@ -104,7 +106,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Sodium, Na"
     "Zinc, Zn"
   ],
-    text: "minerals"
+    text: "Minerals"
     color: Styles.colors.violet
 
   aminoAcidKeys = _.extend [
@@ -118,7 +120,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Tryptophan"
     "Valine"
   ],
-    text: "amino acids"
+    text: "Amino Acids"
     color: Styles.colors.blue
 
   sugarKeys = _.extend [
@@ -130,7 +132,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Sucrose"
     "Sugars, total"
   ],
-    text: "sugars"
+    text: "Sugars"
     color: Styles.colors.red
 
   nutrientKeys = _.union(miscKeys, vitaminKeys, mineralKeys, aminoAcidKeys, sugarKeys)
@@ -142,9 +144,6 @@ data.factory "FoodData", ($rootScope, Styles) ->
     foods: null
     nutrients: null
     selectedFoods: []
-    searchQuery: # TODO is there a better place for this?
-      text: ""
-      includeFoodGroups: false
     
     macronutrientKeys
     nutrientKeys
@@ -154,34 +153,18 @@ data.factory "FoodData", ($rootScope, Styles) ->
     aminoAcidKeys
     sugarKeys
 
-    getKeyAlias: (key) ->
-      keyAliases[key] or key
+    findNutrientById: (Nutr_No) -> _.find(@nutrients, (n) -> n.Nutr_No is Nutr_No)
 
-    toggleSelect: (food) ->
-      food = _.find(@foods, (f) -> f.NDB_No is food.NDB_No)
-      if not food.selected
-        food.selected = true
-        @selectedFoods.push _.clone(allFoods[food.NDB_No])
-      else
-        food.selected = false
-        @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
-      @calculateRelativeValues()
-      @
+    findFoodById: (NDB_No) -> _.find(@foods, (f) -> f.NDB_No is NDB_No)
 
-    clearSelected: ->
-      for food in @selectedFoods
-        _.find(@foods, (f) -> f.NDB_No is food.NDB_No).selected = false
-      @selectedFoods = []
-      @
-
-    calculateRelativeValues: ->
+    calculateRelativeValues: (foods) ->
       for key in comparedKeys
         comparedKey = key + "_Compared"
-        max = _.max(@selectedFoods, (f) -> f[key])[key]
-        for food in @selectedFoods
+        max = _.max(foods, (f) -> f[key])[key]
+        for food in foods
           if food[key]?
             food[comparedKey] = food[key] / max or 0
-      @
+      foods
   }
 
   loadCsvData = (path, cb) ->
@@ -195,6 +178,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     data = {}
     for item in rawNutrients
       data[item.NutrDesc] = item
+      item.text = keyAliases[item.NutrDesc] or item.NutrDesc
     data
 
   # Prepare food data using the formula nutrients/calories
@@ -215,7 +199,10 @@ data.factory "FoodData", ($rootScope, Styles) ->
       calories = item[calorieKey]
       for k, v of item
         if typeof v is "number" and not _.contains(ignoredKeys, k)
-          item[k] = v / calories
+          if calories
+            item[k] = v / calories
+          else
+            item[k] = -v # water...
 
       # Convert fat, protein, carbohydrate, and alcohol to percentages of the whole
       calculatedCalorieKey = "Calories, calculated"
@@ -236,13 +223,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
       item[proteinKey] /= item[calculatedCalorieKey]
       item[carbohydrateKey] /= item[calculatedCalorieKey]
       item[alcoholKey] /= item[calculatedCalorieKey]
-
-    # Store foods in `allFoods` hashed by NDB_No
-    for f in rawFoods
-      allFoods[f.NDB_No] = f
-
-    # Return only the minimum keys needed to render the big list of foods
-    _.map rawFoods, (f) -> _.pick f, ["NDB_No", "Long_Desc", "FdGrp_Desc"]
+      
+    rawFoods
   
   # Asynchronously load the data
   loadCsvData "data/nutrients.csv", (rawNutrients) ->

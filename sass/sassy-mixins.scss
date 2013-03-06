@@ -4,14 +4,25 @@
   border: 1px solid $color;
 }
 
+@mixin rainbow {
+  $length: length($rainbow);
+  $i: 1;
+  @while $i <= $length {
+    :nth-child(#{$length}n + #{$i}) {
+      background-color: nth($rainbow, $i);
+    }
+    $i: $i + 1;
+  }
+}
+
 @mixin selectable {
   cursor: pointer;
-  border: 1px solid transparent;
+  border: 2px dashed transparent;
   border-radius: $border-radius;
 
   &:hover {
     background-color: $highlight-hover-color;
-    border-color: $highlight-color;
+    border-color: $highlight-hover-border-color;
   }
 
   &.selected {
@@ -21,16 +32,6 @@
 
   &:active {
     background-color: $highlight-active-color;
-  }
-}
-
-@mixin rainbow {
-  $length: length($rainbow);
-  $i: 1;
-  @while $i <= $length {
-    :nth-child(#{$length}n + #{$i}) {
-      background-color: nth($rainbow, $i);
-    }
-    $i: $i + 1;
+    border-color: $highlight-border-color;
   }
 }

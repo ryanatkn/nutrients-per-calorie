@@ -1,12 +1,12 @@
 <div class="search-form">
-  <input type="text" ng-model="foodData.searchQuery.text" placeholder="Search foods, using - to exclude results" />
-  <input type="checkbox" ng-model="foodData.searchQuery.includeFoodGroups" id="include-food-groups" />
-  <label for="include-food-groups">Include food groups</label>
+  <input type="text" ng-model="helpers.query.text" placeholder="Search foods, using - to exclude results" />
+  <input type="checkbox" ng-model="helpers.query.includeFoodGroups" id="include-food-groups" />
+  <label for="include-food-groups">Include food groups in search</label>
 </div>
 <ul class="food-list">
-  <li ng-repeat="food in foodData.foods | searchFoods: foodData.searchQuery | limitTo: 50"
-      ng-click="foodData.toggleSelect(food)" ng-class="{selected: food.selected}"
-      class="food-list-item">
+  <li ng-repeat="food in foods | searchFoods: helpers.query | limitTo: 50"
+      ng-click="helpers.toggle(food)" ng-class="{selected: helpers.selected(food)}"
+      class="selectable">
     <span class="food-label">{{food.Long_Desc}}</span>
     <span class="food-group">{{food.FdGrp_Desc}}</span>
   </li>

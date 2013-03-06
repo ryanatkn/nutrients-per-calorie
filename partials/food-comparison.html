@@ -1,12 +1,12 @@
-<ul class="food-comparison-list" ng-show="foodData.selectedFoods.length">
-  <li ng-repeat="food in foodData.selectedFoods" class="food-compare-item">
-    <div ng-click="foodData.toggleSelect(food)" class="remove-button">-</div>
+<ul class="food-comparison-list" ng-show="compare.selectedFoods.length">
+  <li ng-repeat="food in compare.selectedFoods" class="food-compare-item">
+    <div ng-click="compare.toggle(food)" class="remove-button">-</div>
     <div class="food-label">
-      <span onclick="javascript: alert('TODO: single food detail')">{{food.Long_Desc}}</span>
+      <a href="#foods/{{food.NDB_No}}">{{food.Long_Desc}}</a>
     </div>
   </li>
   <li class="food-compare-item">
-    <button class="clear-selected-button" ng-click="foodData.clearSelected()" ng-show="foodData.selectedFoods.length">
+    <button class="clear-selected-button" ng-click="compare.clear()" ng-show="compare.selectedFoods.length">
       Remove all
     </button>
   </li>

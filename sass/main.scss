@@ -33,19 +33,25 @@
 }
 
 .food-list {
-  width: 976px;
+  width: $content-width;
+
+  li {
+    padding: 2px $horizontal-padding;
+
+    .food-label {
+      width: 100%;
+      color: $black-text;
+    }
+
+    .food-group {
+      float: right;
+    }
+  }
 }
 
-.food-list-item {
-  padding: 2px $horizontal-padding;
-  @include selectable;
-
-  .food-label {
-    width: 100%;
-  }
-
-  .food-group {
-    float: right;
+.nutrient-list {
+  li {
+    padding: 2px $horizontal-padding;
   }
 }
 
@@ -80,11 +86,11 @@ food-comparison {
     width: 100%;
     display: table; // vertical centering hack for variable height children
 
-    span {
+    a {
       display: table-cell;
       vertical-align: middle;
-      @include selectable;
       padding: 0 $horizontal-padding;
+      color: $black-text;
     }
   }
 
@@ -124,6 +130,7 @@ food-comparison {
 }
 
 .text-with-icon {
+  width: $content-width;
   $icon-size: 48px;
   position: relative;
   padding-left: $icon-size + $horizontal-padding * 2;
@@ -137,4 +144,23 @@ food-comparison {
     left: 0;
     top: 0;
   }
+}
+
+nutrient-list {
+  display: block;
+  margin-bottom: $vertical-padding;
+}
+
+.nutrient-graph {
+  display: inline-block;
+  width: 100px;
+  height: 16px;
+  background-color: transparentize($green, 0.5);
+  position: relative;
+  top: 3px;
+}
+
+.nutrient-bar {
+  background-color: $green;
+  height: 16px;
 }

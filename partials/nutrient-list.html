@@ -1,0 +1,9 @@
+<h3>
+  {{nutrientKeys.text}}
+</h3>
+<ul class="nutrient-list">
+  <li ng-repeat="nutrient in nutrients" ng-click="helpers.toggle(nutrient)"
+      class="selectable" ng-class="{selected: helpers.selected(nutrient)}">
+    {{nutrient.text}}
+  </li>
+</ul>

@@ -16,70 +16,197 @@ app = angular.module("nutrients-per-calorie", ["food-visuals", "food-data"])
 
 app.config ($routeProvider) ->
   $routeProvider
-    .when("/compare",
+    .when "/compare",
       templateUrl: "partials/compare.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/compare/:foods"
+      controller: "CompareCtrl"
+    .when "/compare/:foods",
       templateUrl: "partials/compare.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/foods"
+      controller: "CompareCtrl"
+    .when "/foods",
       templateUrl: "partials/foods.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/foods/:food"
+      controller: "FoodsCtrl"
+    .when "/foods/:food",
       templateUrl: "partials/foods.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/nutrients"
+      controller: "FoodsCtrl"
+    .when "/nutrients",
       templateUrl: "partials/nutrients.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/nutrients/:nutrient"
+      controller: "NutrientsCtrl"
+    .when "/nutrients/:nutrient",
       templateUrl: "partials/nutrients.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .when("/about"
+      controller: "NutrientsCtrl"
+    .when "/about",
       templateUrl: "partials/about.html"
-      controller: ($scope, $routeParams) ->
-        console.log "COMPARE CTRL", $routeParams
-    )
-    .otherwise(redirectTo: "/compare")
+    .otherwise redirectTo: "/compare"
 
 
 app.controller "MainCtrl", ($scope, $location, FoodData) ->
   $scope.foodData = FoodData
 
+  routes =
+    compare:   "#/compare"
+    foods:     "#/foods"
+    nutrients: "#/nutrients"
+    about:     "#/about"
+
   $scope.navLinks = _.extend [
     text: "Compare"
-    href: "#/compare"
+    href: routes.compare
+    getHash: -> 
+      routes.compare + $scope.compare.selectedFoods.join("+")
   ,
     text: "Foods"
-    href: "#/foods"
+    href: routes.foods
   ,
     text: "Nutrients"
-    href: "#/nutrients"
+    href: routes.nutrients
   ,
     text: "About"
-    href: "#/about"
+    href: routes.about
   ],
     isActive: (navLink) ->
-      navLink.href is "#" + $location.path()
+      _.contains "#" + $location.path(), navLink.href
 
 
-# Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true
+app.factory "ComparePage", (FoodData) ->
+  query:
+    text: ""
+    includeFoodGroups: false
+  selectedFoods: []
+  selected: (food) ->
+    !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
+  toggle: (food) ->
+    if @selected(food)
+      @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
+    else
+      @selectedFoods.push _.clone(food)
+    FoodData.calculateRelativeValues @selectedFoods
+  clear: ->
+    for food in @selectedFoods
+      FoodData.findFoodById(food.NDB_No).selected = false
+    @selectedFoods = []
+
+
+app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
+  $scope.compare = ComparePage
+
+
+app.factory "FoodsPage", ->
+  query:
+    text: ""
+    includeFoodGroups: false
+  selectedFood: null
+  selected: (food) ->
+    @selectedFood?.NDB_No is food?.NDB_No
+  toggle: (food) ->
+    if @selected(food)
+      @selectedFood = null
+    else
+      @selectedFood = _.clone(food)
+
+
+app.controller "FoodsCtrl", ($scope, $routeParams, FoodData, FoodsPage) ->
+  if $routeParams.food
+    $scope.foods.selectedFood = FoodData.findFoodById($routeParams.food)
+
+  $scope.foods = FoodsPage
+
+
+app.factory "NutrientsPage", (FoodData) ->
+  query:
+    text: ""
+    includeFoodGroups: false
+  selectedNutrient: null
+  filteredFoods: FoodData.foods
+  selected: (nutrient) ->
+    nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
+  toggle: (nutrient) ->
+    if @selected(nutrient)
+      @selectedNutrient = null
+    else
+      @selectedNutrient = _.clone(nutrient)
+  orderBy: (food) ->
+    value = food.nutrientValue
+    if value?
+      value
+    else
+      -1
+
+
+app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData, $filter, NutrientsPage) ->
+  if $routeParams.nutrient
+    $scope.nutrients.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient)
+
+  $scope.nutrients = NutrientsPage
+
+  filteredFoodsWithoutValues = null
+  maxValue = null
+
+  calculateMaxValue = (nutrient) ->
+    if nutrient and filteredFoodsWithoutValues.length
+      max = 0
+      for food in filteredFoodsWithoutValues
+        value = food[nutrient.NutrDesc]
+        if typeof value is "number" and value > max
+          max = value
+      max
+    else
+      null
+
+  updateFilteredFoods = (applyFilter) ->
+    if applyFilter
+      filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, $scope.nutrients.query)
+    else
+      filteredFoodsWithoutValues ?= FoodData.foods
+    selectedNutrient = $scope.nutrients.selectedNutrient
+    maxValue = calculateMaxValue(selectedNutrient)
+    $scope.nutrients.filteredFoods = if selectedNutrient
+      _.map filteredFoodsWithoutValues, (f) ->
+        food =
+          NDB_No: f.NDB_No
+          Long_Desc: f.Long_Desc
+          FdGrp_Desc: f.FdGrp_Desc
+        food.nutrientValue = f[selectedNutrient.NutrDesc] or 0
+        food.nutrientPercentOfMax = if maxValue then ((food.nutrientValue / maxValue) * 100) + "%" else "0%"
+        food
+    else
+      []
+
+  $scope.$watch "nutrients.query.text", (newVal, oldVal) ->
+    updateFilteredFoods true
+
+  $scope.$watch "nutrients.selectedNutrient", (newVal, oldVal) ->
+    updateFilteredFoods()
+
+  $scope.$watch "nutrients.query.includeFoodGroups", (newVal, oldVal) ->
+    updateFilteredFoods true
+
+  
+# Provides a search box and food list from which foods can be selected.
+app.directive "foodSearch", ->
+  restrict: "E"
+  templateUrl: "partials/food-search.html"
+  scope:
+    foods: "="
+    helpers: "="
+    
+
+# Provides a selectable list of nutrients.
+app.directive "nutrientList", (FoodData) ->
+  restrict: "E"
+  templateUrl: "partials/nutrient-list.html"
+  scope:
+    nutrientKeys: "="
+    helpers: "="
+  link: (scope, element, attrs) ->
+    scope.nutrients = _.map(scope.nutrientKeys, (n) -> FoodData.nutrients[n])
+
+
+# Searches the `Long_Desc` field of the foods list, including `FdGrp_Desc` if includeFoodGroups is true
 # The search text is case- and order-insensitive
 # The characters in `negativeSearchPrefixes` exclude results
 app.filter "searchFoods", ->
-  (foods, searchQuery) ->
-    {text, includeFoodGroups} = searchQuery
+  (foods, query) ->
+    {text, includeFoodGroups} = query
     if text
       filteredFoods = []
       negativeSearchPrefixes = ["!", "-"]

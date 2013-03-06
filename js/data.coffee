@@ -202,7 +202,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
           if calories
             item[k] = v / calories
           else
-            item[k] = v # water...
+            item[k] = -v # water...
 
       # Convert fat, protein, carbohydrate, and alcohol to percentages of the whole
       calculatedCalorieKey = "Calories, calculated"

@@ -13,7 +13,7 @@
 
 1. Download and unzip [everything](https://github.com/ryanatkn/nutrients-per-calorie/archive/master.zip).
 
-2. Serve up the contents of the folder on a local web server. There is no server code, but cross-origin restrictions make this necessary to load the food data. Python's SimpleHTTPServer works well enough.
+2. Serve up the contents of the folder on a local web server. There is no server code, but cross-origin restrictions make this necessary to load the food data. Python's http server works well enough.
 
   <pre>python -m http.server</pre>
   

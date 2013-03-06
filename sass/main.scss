@@ -159,6 +159,7 @@ nutrient-list {
   display: inline-block;
   width: 100px;
   height: 16px;
+  background-color: transparentize($green, 0.5);
 }
 
 .nutrient-bar {

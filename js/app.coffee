@@ -89,7 +89,7 @@ app.controller "CompareCtrl", ($scope, $routeParams, FoodData) ->
 
 app.controller "FoodsCtrl", ($scope, $routeParams, FoodData) ->
   if $routeParams.food
-    $scope.foods.selected = FoodData.findFoodById($routeParams.food)
+    $scope.foods.selectedFood = FoodData.findFoodById($routeParams.food)
 
   $scope.foods =
     query:
@@ -105,26 +105,16 @@ app.controller "FoodsCtrl", ($scope, $routeParams, FoodData) ->
         @selectedFood = _.clone(food)
 
 
-app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData) ->
+app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData, $filter) ->
   if $routeParams.nutrient
-    $scope.nutrients.selected = FoodData.findNutrientById($routeParams.nutrient)
+    $scope.nutrients.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient)
 
   $scope.nutrients =
     query:
       text: ""
       includeFoodGroups: false
     selectedNutrient: null
-    getMaxValue: ->
-      if @selectedNutrient
-        console.log "get max"
-        _.max(FoodData.foods, @selectedNutrient.NutrDesc)[@selectedNutrient.NutrDesc]
-      else
-        null
-    getPercentOfMax: (food) ->
-      if @selectedNutrient
-        ((food[@selectedNutrient.NutrDesc] / @getMaxValue()) * 100) + "%"
-      else
-        null
+    filteredFoods: FoodData.foods
     selected: (nutrient) ->
       nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
     toggle: (nutrient) ->
@@ -132,17 +122,54 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData) ->
         @selectedNutrient = null
       else
         @selectedNutrient = _.clone(nutrient)
-    getNutrientData: (food) ->
-      if @selectedNutrient
-        food[@selectedNutrient.NutrDesc]
-      else
-        null
     orderBy: (food) ->
-      value = food[$scope.nutrients.selectedNutrient?.NutrDesc]
+      value = food.nutrientValue
       if value?
         value
       else
         -1
+
+  filteredFoodsWithoutValues = null
+  maxValue = null
+
+  calculateMaxValue = (nutrient) ->
+    if nutrient and filteredFoodsWithoutValues.length
+      max = 0
+      for food in filteredFoodsWithoutValues
+        value = food[nutrient.NutrDesc]
+        if typeof value is "number" and value > max
+          max = value
+      max
+    else
+      null
+
+  updateFilteredFoods = (applyFilter) ->
+    if applyFilter
+      filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, $scope.nutrients.query)
+    else
+      filteredFoodsWithoutValues ?= FoodData.foods
+    selectedNutrient = $scope.nutrients.selectedNutrient
+    maxValue = calculateMaxValue(selectedNutrient)
+    $scope.nutrients.filteredFoods = if selectedNutrient
+      _.map filteredFoodsWithoutValues, (f) ->
+        food =
+          NDB_No: f.NDB_No
+          Long_Desc: f.Long_Desc
+          FdGrp_Desc: f.FdGrp_Desc
+        food.nutrientValue = f[selectedNutrient.NutrDesc] or 0
+        food.nutrientPercentOfMax = if maxValue then ((food.nutrientValue / maxValue) * 100) + "%" else "0%"
+        food
+    else
+      []
+
+  $scope.$watch "nutrients.query.text", (newVal, oldVal) ->
+    updateFilteredFoods true
+
+  $scope.$watch "nutrients.selectedNutrient", (newVal, oldVal) ->
+    updateFilteredFoods()
+
+  $scope.$watch "nutrients.query.includeFoodGroups", (newVal, oldVal) ->
+    updateFilteredFoods true
 
   
 # Provides a search box and food list from which foods can be selected.
@@ -164,7 +191,7 @@ app.directive "nutrientList", (FoodData) ->
     scope.nutrients = _.map(scope.nutrientKeys, (n) -> FoodData.nutrients[n])
 
 
-# Searches the `Long_Desc` field of the foods list, including `FdGroup_Desc` if includeFoodGroups is true
+# Searches the `Long_Desc` field of the foods list, including `FdGrp_Desc` if includeFoodGroups is true
 # The search text is case- and order-insensitive
 # The characters in `negativeSearchPrefixes` exclude results
 app.filter "searchFoods", ->

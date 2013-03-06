@@ -1,7 +1,7 @@
 <div class="search-form">
   <input type="text" ng-model="helpers.query.text" placeholder="Search foods, using - to exclude results" />
   <input type="checkbox" ng-model="helpers.query.includeFoodGroups" id="include-food-groups" />
-  <label for="include-food-groups">Include food groups</label>
+  <label for="include-food-groups">Include food groups in search</label>
 </div>
 <ul class="food-list">
   <li ng-repeat="food in foods | searchFoods: helpers.query | limitTo: 50"

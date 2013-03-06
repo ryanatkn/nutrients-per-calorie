@@ -15,7 +15,7 @@
 
 2. Serve up the contents of the folder on a local web server. There is no server code, but cross-origin restrictions make this necessary to load the food data. Python's SimpleHTTPServer works well enough.
 
-  <pre>python -m SimpleHTTPServer 3000</pre>
+  <pre>python -m http.server</pre>
   
 3. Go to localhost:3000 in your browser, or wherever your server is.
 

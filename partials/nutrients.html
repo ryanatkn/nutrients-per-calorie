@@ -1,36 +1,36 @@
 <div class="column-wrapper">
   <div class="column">
-    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.macronutrientKeys"></nutrient-list>
-    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.miscKeys"></nutrient-list>
+    <nutrient-list helpers="nutrients" nutrient-keys="foodData.macronutrientKeys"></nutrient-list>
+    <nutrient-list helpers="nutrients" nutrient-keys="foodData.miscKeys"></nutrient-list>
   </div>
   <div class="column">
-    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.vitaminKeys"></nutrient-list>
+    <nutrient-list helpers="nutrients" nutrient-keys="foodData.vitaminKeys"></nutrient-list>
   </div>
   <div class="column">
-    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.mineralKeys"></nutrient-list>
+    <nutrient-list helpers="nutrients" nutrient-keys="foodData.mineralKeys"></nutrient-list>
   </div>
   <div class="column">
-    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.aminoAcidKeys"></nutrient-list>
+    <nutrient-list helpers="nutrients" nutrient-keys="foodData.aminoAcidKeys"></nutrient-list>
   </div>
   <div class="column">
-    <nutrient-list helpers="data.nutrients" nutrient-keys="foodData.sugarKeys"></nutrient-list>
+    <nutrient-list helpers="nutrients" nutrient-keys="foodData.sugarKeys"></nutrient-list>
   </div>
 </div>
 
-nutrients {{data.nutrients.selectedNutrient}} {{data.nutrients.getMaxValue()}}
+nutrients {{nutrients.selectedNutrient}} {{nutrients.getMaxValue()}}
 
 <!-- TODO add a food group checkbox dropdown on every search - globally shared data - saved to localStorage! -->
 <!-- TODO saved searches, quick clear -->
 
 <div class="search-form">
-  <input type="text" ng-model="data.nutrients.query.text" placeholder="Search foods, using - to exclude results" />
-  <input type="checkbox" ng-model="data.nutrients.query.includeFoodGroups" id="include-food-groups" />
+  <input type="text" ng-model="nutrients.query.text" placeholder="Search foods, using - to exclude results" />
+  <input type="checkbox" ng-model="nutrients.query.includeFoodGroups" id="include-food-groups" />
   <label for="include-food-groups">Include food groups</label>
 </div>
 <ul class="food-list">
-  <li ng-repeat="food in foodData.foods | searchFoods: data.nutrients.query | orderBy: data.nutrients.orderBy : true | limitTo: 200">
+  <li ng-repeat="food in foodData.foods | searchFoods: nutrients.query | orderBy: nutrients.orderBy : true | limitTo: 200">
     <div class="nutrient-graph">
-      <div class="nutrient-bar" style="width: {{data.nutrients.getPercentOfMax(food)}}"></div>
+      <div class="nutrient-bar" style="width: {{nutrients.getPercentOfMax(food)}}"></div>
     </div>
     <a class="food-label" href="#/foods/{{food.NDB_No}}">{{food.Long_Desc}}</a>
     <span class="food-group">{{food.FdGrp_Desc}}</span>

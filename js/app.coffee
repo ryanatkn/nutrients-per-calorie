@@ -52,7 +52,7 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
     text: "Compare"
     href: routes.compare
     getHash: -> 
-      routes.compare + $scope.data.compare.selectedFoods.join("+")
+      routes.compare + $scope.compare.selectedFoods.join("+")
   ,
     text: "Foods"
     href: routes.foods
@@ -66,84 +66,83 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
     isActive: (navLink) ->
       _.contains "#" + $location.path(), navLink.href
 
-  $scope.data =
-    compare:
-      query: # TODO MOVE if we can figure out how to persist state on each page, separately...
-        text: ""
-        includeFoodGroups: false
-      selectedFoods: []
-      selected: (food) ->
-        !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
-      toggle: (food) ->
-        if @selected(food)
-          @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
-        else
-          @selectedFoods.push _.clone(food)
-        FoodData.calculateRelativeValues @selectedFoods
-      clear: ->
-        for food in @selectedFoods
-          FoodData.findFoodById(food.NDB_No).selected = false
-        @selectedFoods = []
-    foods:
-      query: # TODO MOVE if we can figure out how to persist state on each page, separately...
-        text: ""
-        includeFoodGroups: false
-      selectedFood: null
-      selected: (food) ->
-        @selectedFood?.NDB_No is food?.NDB_No
-      toggle: (food) ->
-        if @selected(food)
-          @selectedFood = null
-        else
-          @selectedFood = _.clone(food)
-    nutrients:
-      query: # TODO MOVE if we can figure out how to persist state on each page, separately...
-        text: ""
-        includeFoodGroups: false
-      selectedNutrient: null
-      getMaxValue: ->
-        if @selectedNutrient
-          console.log "get max"
-          _.max(FoodData.foods, @selectedNutrient.NutrDesc)[@selectedNutrient.NutrDesc]
-        else
-          null
-      getPercentOfMax: (food) ->
-        if @selectedNutrient
-          ((food[@selectedNutrient.NutrDesc] / @getMaxValue()) * 100) + "%"
-        else
-          null
-      selected: (nutrient) ->
-        nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
-      toggle: (nutrient) ->
-        if @selected(nutrient)
-          @selectedNutrient = null
-        else
-          @selectedNutrient = _.clone(nutrient)
-      getNutrientData: (food) ->
-        if @selectedNutrient
-          food[@selectedNutrient.NutrDesc]
-        else
-          null
-      orderBy: (food) ->
-        value = food[$scope.data.nutrients.selectedNutrient?.NutrDesc]
-        if value?
-          value
-        else
-          -1
 
-
-app.controller "CompareCtrl", ($scope, $routeParams) ->
-  console.log "COMPARE CTRL", $routeParams
+app.controller "CompareCtrl", ($scope, $routeParams, FoodData) ->
+  $scope.compare =
+    query:
+      text: ""
+      includeFoodGroups: false
+    selectedFoods: []
+    selected: (food) ->
+      !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
+    toggle: (food) ->
+      if @selected(food)
+        @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
+      else
+        @selectedFoods.push _.clone(food)
+      FoodData.calculateRelativeValues @selectedFoods
+    clear: ->
+      for food in @selectedFoods
+        FoodData.findFoodById(food.NDB_No).selected = false
+      @selectedFoods = []    
 
 
 app.controller "FoodsCtrl", ($scope, $routeParams, FoodData) ->
   if $routeParams.food
-    $scope.data.foods.selected = FoodData.findFoodById($routeParams.food)
+    $scope.foods.selected = FoodData.findFoodById($routeParams.food)
+
+  $scope.foods =
+    query:
+      text: ""
+      includeFoodGroups: false
+    selectedFood: null
+    selected: (food) ->
+      @selectedFood?.NDB_No is food?.NDB_No
+    toggle: (food) ->
+      if @selected(food)
+        @selectedFood = null
+      else
+        @selectedFood = _.clone(food)
 
 
 app.controller "NutrientsCtrl", ($scope, $routeParams, FoodData) ->
   if $routeParams.nutrient
-    $scope.data.nutrients.selected = FoodData.findNutrientById($routeParams.nutrient)
+    $scope.nutrients.selected = FoodData.findNutrientById($routeParams.nutrient)
+
+  $scope.nutrients =
+    query:
+      text: ""
+      includeFoodGroups: false
+    selectedNutrient: null
+    getMaxValue: ->
+      if @selectedNutrient
+        console.log "get max"
+        _.max(FoodData.foods, @selectedNutrient.NutrDesc)[@selectedNutrient.NutrDesc]
+      else
+        null
+    getPercentOfMax: (food) ->
+      if @selectedNutrient
+        ((food[@selectedNutrient.NutrDesc] / @getMaxValue()) * 100) + "%"
+      else
+        null
+    selected: (nutrient) ->
+      nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
+    toggle: (nutrient) ->
+      if @selected(nutrient)
+        @selectedNutrient = null
+      else
+        @selectedNutrient = _.clone(nutrient)
+    getNutrientData: (food) ->
+      if @selectedNutrient
+        food[@selectedNutrient.NutrDesc]
+      else
+        null
+    orderBy: (food) ->
+      value = food[$scope.nutrients.selectedNutrient?.NutrDesc]
+      if value?
+        value
+      else
+        -1
 
   
 # Provides a search box and food list from which foods can be selected.

@@ -242,7 +242,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
     render = ->
       vis.selectAll("*").remove()
 
-      foods = scope.data.compare.selectedFoods
+      foods = scope.compare.selectedFoods
       numSelected = foods.length
       if !numSelected
         vis.style "display", "none"
@@ -261,5 +261,5 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
       DrawingHelpers.drawNutrientGroups vis, foods, nutrientGroups
 
     # Redraw when items are selected or deselected
-    scope.$watch "data.compare.selectedFoods.length", ->
+    scope.$watch "compare.selectedFoods.length", ->
       render()

@@ -1,1 +1,1 @@
-coffee -cwj js/app.js js/app.coffee js/data.coffee js/visuals.coffee & compass watch & python -m http.server
+coffee -cwj js/app.js js/app.coffee js/data.coffee js/visuals.coffee & compass watch sass/sassy.scss sass/main.scss sass/ie.scss & python -m http.server

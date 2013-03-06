@@ -101,6 +101,17 @@ app.controller "MainCtrl", ($scope, $location, FoodData) ->
         text: ""
         includeFoodGroups: false
       selectedNutrient: null
+      getMaxValue: ->
+        if @selectedNutrient
+          console.log "get max"
+          _.max(FoodData.foods, @selectedNutrient.NutrDesc)[@selectedNutrient.NutrDesc]
+        else
+          null
+      getPercentOfMax: (food) ->
+        if @selectedNutrient
+          ((food[@selectedNutrient.NutrDesc] / @getMaxValue()) * 100) + "%"
+        else
+          null
       selected: (nutrient) ->
         nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
       toggle: (nutrient) ->

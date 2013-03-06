@@ -154,3 +154,14 @@ nutrient-list {
   display: block;
   margin-bottom: $vertical-padding;
 }
+
+.nutrient-graph {
+  display: inline-block;
+  width: 100px;
+  height: 16px;
+}
+
+.nutrient-bar {
+  background-color: $green;
+  height: 16px;
+}

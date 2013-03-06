@@ -17,7 +17,7 @@
   </div>
 </div>
 
-nutrients {{data.nutrients.selectedNutrient}}
+nutrients {{data.nutrients.selectedNutrient}} {{data.nutrients.getMaxValue()}}
 
 <!-- TODO add a food group checkbox dropdown on every search - globally shared data - saved to localStorage! -->
 <!-- TODO saved searches, quick clear -->
@@ -29,7 +29,9 @@ nutrients {{data.nutrients.selectedNutrient}}
 </div>
 <ul class="food-list">
   <li ng-repeat="food in foodData.foods | searchFoods: data.nutrients.query | orderBy: data.nutrients.orderBy : true | limitTo: 200">
-    <span class="nutrient-graph">{{data.nutrients.getNutrientData(food)}}</span>
+    <div class="nutrient-graph">
+      <div class="nutrient-bar" style="width: {{data.nutrients.getPercentOfMax(food)}}"></div>
+    </div>
     <a class="food-label" href="#/foods/{{food.NDB_No}}">{{food.Long_Desc}}</a>
     <span class="food-group">{{food.FdGrp_Desc}}</span>
   </li>

@@ -27,7 +27,7 @@
 
 1. You'll need [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/). 
 
-2. To compile and watch coffee/sass and start a server, run the included shell script:
+2. To compile and watch coffee/sass and start a Python server, run the included shell script:
   
   <pre>bash ba.sh</pre>
 

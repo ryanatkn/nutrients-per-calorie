@@ -1,35 +1,36 @@
 :dolphin: Nutrients Per Calorie
 ===============================
 
-*an interface to the nutritional data available at the [USDA National Nutrient Database](http://ndb.nal.usda.gov/)*
-
 **[Try it here!](http://ryanatkn.github.com/nutrients-per-calorie)** (tested only in Firefox and Chrome)
 
-*made with [Angular](http://angularjs.org/) and [d3](http://d3js.org/)*
+*made with [AngularJS](http://angularjs.org/) and [d3](http://d3js.org/)*
 
 
-:elephant: How to run locally
-=============================
+:elephant: Mission
+==================
+
+This app attempts to help us make better food choices by putting the nutrition data from the [USDA National Nutrient Database](http://ndb.nal.usda.gov/) in an easily digestible form. By comparing foods in terms of nutrients per calorie, we're able to get an idea of what's healthy and what's empty.
+
+
+:monkey: Use it offline
+=======================
 
 1. Download and unzip [everything](https://github.com/ryanatkn/nutrients-per-calorie/archive/master.zip).
 
-2. Serve up the contents of the folder on a local web server. There is no server code, but cross-origin restrictions make this necessary to load the food data. Python's http server works well enough.
+2. Serve the extracted folder from a web server. If you have Python installed, you have (a server)[http://docs.python.org/2/library/simplehttpserver.html] ready to go. See instructions below for Node.
 
-  <pre>python -m http.server</pre>
+3. Compare foods!
+
+
+:octopus: For developers
+========================
+
+To tinker with the precompiled code, you'll need [Node](http://nodejs.org), [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/).
   
-3. Go to localhost:8000 in your browser, or wherever your server is.
-
-4. Compare foods!
-
-
-:monkey: How to make changes
-============================
-
-1. You'll need [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/). 
-
-2. To compile and watch coffee/sass and start a Python server, run the included shell script:
-  
-  <pre>bash ba.sh</pre>
+  <pre>
+    npm install
+    npm start
+  </pre>
 
 
 :snake: License

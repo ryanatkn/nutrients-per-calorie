@@ -1,0 +1,17 @@
+{
+  "name": "nutrients-per-calorie",
+  "version": "0.1.0",
+  "author": "Ryan Atkinson <ryanatkn@gmail.com>",
+  "description": "an interface to the nutritional data available at http://ndb.nal.usda.gov/",
+  "scripts": {
+    "start": "bash ba.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryanatkn/nutrients-per-calorie.git"
+  },
+  "dependencies": {
+    "express":  "*"
+  },
+  "license": "MIT"
+}

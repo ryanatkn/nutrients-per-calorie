@@ -29,7 +29,7 @@ This app attempts to help us make better food choices by putting the nutrition d
 :octopus: For developers
 ========================
 
-To tinker with the precompiled code, you'll need [Node](http://nodejs.org), [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/).
+To tinker with the uncompiled code, you'll need [Node](http://nodejs.org), [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/).
   
     npm install
     npm start

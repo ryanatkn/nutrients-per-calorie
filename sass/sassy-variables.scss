@@ -36,9 +36,10 @@ $master-text-color: saturate(darken($master-color, 35%), 30%);
 
 $highlight-border-color: $master-color;
 $highlight-color: transparentize($highlight-border-color, 0.75);
-$highlight-hover-color: transparentize($highlight-border-color, 0.85);
-$highlight-active-color: transparentize($highlight-border-color, 0.8);
+$highlight-hover-color: transparentize($highlight-border-color, 0.9);
 $highlight-hover-border-color: transparentize($highlight-border-color, 0.4);
+$highlight-active-color: transparentize($highlight-border-color, 0.85);
+$highlight-active-border-color: transparentize($highlight-border-color, 0.2);
 
 $border-radius: 2px;
 $border-color: #bbb;

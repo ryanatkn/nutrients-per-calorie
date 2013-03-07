@@ -2,7 +2,7 @@
   "name": "nutrients-per-calorie",
   "version": "0.1.0",
   "author": "Ryan Atkinson <ryanatkn@gmail.com>",
-  "description": "an interface to the nutritional data available at http://ndb.nal.usda.gov/",
+  "description": "a web interface to the nutritional data available at http://ndb.nal.usda.gov/",
   "scripts": {
     "start": "bash ba.sh"
   },

@@ -1,7 +1,7 @@
 :dolphin: Nutrients Per Calorie
 ===============================
 
-*a web-based interface to the nutritional data available at the [USDA National Nutrient Database](http://ndb.nal.usda.gov/)*
+*a web interface to the nutritional data available at the [USDA National Nutrient Database](http://ndb.nal.usda.gov/)*
 
 **[Try it here!](http://ryanatkn.github.com/nutrients-per-calorie)** (tested only in Firefox and Chrome)
 

@@ -112,7 +112,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 /* line 23, ../sass/sassy-mixins.scss */
 .selectable:hover {
-  background-color: rgba(148, 228, 109, 0.15);
+  background-color: rgba(148, 228, 109, 0.1);
   border-color: rgba(148, 228, 109, 0.6);
 }
 /* line 28, ../sass/sassy-mixins.scss */
@@ -122,8 +122,8 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 /* line 33, ../sass/sassy-mixins.scss */
 .selectable:active {
-  background-color: rgba(148, 228, 109, 0.2);
-  border-color: #94e46d;
+  background-color: rgba(148, 228, 109, 0.15);
+  border-color: rgba(148, 228, 109, 0.8);
 }
 
 /* line 12, ../sass/sassy-classes.scss */

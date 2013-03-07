@@ -263,7 +263,7 @@
       }
       selectedNutrient = $scope.nutrients.selectedNutrient;
       maxValue = calculateMaxValue(selectedNutrient);
-      return $scope.nutrients.filteredFoods = selectedNutrient ? _.map(filteredFoodsWithoutValues, function(f) {
+      $scope.nutrients.filteredFoods = selectedNutrient ? _.map(filteredFoodsWithoutValues, function(f) {
         var food;
         food = {
           NDB_No: f.NDB_No,
@@ -274,6 +274,7 @@
         food.nutrientPercentOfMax = maxValue ? ((food.nutrientValue / maxValue) * 100) + "%" : "0%";
         return food;
       }) : [];
+      return NutrientsPage.updatePath();
     };
     $scope.$watch("nutrients.query.text", function(newVal, oldVal) {
       return updateFilteredFoods(true);

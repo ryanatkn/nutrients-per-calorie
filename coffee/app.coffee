@@ -217,6 +217,7 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
         food
     else
       []
+    NutrientsPage.updatePath()
 
   $scope.$watch "nutrients.query.text", (newVal, oldVal) ->
     updateFilteredFoods true

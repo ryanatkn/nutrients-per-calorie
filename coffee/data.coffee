@@ -139,6 +139,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
 
   unusedKeys = _.difference(allKeys, macronutrientKeys, nutrientKeys)
 
+  onLoadCbs = []
+
   FoodData = {
     loaded: false
     foods: null
@@ -167,6 +169,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
           if food[key]?
             food[comparedKey] = food[key] / max or 0
       foods
+
+    onLoad: (cb) -> onLoadCbs.push cb if !@loaded
   }
 
   loadCsvData = (path, cb) ->
@@ -240,5 +244,9 @@ data.factory "FoodData", ($rootScope, Styles) ->
       # Refresh once loaded
       $rootScope.$apply()
       console.log "Loaded FoodData", FoodData
+
+      # Tell the rest of the app to refresh
+      cb() for cb in onLoadCbs
+      onLoadCbs = null
 
   FoodData

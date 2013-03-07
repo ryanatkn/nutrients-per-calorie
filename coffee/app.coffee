@@ -45,64 +45,62 @@ app.config ($routeProvider) ->
     .otherwise redirectTo: "/compare"
 
 
-app.controller "MainCtrl", ($scope, $location, FoodData) ->
+app.controller "MainCtrl", ($scope, $location, FoodData, ComparePage, FoodsPage, NutrientsPage) ->
   $scope.foodData = FoodData
-
-  routes =
-    compare:   "#/compare"
-    foods:     "#/foods"
-    nutrients: "#/nutrients"
-    about:     "#/about"
 
   $scope.navLinks = _.extend [
     text: "Compare"
-    href: routes.compare
-    getHash: -> 
-      routes.compare + $scope.compare.selectedFoods.join("+")
+    getPath: ComparePage.getPath
   ,
     text: "Foods"
-    href: routes.foods
+    getPath: FoodsPage.getPath
   ,
     text: "Nutrients"
-    href: routes.nutrients
+    getPath: NutrientsPage.getPath
   ,
     text: "About"
-    href: routes.about
+    getPath: -> "#/about"
   ],
     isActive: (navLink) ->
-      _.contains "#" + $location.path(), navLink.href
+      _.contains navLink.getPath(), $location.path()
 
 
 app.factory "ComparePage", ($location, FoodData) ->
-  query:
-    text: ""
-    includeFoodGroups: false
-  selectedFoods: []
-  isSelected: (food) ->
-    !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
-  toggle: (food) ->
-    if @isSelected(food)
-      @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
-    else
-      @selectedFoods = _.union(@selectedFoods, _.clone(food))
-    FoodData.calculateRelativeValues @selectedFoods
-  clear: ->
-    for food in @selectedFoods
-      FoodData.findFoodById(food.NDB_No).selected = false
-    @selectedFoods = []
-  updatePath: ->
-    if @selectedFoods.length
-      $location.search foods: _.pluck(@selectedFoods, "NDB_No")
-    else
-      $location.search {}
+  data = 
+    query:
+      text: ""
+      includeFoodGroups: false
+    selectedFoods: []
+    isSelected: (food) ->
+      !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
+    toggle: (food) ->
+      if @isSelected(food)
+        @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
+      else
+        @selectedFoods = _.union(@selectedFoods, _.clone(food))
+      FoodData.calculateRelativeValues @selectedFoods
+    clear: ->
+      for food in @selectedFoods
+        FoodData.findFoodById(food.NDB_No).selected = false
+      @selectedFoods = []
+    updatePath: ->
+      if @selectedFoods.length
+        $location.search foods: _.pluck(@selectedFoods, "NDB_No")
+      else
+        $location.search {}
+    getPath: ->
+      "#/compare" + data.getSearch()
+    getSearch: ->
+      if data.selectedFoods.length
+        "?foods=" + _.pluck(data.selectedFoods, "NDB_No").join(",")
+      else
+        ""
 
 
 app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
   FoodData.onLoad ->
     if $routeParams.foods
       ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods.split(","))
-    else if ComparePage.selectedFoods
-      ComparePage.updatePath()
     ComparePage.selectedFoods = _.clone(ComparePage.selectedFoods)
     $scope.$apply()
 
@@ -113,30 +111,36 @@ app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
 
 
 app.factory "FoodsPage", ($location) ->
-  query:
-    text: ""
-    includeFoodGroups: false
-  selectedFood: null
-  isSelected: (food) ->
-    @selectedFood?.NDB_No is food?.NDB_No
-  toggle: (food) ->
-    if @isSelected(food)
-      @selectedFood = null
-    else
-      @selectedFood = _.clone(food)
-  updatePath: ->
-    if @selectedFood
-      $location.search food: @selectedFood.NDB_No
-    else
-      $location.search {}
+  data =
+    query:
+      text: ""
+      includeFoodGroups: false
+    selectedFood: null
+    isSelected: (food) ->
+      @selectedFood?.NDB_No is food?.NDB_No
+    toggle: (food) ->
+      if @isSelected(food)
+        @selectedFood = null
+      else
+        @selectedFood = _.clone(food)
+    updatePath: ->
+      if @selectedFood
+        $location.search food: @selectedFood.NDB_No
+      else
+        $location.search {}
+    getPath: ->
+      "#/foods" + data.getSearch()
+    getSearch: ->
+      if data.selectedFood
+        "?food=" + data.selectedFood.NDB_No
+      else
+        ""
 
 
 app.controller "FoodsCtrl", ($scope, $routeParams, FoodData, FoodsPage) ->
   FoodData.onLoad ->
     if $routeParams.food
       FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food) # TODO FoodData not loaded, breaks on refresh!
-    else if FoodsPage.selectedFood
-      FoodsPage.updatePath()
     FoodsPage.selectedFood = _.clone(FoodsPage.selectedFood)
     $scope.$apply()
 
@@ -147,38 +151,44 @@ app.controller "FoodsCtrl", ($scope, $routeParams, FoodData, FoodsPage) ->
 
 
 app.factory "NutrientsPage", ($location, FoodData) ->
-  query:
-    text: ""
-    includeFoodGroups: false
-  selectedNutrient: null
-  filteredFoods: FoodData.foods
-  isSelected: (nutrient) ->
-    nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
-  toggle: (nutrient) ->
-    if @isSelected(nutrient)
-      @selectedNutrient = null
-    else
-      @selectedNutrient = _.clone(nutrient)
-    @updatePath()
-  orderBy: (food) ->
-    value = food.nutrientValue
-    if value?
-      value
-    else
-      -1
-  updatePath: ->
-    if @selectedNutrient
-      $location.search "nutrient": @selectedNutrient.Nutr_No
-    else
-      $location.search {}
+  data = 
+    query:
+      text: ""
+      includeFoodGroups: false
+    selectedNutrient: null
+    filteredFoods: FoodData.foods
+    isSelected: (nutrient) ->
+      nutrient?.Nutr_No is @selectedNutrient?.Nutr_No
+    toggle: (nutrient) ->
+      if @isSelected(nutrient)
+        @selectedNutrient = null
+      else
+        @selectedNutrient = _.clone(nutrient)
+      @updatePath()
+    orderBy: (food) ->
+      value = food.nutrientValue
+      if value?
+        value
+      else
+        -1
+    updatePath: ->
+      if @selectedNutrient
+        $location.search "nutrient": @selectedNutrient.Nutr_No
+      else
+        $location.search {}
+    getPath: ->
+      "#/nutrients" + data.getSearch()
+    getSearch: ->
+      if data.selectedNutrient
+        "?nutrient=" + data.selectedNutrient.Nutr_No
+      else
+        ""
 
 
 app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, NutrientsPage) ->
   FoodData.onLoad ->
     if $routeParams.nutrient
       NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient)
-    else if NutrientsPage.selectedNutrient
-      NutrientsPage.updatePath()
     NutrientsPage.selectedNutrient = _.clone(NutrientsPage.selectedNutrient)
     $scope.$apply()
 

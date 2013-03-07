@@ -24,7 +24,7 @@
         <h3 id="loading-message" ng-show="!foodData.loaded">Loading</h3>
         <ul class="tabs" ng-show="foodData.loaded">
           <li ng-repeat="navLink in navLinks" ng-class="{active: navLinks.isActive(navLink)}">
-            <a href="{{navLink.href}}">{{navLink.text}}</a>
+            <a href="{{navLink.getPath()}}">{{navLink.text}}</a>
           </li>
         </ul>
       </div>

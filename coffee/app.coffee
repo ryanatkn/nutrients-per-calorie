@@ -1,4 +1,4 @@
-# Nutrients Per Calorie is an interface to the nutritional data available at http://ndb.nal.usda.gov/
+# Nutrients Per Calorie is a web interface to the nutritional data available at http://ndb.nal.usda.gov/
 # https://github.com/ryanatkn/nutrients-per-calorie
 # Copyright (c) Ryan Atkinson 2013
 # MIT License

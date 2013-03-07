@@ -17,7 +17,7 @@ This app attempts to help us make better food choices by putting the nutrition d
 
 1. Download and unzip [everything](https://github.com/ryanatkn/nutrients-per-calorie/archive/master.zip).
 
-2. Serve the extracted folder from a web server. If you have Python installed, you have (a server)[http://docs.python.org/2/library/simplehttpserver.html] ready to go. See instructions below for Node.
+2. Serve the extracted folder from a web server. If you have Python installed, you have [a server](http://docs.python.org/2/library/simplehttpserver.html) ready to go. See instructions below for Node.
 
 3. Compare foods!
 
@@ -27,10 +27,8 @@ This app attempts to help us make better food choices by putting the nutrition d
 
 To tinker with the precompiled code, you'll need [Node](http://nodejs.org), [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/).
   
-  <pre>
     npm install
     npm start
-  </pre>
 
 
 :snake: License

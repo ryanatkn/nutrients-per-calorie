@@ -36,41 +36,34 @@
     });
   });
 
-  app.controller("MainCtrl", function($scope, $location, FoodData) {
-    var routes;
+  app.controller("MainCtrl", function($scope, $location, FoodData, ComparePage, FoodsPage, NutrientsPage) {
     $scope.foodData = FoodData;
-    routes = {
-      compare: "#/compare",
-      foods: "#/foods",
-      nutrients: "#/nutrients",
-      about: "#/about"
-    };
     return $scope.navLinks = _.extend([
       {
         text: "Compare",
-        href: routes.compare,
-        getHash: function() {
-          return routes.compare + $scope.compare.selectedFoods.join("+");
-        }
+        getPath: ComparePage.getPath
       }, {
         text: "Foods",
-        href: routes.foods
+        getPath: FoodsPage.getPath
       }, {
         text: "Nutrients",
-        href: routes.nutrients
+        getPath: NutrientsPage.getPath
       }, {
         text: "About",
-        href: routes.about
+        getPath: function() {
+          return "#/about";
+        }
       }
     ], {
       isActive: function(navLink) {
-        return _.contains("#" + $location.path(), navLink.href);
+        return _.contains(navLink.getPath(), $location.path());
       }
     });
   });
 
   app.factory("ComparePage", function($location, FoodData) {
-    return {
+    var data;
+    return data = {
       query: {
         text: "",
         includeFoodGroups: false
@@ -108,6 +101,16 @@
         } else {
           return $location.search({});
         }
+      },
+      getPath: function() {
+        return "#/compare" + data.getSearch();
+      },
+      getSearch: function() {
+        if (data.selectedFoods.length) {
+          return "?foods=" + _.pluck(data.selectedFoods, "NDB_No").join(",");
+        } else {
+          return "";
+        }
       }
     };
   });
@@ -116,8 +119,6 @@
     FoodData.onLoad(function() {
       if ($routeParams.foods) {
         ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods.split(","));
-      } else if (ComparePage.selectedFoods) {
-        ComparePage.updatePath();
       }
       ComparePage.selectedFoods = _.clone(ComparePage.selectedFoods);
       return $scope.$apply();
@@ -131,7 +132,8 @@
   });
 
   app.factory("FoodsPage", function($location) {
-    return {
+    var data;
+    return data = {
       query: {
         text: "",
         includeFoodGroups: false
@@ -156,6 +158,16 @@
         } else {
           return $location.search({});
         }
+      },
+      getPath: function() {
+        return "#/foods" + data.getSearch();
+      },
+      getSearch: function() {
+        if (data.selectedFood) {
+          return "?food=" + data.selectedFood.NDB_No;
+        } else {
+          return "";
+        }
       }
     };
   });
@@ -164,8 +176,6 @@
     FoodData.onLoad(function() {
       if ($routeParams.food) {
         FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food);
-      } else if (FoodsPage.selectedFood) {
-        FoodsPage.updatePath();
       }
       FoodsPage.selectedFood = _.clone(FoodsPage.selectedFood);
       return $scope.$apply();
@@ -179,7 +189,8 @@
   });
 
   app.factory("NutrientsPage", function($location, FoodData) {
-    return {
+    var data;
+    return data = {
       query: {
         text: "",
         includeFoodGroups: false
@@ -215,6 +226,16 @@
         } else {
           return $location.search({});
         }
+      },
+      getPath: function() {
+        return "#/nutrients" + data.getSearch();
+      },
+      getSearch: function() {
+        if (data.selectedNutrient) {
+          return "?nutrient=" + data.selectedNutrient.Nutr_No;
+        } else {
+          return "";
+        }
       }
     };
   });
@@ -224,8 +245,6 @@
     FoodData.onLoad(function() {
       if ($routeParams.nutrient) {
         NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient);
-      } else if (NutrientsPage.selectedNutrient) {
-        NutrientsPage.updatePath();
       }
       NutrientsPage.selectedNutrient = _.clone(NutrientsPage.selectedNutrient);
       return $scope.$apply();

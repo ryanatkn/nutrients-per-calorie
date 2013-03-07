@@ -1,6 +1,8 @@
 :dolphin: Nutrients Per Calorie
 ===============================
 
+*a web-based interface to the nutritional data available at the [USDA National Nutrient Database](http://ndb.nal.usda.gov/)*
+
 **[Try it here!](http://ryanatkn.github.com/nutrients-per-calorie)** (tested only in Firefox and Chrome)
 
 *made with [AngularJS](http://angularjs.org/) and [d3](http://d3js.org/)*
@@ -12,12 +14,12 @@
 This app attempts to help us make better food choices by putting the nutrition data from the [USDA National Nutrient Database](http://ndb.nal.usda.gov/) in an easily digestible form. By comparing foods in terms of nutrients per calorie, we're able to get an idea of what's healthy and what's empty.
 
 
-:monkey: Use it offline
-=======================
+:monkey: It works offline too!
+==============================
 
 1. Download and unzip [everything](https://github.com/ryanatkn/nutrients-per-calorie/archive/master.zip).
 
-2. Serve the extracted folder from a web server. If you have Python installed, you have (a server)[http://docs.python.org/2/library/simplehttpserver.html] ready to go. See instructions below for Node.
+2. Serve the extracted folder from a web server. If you have Python installed, you have [a server](http://docs.python.org/2/library/simplehttpserver.html) ready to go. See instructions below for Node. There's no server code required, but this step is necessary to load the food data due to browser security restrictons.
 
 3. Compare foods!
 
@@ -27,10 +29,8 @@ This app attempts to help us make better food choices by putting the nutrition d
 
 To tinker with the precompiled code, you'll need [Node](http://nodejs.org), [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/).
   
-  <pre>
     npm install
     npm start
-  </pre>
 
 
 :snake: License

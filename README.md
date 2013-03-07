@@ -12,8 +12,8 @@
 This app attempts to help us make better food choices by putting the nutrition data from the [USDA National Nutrient Database](http://ndb.nal.usda.gov/) in an easily digestible form. By comparing foods in terms of nutrients per calorie, we're able to get an idea of what's healthy and what's empty.
 
 
-:monkey: Use it offline
-=======================
+:monkey: It works offline too!
+==============================
 
 1. Download and unzip [everything](https://github.com/ryanatkn/nutrients-per-calorie/archive/master.zip).
 

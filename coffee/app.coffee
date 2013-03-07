@@ -98,15 +98,18 @@ app.factory "ComparePage", ($location, FoodData) ->
 
 
 app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
-  if $routeParams.foods
-    ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods)
-  else if ComparePage.selectedFoods
-    ComparePage.updatePath()
+  FoodData.onLoad ->
+    if $routeParams.foods
+      ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods.split(","))
+    else if ComparePage.selectedFoods
+      ComparePage.updatePath()
+    ComparePage.selectedFoods = _.clone(ComparePage.selectedFoods)
+    $scope.$apply()
 
   $scope.compare = ComparePage
 
   $scope.$watch "compare.selectedFoods", (newVal, oldVal) ->
-    ComparePage.updatePath()
+    ComparePage.updatePath() if FoodData.loaded
 
 
 app.factory "FoodsPage", ($location) ->
@@ -129,15 +132,18 @@ app.factory "FoodsPage", ($location) ->
 
 
 app.controller "FoodsCtrl", ($scope, $routeParams, FoodData, FoodsPage) ->
-  if $routeParams.food
-    FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food) # TODO FoodData not loaded, breaks on refresh!
-  else if FoodsPage.selectedFood
-    FoodsPage.updatePath()
+  FoodData.onLoad ->
+    if $routeParams.food
+      FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food) # TODO FoodData not loaded, breaks on refresh!
+    else if FoodsPage.selectedFood
+      FoodsPage.updatePath()
+    FoodsPage.selectedFood = _.clone(FoodsPage.selectedFood)
+    $scope.$apply()
 
   $scope.foods = FoodsPage
 
   $scope.$watch "foods.selectedFood", (newVal, oldVal) ->
-    FoodsPage.updatePath()
+    FoodsPage.updatePath() if FoodData.loaded
 
 
 app.factory "NutrientsPage", ($location, FoodData) ->
@@ -168,10 +174,13 @@ app.factory "NutrientsPage", ($location, FoodData) ->
 
 
 app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, NutrientsPage) ->
-  if $routeParams.nutrient
-    NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient)
-  else if NutrientsPage.selectedNutrient
-    NutrientsPage.updatePath()
+  FoodData.onLoad ->
+    if $routeParams.nutrient
+      NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient)
+    else if NutrientsPage.selectedNutrient
+      NutrientsPage.updatePath()
+    NutrientsPage.selectedNutrient = _.clone(NutrientsPage.selectedNutrient)
+    $scope.$apply()
 
   $scope.nutrients = NutrientsPage
 
@@ -190,11 +199,11 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
       null
 
   updateFilteredFoods = (applyFilter) ->
+    return if !FoodData.loaded
     if applyFilter
       filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, $scope.nutrients.query)
     else
       filteredFoodsWithoutValues ?= FoodData.foods
-    return if !filteredFoodsWithoutValues # not yet laded
     selectedNutrient = $scope.nutrients.selectedNutrient
     maxValue = calculateMaxValue(selectedNutrient)
     $scope.nutrients.filteredFoods = if selectedNutrient

@@ -113,15 +113,20 @@
   });
 
   app.controller("CompareCtrl", function($scope, $routeParams, FoodData, ComparePage) {
-    console.log("COMPARE CRTRL", $routeParams, ComparePage.selectedFoods);
-    if ($routeParams.foods) {
-      ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods);
-    } else if (ComparePage.selectedFoods) {
-      ComparePage.updatePath();
-    }
+    FoodData.onLoad(function() {
+      if ($routeParams.foods) {
+        ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods.split(","));
+      } else if (ComparePage.selectedFoods) {
+        ComparePage.updatePath();
+      }
+      ComparePage.selectedFoods = _.clone(ComparePage.selectedFoods);
+      return $scope.$apply();
+    });
     $scope.compare = ComparePage;
     return $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
-      return ComparePage.updatePath();
+      if (FoodData.loaded) {
+        return ComparePage.updatePath();
+      }
     });
   });
 
@@ -156,15 +161,20 @@
   });
 
   app.controller("FoodsCtrl", function($scope, $routeParams, FoodData, FoodsPage) {
-    console.log("FOODS CTRL", $routeParams);
-    if ($routeParams.food) {
-      FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food);
-    } else if (FoodsPage.selectedFood) {
-      FoodsPage.updatePath();
-    }
+    FoodData.onLoad(function() {
+      if ($routeParams.food) {
+        FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food);
+      } else if (FoodsPage.selectedFood) {
+        FoodsPage.updatePath();
+      }
+      FoodsPage.selectedFood = _.clone(FoodsPage.selectedFood);
+      return $scope.$apply();
+    });
     $scope.foods = FoodsPage;
     return $scope.$watch("foods.selectedFood", function(newVal, oldVal) {
-      return FoodsPage.updatePath();
+      if (FoodData.loaded) {
+        return FoodsPage.updatePath();
+      }
     });
   });
 
@@ -211,12 +221,15 @@
 
   app.controller("NutrientsCtrl", function($scope, $routeParams, $filter, FoodData, NutrientsPage) {
     var calculateMaxValue, filteredFoodsWithoutValues, maxValue, updateFilteredFoods;
-    console.log("NUTRIENTS CTRL");
-    if ($routeParams.nutrient) {
-      NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient);
-    } else if (NutrientsPage.selectedNutrient) {
-      NutrientsPage.updatePath();
-    }
+    FoodData.onLoad(function() {
+      if ($routeParams.nutrient) {
+        NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient);
+      } else if (NutrientsPage.selectedNutrient) {
+        NutrientsPage.updatePath();
+      }
+      NutrientsPage.selectedNutrient = _.clone(NutrientsPage.selectedNutrient);
+      return $scope.$apply();
+    });
     $scope.nutrients = NutrientsPage;
     filteredFoodsWithoutValues = null;
     maxValue = null;
@@ -238,15 +251,15 @@
     };
     updateFilteredFoods = function(applyFilter) {
       var selectedNutrient;
+      if (!FoodData.loaded) {
+        return;
+      }
       if (applyFilter) {
         filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, $scope.nutrients.query);
       } else {
         if (filteredFoodsWithoutValues == null) {
           filteredFoodsWithoutValues = FoodData.foods;
         }
-      }
-      if (!filteredFoodsWithoutValues) {
-        return;
       }
       selectedNutrient = $scope.nutrients.selectedNutrient;
       maxValue = calculateMaxValue(selectedNutrient);
@@ -366,7 +379,7 @@
   data = angular.module("food-data", []);
 
   data.factory("FoodData", function($rootScope, Styles) {
-    var FoodData, allKeys, aminoAcidKeys, comparedKeys, keyAliases, loadCsvData, macronutrientKeys, mineralKeys, miscKeys, nutrientKeys, processFoods, processNutrients, sugarKeys, unusedKeys, vitaminKeys;
+    var FoodData, allKeys, aminoAcidKeys, comparedKeys, keyAliases, loadCsvData, macronutrientKeys, mineralKeys, miscKeys, nutrientKeys, onLoadCbs, processFoods, processNutrients, sugarKeys, unusedKeys, vitaminKeys;
     allKeys = ["NDB_No", "Long_Desc", "FdGrp_Desc", "10:0", "12:0", "13:0", "14:0", "14:1", "15:0", "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0", "18:1 c", "18:1 t", "18:1 undifferentiated", "18:1-11t (18:1t n-7)", "18:2 CLAs", "18:2 i", "18:2 n-6 c,c", "18:2 t not further defined", "18:2 t,t", "18:2 undifferentiated", "18:3 n-3 c,c,c (ALA)", "18:3 n-6 c,c,c", "18:3 undifferentiated", "18:3i", "18:4", "20:0", "20:1", "20:2 n-6 c,c", "20:3 n-3", "20:3 n-6", "20:3 undifferentiated", "20:4 n-6", "20:4 undifferentiated", "20:5 n-3 (EPA)", "21:5", "22:0", "22:1 c", "22:1 t", "22:1 undifferentiated", "22:4", "22:5 n-3 (DPA)", "22:6 n-3 (DHA)", "24:0", "24:1 c", "4:0", "6:0", "8:0", "Adjusted Protein", "Alanine", "Alcohol, ethyl", "Arginine", "Ash", "Aspartic acid", "Betaine", "Beta-sitosterol", "Caffeine", "Calcium, Ca", "Campesterol", "Carbohydrate, by difference", "Carotene, alpha", "Carotene, beta", "Cholesterol", "Choline, total", "Copper, Cu", "Cryptoxanthin, beta", "Cystine", "Dihydrophylloquinone", "Energy", "Energy (kj)", "Fatty acids, total monounsaturated", "Fatty acids, total polyunsaturated", "Fatty acids, total saturated", "Fatty acids, total trans", "Fatty acids, total trans-monoenoic", "Fatty acids, total trans-polyenoic", "Fiber, total dietary", "Fluoride, F", "Folate, DFE", "Folate, food", "Folate, total", "Folic acid", "Fructose", "Galactose", "Glucose (dextrose)", "Glutamic acid", "Glycine", "Histidine", "Hydroxyproline", "Iron, Fe", "Isoleucine", "Lactose", "Leucine", "Lutein + zeaxanthin", "Lycopene", "Lysine", "Magnesium, Mg", "Maltose", "Manganese, Mn", "Menaquinone-4", "Methionine", "Niacin", "Pantothenic acid", "Phenylalanine", "Phosphorus, P", "Phytosterols", "Potassium, K", "Proline", "Protein", "Retinol", "Riboflavin", "Selenium, Se", "Serine", "Sodium, Na", "Starch", "Stigmasterol", "Sucrose", "Sugars, total", "Theobromine", "Thiamin", "Threonine", "Tocopherol, beta", "Tocopherol, delta", "Tocopherol, gamma", "Total lipid (fat)", "Tryptophan", "Tyrosine", "Valine", "Vitamin A, IU", "Vitamin A, RAE", "Vitamin B-12", "Vitamin B-12, added", "Vitamin B-6", "Vitamin C, total ascorbic acid", "Vitamin D", "Vitamin D (D2 + D3)", "Vitamin D2 (ergocalciferol)", "Vitamin D3 (cholecalciferol)", "Vitamin E (alpha-tocopherol)", "Vitamin E, added", "Vitamin K (phylloquinone)", "Water", "Zinc, Zn"];
     keyAliases = {
       "Total lipid (fat)": "Fat",
@@ -416,6 +429,7 @@
     });
     nutrientKeys = _.union(miscKeys, vitaminKeys, mineralKeys, aminoAcidKeys, sugarKeys);
     unusedKeys = _.difference(allKeys, macronutrientKeys, nutrientKeys);
+    onLoadCbs = [];
     FoodData = {
       loaded: false,
       foods: null,
@@ -463,6 +477,11 @@
           }
         }
         return foods;
+      },
+      onLoad: function(cb) {
+        if (!this.loaded) {
+          return onLoadCbs.push(cb);
+        }
       }
     };
     loadCsvData = function(path, cb) {
@@ -535,10 +554,16 @@
     loadCsvData("data/nutrients.csv", function(rawNutrients) {
       FoodData.nutrients = processNutrients(rawNutrients);
       return loadCsvData("data/foods.csv", function(rawFoods) {
+        var cb, _i, _len;
         FoodData.foods = processFoods(rawFoods);
         FoodData.loaded = true;
         $rootScope.$apply();
-        return console.log("Loaded FoodData", FoodData);
+        console.log("Loaded FoodData", FoodData);
+        for (_i = 0, _len = onLoadCbs.length; _i < _len; _i++) {
+          cb = onLoadCbs[_i];
+          cb();
+        }
+        return onLoadCbs = null;
       });
     });
     return FoodData;

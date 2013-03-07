@@ -7,22 +7,28 @@
   app.config(function($routeProvider) {
     return $routeProvider.when("/compare", {
       templateUrl: "partials/compare.html",
-      controller: "CompareCtrl"
+      controller: "CompareCtrl",
+      reloadOnSearch: false
     }).when("/compare/:foods", {
       templateUrl: "partials/compare.html",
-      controller: "CompareCtrl"
+      controller: "CompareCtrl",
+      reloadOnSearch: false
     }).when("/foods", {
       templateUrl: "partials/foods.html",
-      controller: "FoodsCtrl"
+      controller: "FoodsCtrl",
+      reloadOnSearch: false
     }).when("/foods/:food", {
       templateUrl: "partials/foods.html",
-      controller: "FoodsCtrl"
+      controller: "FoodsCtrl",
+      reloadOnSearch: false
     }).when("/nutrients", {
       templateUrl: "partials/nutrients.html",
-      controller: "NutrientsCtrl"
+      controller: "NutrientsCtrl",
+      reloadOnSearch: false
     }).when("/nutrients/:nutrient", {
       templateUrl: "partials/nutrients.html",
-      controller: "NutrientsCtrl"
+      controller: "NutrientsCtrl",
+      reloadOnSearch: false
     }).when("/about", {
       templateUrl: "partials/about.html"
     }).otherwise({
@@ -63,25 +69,25 @@
     });
   });
 
-  app.factory("ComparePage", function(FoodData) {
+  app.factory("ComparePage", function($location, FoodData) {
     return {
       query: {
         text: "",
         includeFoodGroups: false
       },
       selectedFoods: [],
-      selected: function(food) {
+      isSelected: function(food) {
         return !!_.find(this.selectedFoods, function(f) {
           return f.NDB_No === food.NDB_No;
         });
       },
       toggle: function(food) {
-        if (this.selected(food)) {
+        if (this.isSelected(food)) {
           this.selectedFoods = _.reject(this.selectedFoods, function(f) {
             return f.NDB_No === food.NDB_No;
           });
         } else {
-          this.selectedFoods.push(_.clone(food));
+          this.selectedFoods = _.union(this.selectedFoods, _.clone(food));
         }
         return FoodData.calculateRelativeValues(this.selectedFoods);
       },
@@ -93,43 +99,76 @@
           FoodData.findFoodById(food.NDB_No).selected = false;
         }
         return this.selectedFoods = [];
+      },
+      updatePath: function() {
+        if (this.selectedFoods.length) {
+          return $location.search({
+            foods: _.pluck(this.selectedFoods, "NDB_No")
+          });
+        } else {
+          return $location.search({});
+        }
       }
     };
   });
 
   app.controller("CompareCtrl", function($scope, $routeParams, FoodData, ComparePage) {
-    return $scope.compare = ComparePage;
+    console.log("COMPARE CRTRL", $routeParams, ComparePage.selectedFoods);
+    if ($routeParams.foods) {
+      ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods);
+    } else if (ComparePage.selectedFoods) {
+      ComparePage.updatePath();
+    }
+    $scope.compare = ComparePage;
+    return $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
+      return ComparePage.updatePath();
+    });
   });
 
-  app.factory("FoodsPage", function() {
+  app.factory("FoodsPage", function($location) {
     return {
       query: {
         text: "",
         includeFoodGroups: false
       },
       selectedFood: null,
-      selected: function(food) {
+      isSelected: function(food) {
         var _ref;
         return ((_ref = this.selectedFood) != null ? _ref.NDB_No : void 0) === (food != null ? food.NDB_No : void 0);
       },
       toggle: function(food) {
-        if (this.selected(food)) {
+        if (this.isSelected(food)) {
           return this.selectedFood = null;
         } else {
           return this.selectedFood = _.clone(food);
+        }
+      },
+      updatePath: function() {
+        if (this.selectedFood) {
+          return $location.search({
+            food: this.selectedFood.NDB_No
+          });
+        } else {
+          return $location.search({});
         }
       }
     };
   });
 
   app.controller("FoodsCtrl", function($scope, $routeParams, FoodData, FoodsPage) {
+    console.log("FOODS CTRL", $routeParams);
     if ($routeParams.food) {
-      $scope.foods.selectedFood = FoodData.findFoodById($routeParams.food);
+      FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food);
+    } else if (FoodsPage.selectedFood) {
+      FoodsPage.updatePath();
     }
-    return $scope.foods = FoodsPage;
+    $scope.foods = FoodsPage;
+    return $scope.$watch("foods.selectedFood", function(newVal, oldVal) {
+      return FoodsPage.updatePath();
+    });
   });
 
-  app.factory("NutrientsPage", function(FoodData) {
+  app.factory("NutrientsPage", function($location, FoodData) {
     return {
       query: {
         text: "",
@@ -137,16 +176,17 @@
       },
       selectedNutrient: null,
       filteredFoods: FoodData.foods,
-      selected: function(nutrient) {
+      isSelected: function(nutrient) {
         var _ref;
         return (nutrient != null ? nutrient.Nutr_No : void 0) === ((_ref = this.selectedNutrient) != null ? _ref.Nutr_No : void 0);
       },
       toggle: function(nutrient) {
-        if (this.selected(nutrient)) {
-          return this.selectedNutrient = null;
+        if (this.isSelected(nutrient)) {
+          this.selectedNutrient = null;
         } else {
-          return this.selectedNutrient = _.clone(nutrient);
+          this.selectedNutrient = _.clone(nutrient);
         }
+        return this.updatePath();
       },
       orderBy: function(food) {
         var value;
@@ -156,14 +196,26 @@
         } else {
           return -1;
         }
+      },
+      updatePath: function() {
+        if (this.selectedNutrient) {
+          return $location.search({
+            "nutrient": this.selectedNutrient.Nutr_No
+          });
+        } else {
+          return $location.search({});
+        }
       }
     };
   });
 
-  app.controller("NutrientsCtrl", function($scope, $routeParams, FoodData, $filter, NutrientsPage) {
+  app.controller("NutrientsCtrl", function($scope, $routeParams, $filter, FoodData, NutrientsPage) {
     var calculateMaxValue, filteredFoodsWithoutValues, maxValue, updateFilteredFoods;
+    console.log("NUTRIENTS CTRL");
     if ($routeParams.nutrient) {
-      $scope.nutrients.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient);
+      NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient);
+    } else if (NutrientsPage.selectedNutrient) {
+      NutrientsPage.updatePath();
     }
     $scope.nutrients = NutrientsPage;
     filteredFoodsWithoutValues = null;
@@ -192,6 +244,9 @@
         if (filteredFoodsWithoutValues == null) {
           filteredFoodsWithoutValues = FoodData.foods;
         }
+      }
+      if (!filteredFoodsWithoutValues) {
+        return;
       }
       selectedNutrient = $scope.nutrients.selectedNutrient;
       maxValue = calculateMaxValue(selectedNutrient);
@@ -378,10 +433,19 @@
           return n.Nutr_No === Nutr_No;
         });
       },
-      findFoodById: function(NDB_No) {
+      findFoodById: function(id) {
         return _.find(this.foods, function(f) {
-          return f.NDB_No === NDB_No;
+          return f.NDB_No === id;
         });
+      },
+      findFoodsById: function(ids) {
+        var id, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = ids.length; _i < _len; _i++) {
+          id = ids[_i];
+          _results.push(this.findFoodById(id));
+        }
+        return _results;
       },
       calculateRelativeValues: function(foods) {
         var comparedKey, food, key, max, _i, _j, _len, _len1;
@@ -623,7 +687,7 @@
       };
       labelY = Styles.comparisonHeaderHeight + Styles.horizontalPadding - 8;
       vis.selectAll("text.nutrient-label").data(nutrients).enter().append("text").attr("onclick", function(d) {
-        return "javascript: window.location.hash = '#/nutrients/" + FoodData.nutrients[d].Nutr_No + "';";
+        return "javascript: window.location = '#/nutrients?nutrient=" + FoodData.nutrients[d].Nutr_No + "';";
       }).attr("class", "nutrient-label").attr("transform", function(d, i) {
         return "rotate(-45 " + (getLabelX(i)) + " " + labelY + ")";
       }).attr("x", function(d, i) {

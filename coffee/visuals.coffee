@@ -166,7 +166,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
       .data(nutrients)
       .enter()
         .append("text")
-          .attr("onclick", (d) -> "javascript: window.location.hash = '#/nutrients/#{FoodData.nutrients[d].Nutr_No}';")
+          .attr("onclick", (d) -> "javascript: window.location = '#/nutrients?nutrient=#{FoodData.nutrients[d].Nutr_No}';")
           .attr("class", "nutrient-label")
           .attr("transform", (d, i) -> 
             "rotate(-45 #{getLabelX(i)} #{labelY})")

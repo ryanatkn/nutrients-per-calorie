@@ -155,8 +155,10 @@ data.factory "FoodData", ($rootScope, Styles) ->
 
     findNutrientById: (Nutr_No) -> _.find(@nutrients, (n) -> n.Nutr_No is Nutr_No)
 
-    findFoodById: (NDB_No) -> _.find(@foods, (f) -> f.NDB_No is NDB_No)
+    findFoodById: (id) -> _.find(@foods, (f) -> f.NDB_No is id)
+    findFoodsById: (ids) -> @findFoodById id for id in ids
 
+    # Mutates `foods` with compared values
     calculateRelativeValues: (foods) ->
       for key in comparedKeys
         comparedKey = key + "_Compared"

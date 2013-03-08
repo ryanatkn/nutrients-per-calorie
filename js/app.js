@@ -93,13 +93,7 @@
         return this.selectedFoods = [];
       },
       updatePath: function() {
-        if (this.selectedFoods.length) {
-          return $location.search({
-            foods: _.pluck(this.selectedFoods, "NDB_No")
-          });
-        } else {
-          return $location.search({});
-        }
+        return window.location.hash = this.getPath();
       },
       getPath: function() {
         return "#/compare" + data.getSearch();
@@ -151,13 +145,7 @@
         }
       },
       updatePath: function() {
-        if (this.selectedFood) {
-          return $location.search({
-            food: this.selectedFood.NDB_No
-          });
-        } else {
-          return $location.search({});
-        }
+        return window.location.hash = this.getPath();
       },
       getPath: function() {
         return "#/foods" + data.getSearch();
@@ -218,13 +206,7 @@
         }
       },
       updatePath: function() {
-        if (this.selectedNutrient) {
-          return $location.search({
-            "nutrient": this.selectedNutrient.Nutr_No
-          });
-        } else {
-          return $location.search({});
-        }
+        return window.location.hash = this.getPath();
       },
       getPath: function() {
         return "#/nutrients" + data.getSearch();

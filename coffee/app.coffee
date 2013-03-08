@@ -83,10 +83,7 @@ app.factory "ComparePage", ($location, FoodData) ->
         FoodData.findFoodById(food.NDB_No).selected = false
       @selectedFoods = []
     updatePath: ->
-      if @selectedFoods.length
-        $location.search foods: _.pluck(@selectedFoods, "NDB_No")
-      else
-        $location.search {}
+      window.location.hash = @getPath()
     getPath: ->
       "#/compare" + data.getSearch()
     getSearch: ->
@@ -125,10 +122,7 @@ app.factory "FoodsPage", ($location) ->
       else
         @selectedFood = _.clone(food)
     updatePath: ->
-      if @selectedFood
-        $location.search food: @selectedFood.NDB_No
-      else
-        $location.search {}
+      window.location.hash = @getPath()
     getPath: ->
       "#/foods" + data.getSearch()
     getSearch: ->
@@ -173,10 +167,7 @@ app.factory "NutrientsPage", ($location, FoodData) ->
       else
         -1
     updatePath: ->
-      if @selectedNutrient
-        $location.search "nutrient": @selectedNutrient.Nutr_No
-      else
-        $location.search {}
+      window.location.hash = @getPath()
     getPath: ->
       "#/nutrients" + data.getSearch()
     getSearch: ->

@@ -314,7 +314,7 @@ a:hover {
 #header-container {
   white-space: nowrap;
   padding-bottom: 28px;
-  padding-left: 3px;
+  padding-left: 6px;
 }
 
 /* line 17, ../sass/main.scss */
@@ -491,17 +491,21 @@ food-detail {
   white-space: nowrap;
 }
 /* line 181, ../sass/main.scss */
-food-detail h3, food-detail p {
+food-detail h3 {
   padding-left: 6px;
 }
+/* line 185, ../sass/main.scss */
+food-detail p {
+  padding-left: 7px;
+}
 
-/* line 186, ../sass/main.scss */
+/* line 190, ../sass/main.scss */
 .food-detail-graph {
   margin: 14px 0;
   display: inline-block;
 }
 
-/* line 191, ../sass/main.scss */
+/* line 195, ../sass/main.scss */
 .food-detail-pie-chart-labels {
   display: inline-block;
   font-size: 24px;
@@ -510,17 +514,17 @@ food-detail h3, food-detail p {
   left: 13px;
 }
 
-/* line 199, ../sass/main.scss */
+/* line 203, ../sass/main.scss */
 .fat {
   color: red;
 }
 
-/* line 203, ../sass/main.scss */
+/* line 207, ../sass/main.scss */
 .carbohydrate {
   color: #94e46d;
 }
 
-/* line 207, ../sass/main.scss */
+/* line 211, ../sass/main.scss */
 .protein {
   color: #6ed2ef;
 }

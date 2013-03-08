@@ -23,7 +23,7 @@ This app attempts to help us make better food choices by putting the nutrition d
 
 3. Navigate to localhost:1337 or wherever your server is.
 
-4. Compare foods!
+4. Compare f☯☮ds!
 
 
 :octopus: For developers

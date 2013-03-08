@@ -66,14 +66,14 @@ visuals.factory "Styles", ->
 # Drawing helpers
 visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
 
-  # Draws a pie chart from `data` on the `vis` with the given `radius`.
+  # Draws a pie chart from `data` on the `svg` with the given `radius`.
   # Returns the d3 visualization.
-  drawPieChart = (vis, data, radius, options = {}) ->
+  drawPieChart = (svg, data, radius, options = {}) ->
     {x, y} = options
     x ?= radius
     y ?= radius
 
-    g = vis.append("g")
+    g = svg.append("g")
       .data([data])
       .attr("transform", "translate(#{x}, #{y})")
 
@@ -235,8 +235,6 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
   templateUrl: "partials/food-comparison.html"
   link: (scope, element, attrs) ->
 
-    width = (FoodData.nutrientKeys.length * Styles.comparisonCellWidth) + Styles.horizontalPadding + Styles.pieChartRadius
-
     vis = d3.select(element[0]).select(".food-comparison-graphs")
 
     render = ->
@@ -262,4 +260,44 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
 
     # Redraw when items are selected or deselected
     scope.$watch "compare.selectedFoods.length", ->
+      render()
+
+
+visuals.directive "foodDetail", (Styles, FoodData, DrawingHelpers) ->
+  restrict: "E"
+  templateUrl: "partials/food-detail.html"
+  scope:
+    food: "="
+  link: (scope, element, attrs) ->
+
+    vis = d3.select(element[0]).select(".food-detail-graph")
+
+    render = ->
+      vis.selectAll("*").remove()
+
+      food = scope.food
+
+      return if !food
+
+      pieChartData = [
+        value: food["Total lipid (fat)"]
+        color: Styles.colors.red
+      ,
+        value: food["Protein"]
+        color: Styles.colors.blue
+      ,
+        value: food["Carbohydrate, by difference"]
+        color: Styles.colors.green
+      ,
+        value: food["Alcohol, ethyl"]
+        color: Styles.colors.lightGray
+      ]
+      pieChartRadius = 100
+      pieChart = vis.append("svg")
+        .attr("height", pieChartRadius * 2)
+        .attr("width", pieChartRadius * 2)
+      DrawingHelpers.drawPieChart pieChart, pieChartData, pieChartRadius
+
+
+    scope.$watch "food", ->
       render()

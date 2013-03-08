@@ -17,5 +17,5 @@
   display: inline-block;
   vertical-align: top;
   width: $column-width;
-  padding: $horizontal-padding;
+  padding: 0 $horizontal-padding $horizontal-padding $horizontal-padding;
 }

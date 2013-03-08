@@ -136,7 +136,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: inline-block;
   vertical-align: top;
   width: 195.2px;
-  padding: 6px;
+  padding: 0 6px 6px 6px;
 }
 
 /* line 9, ../sass/sassy.scss */

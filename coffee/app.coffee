@@ -78,16 +78,12 @@ app.factory "ComparePage", ($location, FoodData) ->
         @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
       else
         @selectedFoods = _.union(@selectedFoods, _.clone(food))
-      FoodData.calculateRelativeValues @selectedFoods
     clear: ->
       for food in @selectedFoods
         FoodData.findFoodById(food.NDB_No).selected = false
       @selectedFoods = []
     updatePath: ->
-      if @selectedFoods.length
-        $location.search foods: _.pluck(@selectedFoods, "NDB_No")
-      else
-        $location.search {}
+      window.location.hash = @getPath()
     getPath: ->
       "#/compare" + data.getSearch()
     getSearch: ->
@@ -108,6 +104,7 @@ app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
   $scope.compare = ComparePage
 
   $scope.$watch "compare.selectedFoods", (newVal, oldVal) ->
+    FoodData.calculateRelativeValues newVal
     ComparePage.updatePath() if FoodData.loaded
 
 
@@ -125,10 +122,7 @@ app.factory "FoodsPage", ($location) ->
       else
         @selectedFood = _.clone(food)
     updatePath: ->
-      if @selectedFood
-        $location.search food: @selectedFood.NDB_No
-      else
-        $location.search {}
+      window.location.hash = @getPath()
     getPath: ->
       "#/foods" + data.getSearch()
     getSearch: ->
@@ -166,7 +160,6 @@ app.factory "NutrientsPage", ($location, FoodData) ->
         @selectedNutrient = null
       else
         @selectedNutrient = _.clone(nutrient)
-      @updatePath()
     orderBy: (food) ->
       value = food.nutrientValue
       if value?
@@ -174,10 +167,7 @@ app.factory "NutrientsPage", ($location, FoodData) ->
       else
         -1
     updatePath: ->
-      if @selectedNutrient
-        $location.search "nutrient": @selectedNutrient.Nutr_No
-      else
-        $location.search {}
+      window.location.hash = @getPath()
     getPath: ->
       "#/nutrients" + data.getSearch()
     getSearch: ->

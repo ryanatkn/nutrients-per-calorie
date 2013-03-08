@@ -102,26 +102,30 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
 
     # Displays the pie chart labels to explain how to interpret them.
     labelData = [
-      text: "fat"
-      color: Styles.colors.redText
-    ,
-      text: "carbs"
-      color: Styles.colors.greenText
-    ,
-      text: "protein"
+      text: "Protein"
       color: Styles.colors.blueText
+      NutrDesc: "Protein"
+    ,
+      text: "Carbs"
+      color: Styles.colors.greenText
+      NutrDesc: "Carbohydrate, by difference"
+    ,
+      text: "Fat"
+      color: Styles.colors.redText
+      NutrDesc: "Total lipid (fat)"
     ]
     svg.selectAll("text.pie-chart-legend-label")
       .data(labelData)
       .enter()
         .append("text")
-        .attr("class", "pie-chart-legend-label")
+        .attr("class", "pie-chart-legend-label nutrient-label")
         .attr("x", (parseInt(svg.attr("width")) - Styles.comparisonHorizontalSpacing) / 2)
         .attr("y", (d, i) -> (i * Styles.smallFontLineHeight) + Styles.comparisonRowHeight)
         .attr("text-anchor", "middle")
-        .text((d) -> d.text)
         .style("font-size", Styles.smallFontSize)
         .style("fill", (d) -> d.color)
+        .text((d) -> d.text)
+        .attr("onclick", (d) -> FoodData.getNutrientLink(d.NutrDesc))
 
     # Draw each item in the list
     for foodIndex in [0...foods.length]
@@ -166,7 +170,6 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
       .data(nutrients)
       .enter()
         .append("text")
-          .attr("onclick", (d) -> "javascript: window.location = '#/nutrients?nutrient=#{FoodData.nutrients[d].Nutr_No}';")
           .attr("class", "nutrient-label")
           .attr("transform", (d, i) -> 
             "rotate(-45 #{getLabelX(i)} #{labelY})")
@@ -175,6 +178,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
           .style("font-size", Styles.smallFontSize)
           .style("fill", (d, i) -> Styles.colors.getRainbowColor(i))
           .text((d) -> FoodData.nutrients[d].text)
+          .attr("onclick", (d) -> FoodData.getNutrientLink(d))
 
      # Draw each item in the list
     for foodIndex in [0...foods.length]

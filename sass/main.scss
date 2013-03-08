@@ -67,10 +67,6 @@ $comparison-row-height: 46px; // comparisonRowHeight in visuals.coffee
 
 food-comparison {
   position: relative;
-  
-  h3 {
-    padding-left: $horizontal-padding;
-  }
 }
 
 .food-comparison-list {
@@ -137,6 +133,10 @@ food-comparison {
 
 .nutrient-label {
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .text-with-icon {
@@ -177,14 +177,6 @@ nutrient-list {
 
 food-detail {
   white-space: nowrap;
-
-  h3 {
-    padding-left: $horizontal-padding;
-  }
-
-  p {
-    padding-left: $horizontal-padding + 1px;
-  }
 }
 
 .food-detail-graph {
@@ -210,4 +202,8 @@ food-detail {
 
 .protein {
   color: $blue;
+}
+
+.padded-left {
+  padding-left: $horizontal-padding;
 }

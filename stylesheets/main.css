@@ -446,8 +446,12 @@ food-comparison h3 {
 .nutrient-label {
   cursor: pointer;
 }
+/* line 141, ../sass/main.scss */
+.nutrient-label:hover {
+  text-decoration: underline;
+}
 
-/* line 142, ../sass/main.scss */
+/* line 146, ../sass/main.scss */
 .text-with-icon {
   width: 976px;
   position: relative;
@@ -455,7 +459,7 @@ food-comparison h3 {
   min-height: 48px;
   margin-bottom: 28px;
 }
-/* line 150, ../sass/main.scss */
+/* line 154, ../sass/main.scss */
 .text-with-icon img {
   width: 48px;
   height: 48px;
@@ -464,13 +468,13 @@ food-comparison h3 {
   top: 0;
 }
 
-/* line 159, ../sass/main.scss */
+/* line 163, ../sass/main.scss */
 nutrient-list {
   display: block;
   margin-bottom: 14px;
 }
 
-/* line 164, ../sass/main.scss */
+/* line 168, ../sass/main.scss */
 .nutrient-graph {
   display: inline-block;
   width: 100px;
@@ -480,32 +484,32 @@ nutrient-list {
   top: 3px;
 }
 
-/* line 173, ../sass/main.scss */
+/* line 177, ../sass/main.scss */
 .nutrient-bar {
   background-color: #94e46d;
   height: 16px;
 }
 
-/* line 178, ../sass/main.scss */
+/* line 182, ../sass/main.scss */
 food-detail {
   white-space: nowrap;
 }
-/* line 181, ../sass/main.scss */
+/* line 185, ../sass/main.scss */
 food-detail h3 {
   padding-left: 6px;
 }
-/* line 185, ../sass/main.scss */
+/* line 189, ../sass/main.scss */
 food-detail p {
   padding-left: 7px;
 }
 
-/* line 190, ../sass/main.scss */
+/* line 194, ../sass/main.scss */
 .food-detail-graph {
   margin: 14px 0;
   display: inline-block;
 }
 
-/* line 195, ../sass/main.scss */
+/* line 199, ../sass/main.scss */
 .food-detail-pie-chart-labels {
   display: inline-block;
   font-size: 24px;
@@ -514,17 +518,17 @@ food-detail p {
   left: 13px;
 }
 
-/* line 203, ../sass/main.scss */
+/* line 207, ../sass/main.scss */
 .fat {
   color: red;
 }
 
-/* line 207, ../sass/main.scss */
+/* line 211, ../sass/main.scss */
 .carbohydrate {
   color: #94e46d;
 }
 
-/* line 211, ../sass/main.scss */
+/* line 215, ../sass/main.scss */
 .protein {
   color: #6ed2ef;
 }

@@ -137,6 +137,10 @@ food-comparison {
 
 .nutrient-label {
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .text-with-icon {

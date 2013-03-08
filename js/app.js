@@ -462,6 +462,9 @@
         }
         return _results;
       },
+      getNutrientLink: function(NutrDesc) {
+        return "javascript: window.location = '#/nutrients?nutrient=" + this.nutrients[NutrDesc].Nutr_No + "';";
+      },
       calculateRelativeValues: function(foods) {
         var comparedKey, food, key, max, _i, _j, _len, _len1;
         for (_i = 0, _len = comparedKeys.length; _i < _len; _i++) {
@@ -670,22 +673,27 @@
       svg = vis.append("svg").attr("height", vis.attr("height")).attr("width", (Styles.pieChartRadius * 2) + Styles.comparisonHorizontalSpacing);
       labelData = [
         {
-          text: "fat",
-          color: Styles.colors.redText
+          text: "Protein",
+          color: Styles.colors.blueText,
+          NutrDesc: "Protein"
         }, {
-          text: "carbs",
-          color: Styles.colors.greenText
+          text: "Carbs",
+          color: Styles.colors.greenText,
+          NutrDesc: "Carbohydrate, by difference"
         }, {
-          text: "protein",
-          color: Styles.colors.blueText
+          text: "Fat",
+          color: Styles.colors.redText,
+          NutrDesc: "Total lipid (fat)"
         }
       ];
-      svg.selectAll("text.pie-chart-legend-label").data(labelData).enter().append("text").attr("class", "pie-chart-legend-label").attr("x", (parseInt(svg.attr("width")) - Styles.comparisonHorizontalSpacing) / 2).attr("y", function(d, i) {
+      svg.selectAll("text.pie-chart-legend-label").data(labelData).enter().append("text").attr("class", "pie-chart-legend-label nutrient-label").attr("x", (parseInt(svg.attr("width")) - Styles.comparisonHorizontalSpacing) / 2).attr("y", function(d, i) {
         return (i * Styles.smallFontLineHeight) + Styles.comparisonRowHeight;
-      }).attr("text-anchor", "middle").text(function(d) {
-        return d.text;
-      }).style("font-size", Styles.smallFontSize).style("fill", function(d) {
+      }).attr("text-anchor", "middle").style("font-size", Styles.smallFontSize).style("fill", function(d) {
         return d.color;
+      }).text(function(d) {
+        return d.text;
+      }).attr("onclick", function(d) {
+        return FoodData.getNutrientLink(d.NutrDesc);
       });
       _results = [];
       for (foodIndex = _i = 0, _ref = foods.length; 0 <= _ref ? _i < _ref : _i > _ref; foodIndex = 0 <= _ref ? ++_i : --_i) {
@@ -727,9 +735,7 @@
         return i * Styles.comparisonCellWidth + 9;
       };
       labelY = Styles.comparisonHeaderHeight + Styles.horizontalPadding - 8;
-      vis.selectAll("text.nutrient-label").data(nutrients).enter().append("text").attr("onclick", function(d) {
-        return "javascript: window.location = '#/nutrients?nutrient=" + FoodData.nutrients[d].Nutr_No + "';";
-      }).attr("class", "nutrient-label").attr("transform", function(d, i) {
+      vis.selectAll("text.nutrient-label").data(nutrients).enter().append("text").attr("class", "nutrient-label").attr("transform", function(d, i) {
         return "rotate(-45 " + (getLabelX(i)) + " " + labelY + ")";
       }).attr("x", function(d, i) {
         return getLabelX(i);
@@ -737,6 +743,8 @@
         return Styles.colors.getRainbowColor(i);
       }).text(function(d) {
         return FoodData.nutrients[d].text;
+      }).attr("onclick", function(d) {
+        return FoodData.getNutrientLink(d);
       });
       _results = [];
       for (foodIndex = _i = 0, _ref = foods.length; 0 <= _ref ? _i < _ref : _i > _ref; foodIndex = 0 <= _ref ? ++_i : --_i) {

@@ -4,6 +4,12 @@
   display: none;
 }
 
+@mixin padded-header {
+  h3 {
+    padding: 0 0 $horizontal-padding $horizontal-padding;
+  }
+}
+
 #wrapper {
   position: relative;
 }
@@ -57,8 +63,8 @@
 
 .search-form {
   padding: 0 $horizontal-padding $horizontal-padding;
+  white-space: nowrap;
 }
-
 
 $comparison-list-width: 230px;
 $comparison-header-height: 80px; // comparisonHeaderHeight in visuals.coffee
@@ -66,6 +72,7 @@ $comparison-row-height: 46px; // comparisonRowHeight in visuals.coffee
 
 food-comparison {
   position: relative;
+  @include padded-header;
 }
 
 .food-comparison-list {
@@ -96,16 +103,21 @@ food-comparison {
 
   .remove-button {
     position: absolute;
-    left: -16px;
+    left: -20px;
     top: 14px;
     cursor: pointer;
     width: 16px;
     height: 16px;
     padding-left: $horizontal-padding;
+    color: $light-gray-text;
 
     &:hover {
       font-weight: bold;
-      color: darken($red, 20%);
+      color: $red;
+    }
+
+    &:active {
+      color: $dark-red;
     }
   }
 }
@@ -163,4 +175,34 @@ nutrient-list {
 .nutrient-bar {
   background-color: $green;
   height: 16px;
+}
+
+food-detail {
+  @include padded-header;
+  white-space: nowrap;
+}
+
+.food-detail-graph {
+  margin: $vertical-padding 0;
+  display: inline-block;
+}
+
+.food-detail-pie-chart-labels {
+  display: inline-block;
+  font-size: $h3-font-size;
+  position: relative;
+  top: -61px;
+  left: 13px;
+}
+
+.fat {
+  color: red;
+}
+
+.carbohydrate {
+  color: $green;
+}
+
+.protein {
+  color: $blue;
 }

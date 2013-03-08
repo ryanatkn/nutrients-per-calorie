@@ -26,10 +26,17 @@ $green: rgb(148, 228, 109);
 $blue: rgb(110, 210, 239);
 $violet: rgb(208, 146, 244);
 
+$dark-red: darken($red, 20%);
+$dark-yellow: darken($yellow, 20%);
+$dark-green: darken($green, 20%);
+$dark-blue: darken($blue, 20%);
+$dark-violet: darken($violet, 20%);
+
 $rainbow: $red mix($red, $yellow) $yellow mix($yellow, $green) $green
   mix($green, $blue) $blue mix($blue, $violet) $violet mix($violet, $red);
 
 $black-text: #222;
+$light-gray-text: #bbb;
 
 $master-color: $green;
 $master-text-color: saturate(darken($master-color, 35%), 30%);

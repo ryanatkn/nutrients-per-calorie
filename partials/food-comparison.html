@@ -1,15 +1,19 @@
-<ul class="food-comparison-list" ng-show="compare.selectedFoods.length">
-  <li ng-repeat="food in compare.selectedFoods" class="food-compare-item">
-    <div ng-click="compare.toggle(food)" class="remove-button">-</div>
-    <div class="food-label">
-      <a href="#foods/?food={{food.NDB_No}}">{{food.Long_Desc}}</a>
-    </div>
-  </li>
-  <li class="food-compare-item">
-    <button class="clear-selected-button" ng-click="compare.clear()" ng-show="compare.selectedFoods.length">
-      Remove all
-    </button>
-  </li>
-</ul>
-
-<div class="food-comparison-graphs"></div>
+<h3 ng-show="!compare.selectedFoods.length">
+  Click two or more foods to compare them.
+</h3>
+<div ng-show="compare.selectedFoods.length">
+  <ul class="food-comparison-list" ng-show="compare.selectedFoods.length">
+    <li ng-repeat="food in compare.selectedFoods" class="food-compare-item">
+      <div ng-click="compare.toggle(food)" class="remove-button">✕</div>
+      <div class="food-label">
+        <a href="#foods/?food={{food.NDB_No}}">{{food.Long_Desc}}</a>
+      </div>
+    </li>
+    <li class="food-compare-item">
+      <button class="clear-selected-button" ng-click="compare.clear()" ng-show="compare.selectedFoods.length">
+        Remove all
+      </button>
+    </li>
+  </ul>
+  <div class="food-comparison-graphs"></div>
+</div>

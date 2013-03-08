@@ -641,7 +641,7 @@
 
   visuals.factory("DrawingHelpers", function(Styles, FoodData, $location) {
     var DrawingHelpers, drawNutrientGroups, drawNutrients, drawPieChart, drawPieCharts;
-    drawPieChart = function(vis, data, radius, options) {
+    drawPieChart = function(svg, data, radius, options) {
       var arc, arcs, g, pie, x, y;
       if (options == null) {
         options = {};
@@ -653,7 +653,7 @@
       if (y == null) {
         y = radius;
       }
-      g = vis.append("g").data([data]).attr("transform", "translate(" + x + ", " + y + ")");
+      g = svg.append("g").data([data]).attr("transform", "translate(" + x + ", " + y + ")");
       arc = d3.svg.arc().outerRadius(radius);
       pie = d3.layout.pie().value(function(d) {
         return d.value;
@@ -784,8 +784,7 @@
       restrict: "E",
       templateUrl: "partials/food-comparison.html",
       link: function(scope, element, attrs) {
-        var render, vis, width;
-        width = (FoodData.nutrientKeys.length * Styles.comparisonCellWidth) + Styles.horizontalPadding + Styles.pieChartRadius;
+        var render, vis;
         vis = d3.select(element[0]).select(".food-comparison-graphs");
         render = function() {
           var foods, height, numSelected, nutrientGroups;
@@ -804,6 +803,49 @@
           return DrawingHelpers.drawNutrientGroups(vis, foods, nutrientGroups);
         };
         return scope.$watch("compare.selectedFoods.length", function() {
+          return render();
+        });
+      }
+    };
+  });
+
+  visuals.directive("foodDetail", function(Styles, FoodData, DrawingHelpers) {
+    return {
+      restrict: "E",
+      templateUrl: "partials/food-detail.html",
+      scope: {
+        food: "="
+      },
+      link: function(scope, element, attrs) {
+        var render, vis;
+        vis = d3.select(element[0]).select(".food-detail-graph");
+        render = function() {
+          var food, pieChart, pieChartData, pieChartRadius;
+          vis.selectAll("*").remove();
+          food = scope.food;
+          if (!food) {
+            return;
+          }
+          pieChartData = [
+            {
+              value: food["Total lipid (fat)"],
+              color: Styles.colors.red
+            }, {
+              value: food["Protein"],
+              color: Styles.colors.blue
+            }, {
+              value: food["Carbohydrate, by difference"],
+              color: Styles.colors.green
+            }, {
+              value: food["Alcohol, ethyl"],
+              color: Styles.colors.lightGray
+            }
+          ];
+          pieChartRadius = 100;
+          pieChart = vis.append("svg").attr("height", pieChartRadius * 2).attr("width", pieChartRadius * 2);
+          return DrawingHelpers.drawPieChart(pieChart, pieChartData, pieChartRadius);
+        };
+        return scope.$watch("food", function() {
           return render();
         });
       }

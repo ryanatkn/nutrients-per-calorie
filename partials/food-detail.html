@@ -1,0 +1,19 @@
+<h3 ng-show="!food">
+  Click a food to view its details.
+</h3>
+<div ng-show="food">
+  <h3>{{food.Long_Desc}}</h3>
+  <p>{{food.FdGrp_Desc}}</p>
+  <div class="food-detail-graph"></div>
+  <ul class="food-detail-pie-chart-labels">
+    <li class="protein">
+      {{food["Protein"] | percent}} protein
+    </li>
+    <li class="carbohydrate">
+      {{food["Carbohydrate, by difference"] | percent}} carbohydrate
+    </li>
+    <li class="fat">
+      {{food["Total lipid (fat)"] | percent}} fat
+    </li>
+  </ul>
+</div>

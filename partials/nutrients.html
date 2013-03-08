@@ -17,7 +17,7 @@
   </div>
 </div>
 
-<p>nutrients {{nutrients.selectedNutrient}}</p> 
+<p>{{nutrients.selectedNutrient}}</p> 
 
 <!-- TODO add a food group checkbox dropdown on every search - globally shared data - saved to localStorage! -->
 <!-- TODO saved searches, quick clear -->
@@ -38,6 +38,6 @@
     </li>
   </ul>
 </div>
-<h3 ng-show="!nutrients.selectedNutrient">
+<h3 class="padded-left" ng-show="!nutrients.selectedNutrient">
   Click a nutrient to see its best sources.
 </h3>

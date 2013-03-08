@@ -11,7 +11,7 @@
 #header-container {
   white-space: nowrap;
   padding-bottom: $body-padding;
-  padding-left: $horizontal-padding - 3;
+  padding-left: $horizontal-padding;
 }
 
 #title {
@@ -178,8 +178,12 @@ nutrient-list {
 food-detail {
   white-space: nowrap;
 
-  h3, p {
+  h3 {
     padding-left: $horizontal-padding;
+  }
+
+  p {
+    padding-left: $horizontal-padding + 1px;
   }
 }
 

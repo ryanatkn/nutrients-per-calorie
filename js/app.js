@@ -76,13 +76,12 @@
       },
       toggle: function(food) {
         if (this.isSelected(food)) {
-          this.selectedFoods = _.reject(this.selectedFoods, function(f) {
+          return this.selectedFoods = _.reject(this.selectedFoods, function(f) {
             return f.NDB_No === food.NDB_No;
           });
         } else {
-          this.selectedFoods = _.union(this.selectedFoods, _.clone(food));
+          return this.selectedFoods = _.union(this.selectedFoods, _.clone(food));
         }
-        return FoodData.calculateRelativeValues(this.selectedFoods);
       },
       clear: function() {
         var food, _i, _len, _ref;
@@ -125,6 +124,7 @@
     });
     $scope.compare = ComparePage;
     return $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
+      FoodData.calculateRelativeValues(newVal);
       if (FoodData.loaded) {
         return ComparePage.updatePath();
       }
@@ -203,11 +203,10 @@
       },
       toggle: function(nutrient) {
         if (this.isSelected(nutrient)) {
-          this.selectedNutrient = null;
+          return this.selectedNutrient = null;
         } else {
-          this.selectedNutrient = _.clone(nutrient);
+          return this.selectedNutrient = _.clone(nutrient);
         }
-        return this.updatePath();
       },
       orderBy: function(food) {
         var value;

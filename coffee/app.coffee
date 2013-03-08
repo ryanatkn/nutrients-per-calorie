@@ -78,7 +78,6 @@ app.factory "ComparePage", ($location, FoodData) ->
         @selectedFoods = _.reject(@selectedFoods, (f) -> f.NDB_No is food.NDB_No)
       else
         @selectedFoods = _.union(@selectedFoods, _.clone(food))
-      FoodData.calculateRelativeValues @selectedFoods
     clear: ->
       for food in @selectedFoods
         FoodData.findFoodById(food.NDB_No).selected = false
@@ -108,6 +107,7 @@ app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
   $scope.compare = ComparePage
 
   $scope.$watch "compare.selectedFoods", (newVal, oldVal) ->
+    FoodData.calculateRelativeValues newVal
     ComparePage.updatePath() if FoodData.loaded
 
 
@@ -166,7 +166,6 @@ app.factory "NutrientsPage", ($location, FoodData) ->
         @selectedNutrient = null
       else
         @selectedNutrient = _.clone(nutrient)
-      @updatePath()
     orderBy: (food) ->
       value = food.nutrientValue
       if value?

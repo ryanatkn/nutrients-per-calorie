@@ -4,12 +4,6 @@
   display: none;
 }
 
-@mixin padded-header {
-  h3 {
-    padding: 0 0 $horizontal-padding $horizontal-padding;
-  }
-}
-
 #wrapper {
   position: relative;
 }
@@ -17,6 +11,7 @@
 #header-container {
   white-space: nowrap;
   padding-bottom: $body-padding;
+  padding-left: $horizontal-padding - 3;
 }
 
 #title {
@@ -62,7 +57,7 @@
 }
 
 .search-form {
-  padding: 0 $horizontal-padding $horizontal-padding;
+  padding: $horizontal-padding;
   white-space: nowrap;
 }
 
@@ -72,7 +67,10 @@ $comparison-row-height: 46px; // comparisonRowHeight in visuals.coffee
 
 food-comparison {
   position: relative;
-  @include padded-header;
+  
+  h3 {
+    padding-left: $horizontal-padding;
+  }
 }
 
 .food-comparison-list {
@@ -178,8 +176,11 @@ nutrient-list {
 }
 
 food-detail {
-  @include padded-header;
   white-space: nowrap;
+
+  h3, p {
+    padding-left: $horizontal-padding;
+  }
 }
 
 .food-detail-graph {

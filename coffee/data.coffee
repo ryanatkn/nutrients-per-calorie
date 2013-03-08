@@ -170,7 +170,22 @@ data.factory "FoodData", ($rootScope, Styles) ->
             food[comparedKey] = food[key] / max or 0
       foods
 
-    onLoad: (cb) -> onLoadCbs.push cb if !@loaded
+    # Callbacks to execute once data is loaded.
+    onLoad: (cb, callIfLoaded = false) -> 
+      if !@loaded
+        onLoadCbs.push cb
+      else if callIfLoaded
+        cb()
+
+    # Helper function for proper 2-way routing with asynchronously loaded data.
+    # $scope is needed because we're going outside of Angular to load data. (replace with $http promises?)
+    loadAsyncCtrl: ($scope, cb) ->
+      if @loaded
+        cb()
+      else
+        @onLoad ->
+          cb()
+          $scope.$apply()
   }
 
   loadCsvData = (path, cb) ->

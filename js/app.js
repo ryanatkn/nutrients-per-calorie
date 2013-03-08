@@ -116,12 +116,12 @@
   });
 
   app.controller("CompareCtrl", function($scope, $routeParams, FoodData, ComparePage) {
-    FoodData.onLoad(function() {
+    FoodData.loadAsyncCtrl($scope, function() {
       if ($routeParams.foods) {
-        ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods.split(","));
+        return ComparePage.selectedFoods = _.clone(FoodData.findFoodsById($routeParams.foods.split(",")));
+      } else {
+        return ComparePage.selectedFoods = [];
       }
-      ComparePage.selectedFoods = _.clone(ComparePage.selectedFoods);
-      return $scope.$apply();
     });
     $scope.compare = ComparePage;
     return $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
@@ -173,12 +173,12 @@
   });
 
   app.controller("FoodsCtrl", function($scope, $routeParams, FoodData, FoodsPage) {
-    FoodData.onLoad(function() {
+    FoodData.loadAsyncCtrl($scope, function() {
       if ($routeParams.food) {
-        FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food);
+        return FoodsPage.selectedFood = _.clone(FoodData.findFoodById($routeParams.food));
+      } else {
+        return FoodsPage.selectedFood = null;
       }
-      FoodsPage.selectedFood = _.clone(FoodsPage.selectedFood);
-      return $scope.$apply();
     });
     $scope.foods = FoodsPage;
     return $scope.$watch("foods.selectedFood", function(newVal, oldVal) {
@@ -242,12 +242,12 @@
 
   app.controller("NutrientsCtrl", function($scope, $routeParams, $filter, FoodData, NutrientsPage) {
     var calculateMaxValue, filteredFoodsWithoutValues, maxValue, updateFilteredFoods;
-    FoodData.onLoad(function() {
+    FoodData.loadAsyncCtrl($scope, function() {
       if ($routeParams.nutrient) {
-        NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient);
+        return NutrientsPage.selectedNutrient = _.clone(FoodData.findNutrientById($routeParams.nutrient));
+      } else {
+        return NutrientsPage.selectedNutrient = null;
       }
-      NutrientsPage.selectedNutrient = _.clone(NutrientsPage.selectedNutrient);
-      return $scope.$apply();
     });
     $scope.nutrients = NutrientsPage;
     filteredFoodsWithoutValues = null;
@@ -498,9 +498,24 @@
         }
         return foods;
       },
-      onLoad: function(cb) {
+      onLoad: function(cb, callIfLoaded) {
+        if (callIfLoaded == null) {
+          callIfLoaded = false;
+        }
         if (!this.loaded) {
           return onLoadCbs.push(cb);
+        } else if (callIfLoaded) {
+          return cb();
+        }
+      },
+      loadAsyncCtrl: function($scope, cb) {
+        if (this.loaded) {
+          return cb();
+        } else {
+          return this.onLoad(function() {
+            cb();
+            return $scope.$apply();
+          });
         }
       }
     };

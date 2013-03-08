@@ -98,11 +98,12 @@ app.factory "ComparePage", ($location, FoodData) ->
 
 
 app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
-  FoodData.onLoad ->
+  
+  FoodData.loadAsyncCtrl $scope, ->
     if $routeParams.foods
-      ComparePage.selectedFoods = FoodData.findFoodsById($routeParams.foods.split(","))
-    ComparePage.selectedFoods = _.clone(ComparePage.selectedFoods)
-    $scope.$apply()
+      ComparePage.selectedFoods = _.clone(FoodData.findFoodsById($routeParams.foods.split(",")))
+    else
+      ComparePage.selectedFoods = []
 
   $scope.compare = ComparePage
 
@@ -138,11 +139,12 @@ app.factory "FoodsPage", ($location) ->
 
 
 app.controller "FoodsCtrl", ($scope, $routeParams, FoodData, FoodsPage) ->
-  FoodData.onLoad ->
+  
+  FoodData.loadAsyncCtrl $scope, ->
     if $routeParams.food
-      FoodsPage.selectedFood = FoodData.findFoodById($routeParams.food) # TODO FoodData not loaded, breaks on refresh!
-    FoodsPage.selectedFood = _.clone(FoodsPage.selectedFood)
-    $scope.$apply()
+      FoodsPage.selectedFood = _.clone(FoodData.findFoodById($routeParams.food))
+    else
+      FoodsPage.selectedFood = null
 
   $scope.foods = FoodsPage
 
@@ -186,11 +188,12 @@ app.factory "NutrientsPage", ($location, FoodData) ->
 
 
 app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, NutrientsPage) ->
-  FoodData.onLoad ->
+
+  FoodData.loadAsyncCtrl $scope, ->
     if $routeParams.nutrient
-      NutrientsPage.selectedNutrient = FoodData.findNutrientById($routeParams.nutrient)
-    NutrientsPage.selectedNutrient = _.clone(NutrientsPage.selectedNutrient)
-    $scope.$apply()
+      NutrientsPage.selectedNutrient = _.clone(FoodData.findNutrientById($routeParams.nutrient))
+    else
+      NutrientsPage.selectedNutrient = null
 
   $scope.nutrients = NutrientsPage
 

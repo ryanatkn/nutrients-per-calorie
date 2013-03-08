@@ -1,4 +1,4 @@
-@import "./sassy";
+@import "./sassy/main";
 
 [ng-cloak] {
   display: none;
@@ -193,7 +193,7 @@ food-detail {
 }
 
 .fat {
-  color: red;
+  color: $red;
 }
 
 .carbohydrate {

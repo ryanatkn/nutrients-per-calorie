@@ -10,6 +10,8 @@ data = angular.module("food-data", [])
 # Provides food data and related state from data/nutrients.csv and data/foods.csv
 data.factory "FoodData", ($rootScope, Styles) ->
 
+  allFoods = null
+
   allKeys = [
     "NDB_No", "Long_Desc", "FdGrp_Desc", "10:0" , "12:0", "13:0", "14:0", "14:1", "15:0",
     "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0",
@@ -158,7 +160,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
 
     findNutrientById: (Nutr_No) -> _.find(@nutrients, (n) -> n.Nutr_No is Nutr_No)
 
-    findFoodById: (id) -> _.find(@foods, (f) -> f.NDB_No is id)
+    findFoodById: (id) -> _.find(allFoods, (f) -> f.NDB_No is id)
     findFoodsById: (ids) -> @findFoodById id for id in ids
 
     # Uses a JS click event because anchors in svgs don't play nicely with every browser.
@@ -167,6 +169,11 @@ data.factory "FoodData", ($rootScope, Styles) ->
 
     getNutrientLink: (NutrDesc) ->
       "#/nutrients?nutrient=#{@nutrients[NutrDesc].Nutr_No}"
+
+    # Updates `foods` to contain only the enabled `foodGroups`
+    updateFoodGroups: ->
+      enabledFoodGroups = _.pluck(_.filter(@foodGroups, (g) -> g.enabled), "name")
+      @foods = _.filter(allFoods, (f) -> _.contains(enabledFoodGroups, f.FdGrp_Desc))
 
     # Mutates `foods` with compared values
     calculateRelativeValues: (foods) ->
@@ -270,7 +277,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     FoodData.nutrients = processNutrients(rawNutrients)
 
     loadCsvData "data/foods.csv", (rawFoods) ->
-      FoodData.foods = processFoods(rawFoods)
+      FoodData.foods = allFoods = processFoods(rawFoods)
 
       setFoodGroups FoodData.foods
 

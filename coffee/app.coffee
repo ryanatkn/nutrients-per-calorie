@@ -242,6 +242,9 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
   $scope.$watch "nutrients.query.includeFoodGroups", (newVal, oldVal) ->
     updateFilteredFoods true
 
+  $scope.$watch "foodData.foods", (newVal, oldVal) ->
+    updateFilteredFoods true
+
   
 # Provides a search box and food list from which foods can be selected.
 app.directive "foodSearch", ->
@@ -285,6 +288,10 @@ app.directive "foodGroupFilter", (FoodData) ->
 
     scope.$on "$destroy", ->
       $(window).off "click", onClick
+
+    scope.$watch "items", (newVal, oldVal) ->
+      FoodData.updateFoodGroups()
+    , true # deep watch...
 
 
 # Searches the `Long_Desc` field of the foods list, including `FdGrp_Desc` if includeFoodGroups is true

@@ -256,7 +256,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
 
       DrawingHelpers.drawPieCharts vis, foods
 
-      nutrientGroups = [ # TODO add a control to toggle these
+      nutrientGroups = [
         FoodData.fiberKeys, FoodData.vitaminKeys, FoodData.mineralKeys,
         FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.sugarKeys
       ]

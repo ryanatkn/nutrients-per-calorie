@@ -131,7 +131,6 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Lutein + zeaxanthin"
     "Lycopene"
     "Phytosterols"
-    "Theobromine"
   ],
     text: "Misc"
     color: Styles.colors.yellow

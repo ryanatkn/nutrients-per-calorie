@@ -536,7 +536,7 @@
       text: "Amino Acids",
       color: Styles.colors.blue
     });
-    miscKeys = _.extend(["Carotene, alpha", "Carotene, beta", "Choline, total", "Cryptoxanthin, beta", "Lutein + zeaxanthin", "Lycopene", "Phytosterols", "Theobromine"], {
+    miscKeys = _.extend(["Carotene, alpha", "Carotene, beta", "Choline, total", "Cryptoxanthin, beta", "Lutein + zeaxanthin", "Lycopene", "Phytosterols"], {
       text: "Misc",
       color: Styles.colors.yellow
     });

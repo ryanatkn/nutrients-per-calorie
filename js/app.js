@@ -318,7 +318,8 @@
     return function(foods, query) {
       var filteredFoods, food, includeFoodGroups, matchCount, negativeRegExps, negativeSearchPrefixes, positiveRegExps, regExp, text, word, wordCount, words, _i, _j, _k, _l, _len, _len1, _len2, _len3;
       text = query.text, includeFoodGroups = query.includeFoodGroups;
-      if (text) {
+      if (text && typeof text === "string") {
+        text = text.replace(/[^a-zA-Z0-9.,% ]/g, "");
         filteredFoods = [];
         negativeSearchPrefixes = ["!", "-"];
         words = text.split(" ");
@@ -373,6 +374,19 @@
         return (Math.round(number * multiple * 100) / multiple) + "%";
       } else {
         return "";
+      }
+    };
+  });
+
+  app.directive("inputClearer", function() {
+    return {
+      link: function(scope, element, attrs) {
+        var inputClearer;
+        inputClearer = angular.element("<div class='input-clearer'>✕</div>");
+        inputClearer.bind("click", function() {
+          return element.val("").focus().trigger("input");
+        });
+        return element.after(inputClearer);
       }
     };
   });

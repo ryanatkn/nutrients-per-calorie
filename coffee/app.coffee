@@ -258,7 +258,8 @@ app.directive "nutrientList", (FoodData) ->
 app.filter "searchFoods", ->
   (foods, query) ->
     {text, includeFoodGroups} = query
-    if text
+    if text and typeof text is "string"
+      text = text.replace(/[^a-zA-Z0-9.,% ]/g, "")
       filteredFoods = []
       negativeSearchPrefixes = ["!", "-"]
       words = text.split(" ")
@@ -297,3 +298,12 @@ app.filter "percent", ->
       ((Math.round(number * multiple * 100) / multiple)) + "%"
     else
       ""
+
+
+# Adds an X to text input fields for quick clearing.
+app.directive "inputClearer", ->
+  link: (scope, element, attrs) ->
+    inputClearer = angular.element("<div class='input-clearer'>✕</div>")
+    inputClearer.bind "click", ->
+      element.val("").focus().trigger("input") # the trigger is needed to tell angular to sync the input's model
+    element.after inputClearer

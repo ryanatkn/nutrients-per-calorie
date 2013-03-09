@@ -353,6 +353,8 @@
   });
 
   app.directive("foodGroupFilter", function(FoodData) {
+    var supressEnableAllChange;
+    supressEnableAllChange = false;
     return {
       restrict: "E",
       templateUrl: "partials/food-group-filter.html",
@@ -368,8 +370,9 @@
           return true;
         };
         FoodData.afterLoading(scope, function() {
-          scope.items = FoodData.foodGroups;
-          return $(window).on("click", onClick);
+          scope.foodGroups = FoodData.foodGroups;
+          $(window).on("click", onClick);
+          return scope.enableAllFoodGroups = FoodData.areAllFoodGroupsEnabled();
         });
         scope.toggle = function() {
           return element.toggleClass("open");
@@ -377,9 +380,33 @@
         scope.$on("$destroy", function() {
           return $(window).off("click", onClick);
         });
-        return scope.$watch("items", function(newVal, oldVal) {
-          return FoodData.updateFoodGroups();
+        scope.$watch("foodGroups", function(newVal, oldVal) {
+          FoodData.updateFoodGroups();
+          if (scope.enableAllFoodGroups && FoodData.areAllFoodGroupsEnabled(oldVal) && !FoodData.areAllFoodGroupsEnabled(newVal) && FoodData.getFoodGroupsEnabledCount(newVal) > 0) {
+            supressEnableAllChange = true;
+            scope.enableAllFoodGroups = false;
+          }
+          if (!scope.enableAllFoodGroups && FoodData.areAllFoodGroupsEnabled(newVal) && !FoodData.areAllFoodGroupsEnabled(oldVal) && FoodData.getFoodGroupsEnabledCount(oldVal) > 0) {
+            supressEnableAllChange = true;
+            return scope.enableAllFoodGroups = true;
+          }
         }, true);
+        return scope.$watch("enableAllFoodGroups", function(newVal, oldVal) {
+          var foodGroup, _i, _len, _ref, _results;
+          if (supressEnableAllChange) {
+            supressEnableAllChange = false;
+            return;
+          }
+          if (newVal !== oldVal) {
+            _ref = FoodData.foodGroups;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              foodGroup = _ref[_i];
+              _results.push(foodGroup.enabled = newVal);
+            }
+            return _results;
+          }
+        });
       }
     };
   });
@@ -562,6 +589,22 @@
         return this.foods = _.filter(allFoods, function(f) {
           return _.contains(enabledFoodGroups, f.FdGrp_Desc);
         });
+      },
+      areAllFoodGroupsEnabled: function(foodGroups) {
+        if (foodGroups == null) {
+          foodGroups = FoodData.foodGroups;
+        }
+        return !_.find(foodGroups, function(g) {
+          return !g.enabled;
+        });
+      },
+      getFoodGroupsEnabledCount: function(foodGroups) {
+        if (foodGroups == null) {
+          foodGroups = FoodData.foodGroups;
+        }
+        return _.filter(foodGroups, function(g) {
+          return g.enabled;
+        }).length;
       },
       calculateRelativeValues: function(foods) {
         var comparedKey, food, key, max, _i, _j, _len, _len1;

@@ -155,11 +155,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 /* line 32, ../sass/sassy/classes.scss */
 .input-clearer:hover {
   font-weight: bold;
-  color: #ff6a61;
+  color: #94e46d;
 }
 /* line 37, ../sass/sassy/classes.scss */
 .input-clearer:active {
-  color: #fa0e00;
+  color: #5ac625;
 }
 
 /* line 9, ../sass/sassy/main.scss */
@@ -435,11 +435,11 @@ food-comparison {
 /* line 109, ../sass/main.scss */
 .food-comparison-list .remove-button:hover {
   font-weight: bold;
-  color: #ff6a61;
+  color: #94e46d;
 }
 /* line 114, ../sass/main.scss */
 .food-comparison-list .remove-button:active {
-  color: #fa0e00;
+  color: #5ac625;
 }
 
 /* line 120, ../sass/main.scss */

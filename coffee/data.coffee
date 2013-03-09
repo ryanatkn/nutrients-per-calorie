@@ -175,6 +175,9 @@ data.factory "FoodData", ($rootScope, Styles) ->
       enabledFoodGroups = _.pluck(_.filter(@foodGroups, (g) -> g.enabled), "name")
       @foods = _.filter(allFoods, (f) -> _.contains(enabledFoodGroups, f.FdGrp_Desc))
 
+    areAllFoodGroupsEnabled: (foodGroups = FoodData.foodGroups) -> !_.find(foodGroups, (g) -> !g.enabled)
+    getFoodGroupsEnabledCount: (foodGroups = FoodData.foodGroups) -> _.filter(foodGroups, (g) -> g.enabled).length
+
     # Mutates `foods` with compared values
     calculateRelativeValues: (foods) ->
       for key in comparedKeys

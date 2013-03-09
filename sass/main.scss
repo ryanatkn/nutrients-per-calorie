@@ -108,11 +108,11 @@ food-comparison {
 
     &:hover {
       font-weight: bold;
-      color: $red;
+      color: $master-color;
     }
 
     &:active {
-      color: $dark-red;
+      color: $master-dark-color;
     }
   }
 }

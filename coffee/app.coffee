@@ -268,6 +268,8 @@ app.directive "nutrientList", (FoodData) ->
 
 # Provides a dropdown with food group checkboxes to filter the food search.
 app.directive "foodGroupFilter", (FoodData) ->
+  supressEnableAllChange = false
+
   restrict: "E"
   templateUrl: "partials/food-group-filter.html"
   scope:
@@ -280,8 +282,9 @@ app.directive "foodGroupFilter", (FoodData) ->
       true
 
     FoodData.afterLoading scope, ->
-      scope.items = FoodData.foodGroups
+      scope.foodGroups = FoodData.foodGroups
       $(window).on "click", onClick
+      scope.enableAllFoodGroups = FoodData.areAllFoodGroupsEnabled()
 
     scope.toggle = ->
       element.toggleClass "open"
@@ -289,9 +292,27 @@ app.directive "foodGroupFilter", (FoodData) ->
     scope.$on "$destroy", ->
       $(window).off "click", onClick
 
-    scope.$watch "items", (newVal, oldVal) ->
+    scope.$watch "foodGroups", (newVal, oldVal) ->
       FoodData.updateFoodGroups()
+
+      # Update the "All food groups" checkbox
+      if scope.enableAllFoodGroups and FoodData.areAllFoodGroupsEnabled(oldVal) and 
+          !FoodData.areAllFoodGroupsEnabled(newVal) and FoodData.getFoodGroupsEnabledCount(newVal) > 0
+        supressEnableAllChange = true
+        scope.enableAllFoodGroups = false
+      if !scope.enableAllFoodGroups and FoodData.areAllFoodGroupsEnabled(newVal) and
+          !FoodData.areAllFoodGroupsEnabled(oldVal) and FoodData.getFoodGroupsEnabledCount(oldVal) > 0
+        supressEnableAllChange = true
+        scope.enableAllFoodGroups = true
     , true # deep watch...
+
+    scope.$watch "enableAllFoodGroups", (newVal, oldVal) ->
+      if supressEnableAllChange
+        supressEnableAllChange = false
+        return
+      if newVal isnt oldVal
+        for foodGroup in FoodData.foodGroups
+          foodGroup.enabled = newVal
 
 
 # Searches the `Long_Desc` field of the foods list, including `FdGrp_Desc` if includeFoodGroups is true

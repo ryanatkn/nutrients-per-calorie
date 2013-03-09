@@ -2,9 +2,13 @@
   Choose food groups ▽
 </div>
 <ul>
-  <li ng-repeat="item in items">
-    <input type="checkbox" ng-model="item.enabled" id="{{item.id}}">
-    <label for="{{item.id}}">{{item.name}}</label>
-    <span>{{item.count}}</span>
+  <li>
+    <input type="checkbox" id="all-food-groups-toggle" ng-model="enableAllFoodGroups">
+    <label for="all-food-groups-toggle">All food groups</label>
+  </li>
+  <li ng-repeat="foodGroup in foodGroups">
+    <input type="checkbox" ng-model="foodGroup.enabled" id="{{foodGroup.id}}">
+    <label for="{{foodGroup.id}}">{{foodGroup.name}}</label>
+    <span>{{foodGroup.count}}</span>
   </li>
 </ul>

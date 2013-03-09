@@ -19,7 +19,12 @@
   </div>
 </div>
 
-<p>{{nutrients.selectedNutrient}}</p> 
+<p>
+  <a href="{{nutrients.selectedNutrient.WikipediaLink}}" ng-show="nutrients.selectedNutrient.WikipediaLink" 
+    target="_blank" class="padded-left">
+    Wikipedia: {{nutrients.selectedNutrient.text}}
+  </a>
+</p> 
 
 <!-- TODO add a food group checkbox dropdown on every search - globally shared data - saved to localStorage! -->
 <!-- TODO saved searches, quick clear -->

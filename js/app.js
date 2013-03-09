@@ -92,17 +92,38 @@
         }
         return this.selectedFoods = [];
       },
+      basePath: "#/compare",
       updatePath: function() {
         return window.location.hash = this.getPath();
       },
-      getPath: function() {
-        return "#/compare" + data.getSearch();
+      getPath: function(foods) {
+        if (foods == null) {
+          foods = data.selectedFoods;
+        }
+        return data.basePath + data.getSearch(foods);
       },
-      getSearch: function() {
-        if (data.selectedFoods.length) {
-          return "?foods=" + _.pluck(data.selectedFoods, "NDB_No").join(",");
+      getSearch: function(foods) {
+        if (foods == null) {
+          foods = data.selectedFoods;
+        }
+        if (foods.length) {
+          return "?foods=" + _.pluck(foods, "NDB_No").join(",");
         } else {
           return "";
+        }
+      },
+      getPathWithFoodAdded: function(food) {
+        var foods;
+        if (food) {
+          foods = _.clone(this.selectedFoods);
+          if (!_.find(foods, function(f) {
+            return f.NDB_No === food.NDB_No;
+          })) {
+            foods.push(food);
+          }
+          return this.getPath(foods);
+        } else {
+          return this.basePath;
         }
       }
     };
@@ -144,15 +165,22 @@
           return this.selectedFood = _.clone(food);
         }
       },
+      basePath: "#/foods",
       updatePath: function() {
         return window.location.hash = this.getPath();
       },
-      getPath: function() {
-        return "#/foods" + data.getSearch();
+      getPath: function(food) {
+        if (food == null) {
+          food = data.selectedFood;
+        }
+        return data.basePath + data.getSearch(food);
       },
-      getSearch: function() {
-        if (data.selectedFood) {
-          return "?food=" + data.selectedFood.NDB_No;
+      getSearch: function(food) {
+        if (food == null) {
+          food = data.selectedFood;
+        }
+        if (food) {
+          return "?food=" + food.NDB_No;
         } else {
           return "";
         }
@@ -205,15 +233,22 @@
           return -1;
         }
       },
+      basePath: "#/nutrients",
       updatePath: function() {
         return window.location.hash = this.getPath();
       },
-      getPath: function() {
-        return "#/nutrients" + data.getSearch();
+      getPath: function(nutrient) {
+        if (nutrient == null) {
+          nutrient = data.selectedNutrient;
+        }
+        return data.basePath + data.getSearch(nutrient);
       },
-      getSearch: function() {
-        if (data.selectedNutrient) {
-          return "?nutrient=" + data.selectedNutrient.Nutr_No;
+      getSearch: function(nutrient) {
+        if (nutrient == null) {
+          nutrient = data.selectedNutrient;
+        }
+        if (nutrient) {
+          return "?nutrient=" + nutrient.Nutr_No;
         } else {
           return "";
         }
@@ -383,7 +418,7 @@
       link: function(scope, element, attrs) {
         var inputClearer;
         inputClearer = angular.element("<div class='input-clearer'>✕</div>");
-        inputClearer.bind("click", function() {
+        inputClearer.on("click", function() {
           return element.val("").focus().trigger("input");
         });
         return element.after(inputClearer);
@@ -476,8 +511,11 @@
         }
         return _results;
       },
+      getNutrientJSLink: function(NutrDesc) {
+        return "javascript: window.location = '" + (this.getNutrientLink(NutrDesc)) + "';";
+      },
       getNutrientLink: function(NutrDesc) {
-        return "javascript: window.location = '#/nutrients?nutrient=" + this.nutrients[NutrDesc].Nutr_No + "';";
+        return "#/nutrients?nutrient=" + this.nutrients[NutrDesc].Nutr_No;
       },
       calculateRelativeValues: function(foods) {
         var comparedKey, food, key, max, _i, _j, _len, _len1;
@@ -707,7 +745,7 @@
       }).text(function(d) {
         return d.text;
       }).attr("onclick", function(d) {
-        return FoodData.getNutrientLink(d.NutrDesc);
+        return FoodData.getNutrientJSLink(d.NutrDesc);
       });
       _results = [];
       for (foodIndex = _i = 0, _ref = foods.length; 0 <= _ref ? _i < _ref : _i > _ref; foodIndex = 0 <= _ref ? ++_i : --_i) {
@@ -758,7 +796,7 @@
       }).text(function(d) {
         return FoodData.nutrients[d].text;
       }).attr("onclick", function(d) {
-        return FoodData.getNutrientLink(d);
+        return FoodData.getNutrientJSLink(d);
       });
       _results = [];
       for (foodIndex = _i = 0, _ref = foods.length; 0 <= _ref ? _i < _ref : _i > _ref; foodIndex = 0 <= _ref ? ++_i : --_i) {
@@ -831,11 +869,12 @@
     };
   });
 
-  visuals.directive("foodDetail", function(Styles, FoodData, DrawingHelpers) {
+  visuals.directive("foodDetail", function(Styles, FoodData, DrawingHelpers, ComparePage) {
     return {
       restrict: "E",
       templateUrl: "partials/food-detail.html",
       scope: {
+        foodData: "=",
         food: "="
       },
       link: function(scope, element, attrs) {
@@ -867,9 +906,12 @@
           pieChart = vis.append("svg").attr("height", pieChartRadius * 2).attr("width", pieChartRadius * 2);
           return DrawingHelpers.drawPieChart(pieChart, pieChartData, pieChartRadius);
         };
-        return scope.$watch("food", function() {
+        scope.$watch("food", function() {
           return render();
         });
+        return scope.getCompareLink = function(food) {
+          return ComparePage.getPathWithFoodAdded(food);
+        };
       }
     };
   });

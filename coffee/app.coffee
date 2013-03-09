@@ -82,15 +82,24 @@ app.factory "ComparePage", ($location, FoodData) ->
       for food in @selectedFoods
         FoodData.findFoodById(food.NDB_No).selected = false
       @selectedFoods = []
+    basePath: "#/compare"
     updatePath: ->
       window.location.hash = @getPath()
-    getPath: ->
-      "#/compare" + data.getSearch()
-    getSearch: ->
-      if data.selectedFoods.length
-        "?foods=" + _.pluck(data.selectedFoods, "NDB_No").join(",")
+    getPath: (foods = data.selectedFoods) ->
+      data.basePath + data.getSearch(foods)
+    getSearch: (foods = data.selectedFoods) ->
+      if foods.length
+        "?foods=" + _.pluck(foods, "NDB_No").join(",")
       else
         ""
+    getPathWithFoodAdded: (food) ->
+      if food
+        foods = _.clone(@selectedFoods)
+        if !_.find(foods, (f) -> f.NDB_No is food.NDB_No)
+          foods.push food
+        @getPath foods
+      else
+        @basePath
 
 
 app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
@@ -121,13 +130,14 @@ app.factory "FoodsPage", ($location) ->
         @selectedFood = null
       else
         @selectedFood = _.clone(food)
+    basePath: "#/foods"
     updatePath: ->
       window.location.hash = @getPath()
-    getPath: ->
-      "#/foods" + data.getSearch()
-    getSearch: ->
-      if data.selectedFood
-        "?food=" + data.selectedFood.NDB_No
+    getPath: (food = data.selectedFood) ->
+      data.basePath + data.getSearch(food)
+    getSearch: (food = data.selectedFood) ->
+      if food
+        "?food=" + food.NDB_No
       else
         ""
 
@@ -166,13 +176,14 @@ app.factory "NutrientsPage", ($location, FoodData) ->
         value
       else
         -1
+    basePath: "#/nutrients"
     updatePath: ->
       window.location.hash = @getPath()
-    getPath: ->
-      "#/nutrients" + data.getSearch()
-    getSearch: ->
-      if data.selectedNutrient
-        "?nutrient=" + data.selectedNutrient.Nutr_No
+    getPath: (nutrient = data.selectedNutrient) ->
+      data.basePath + data.getSearch(nutrient)
+    getSearch: (nutrient = data.selectedNutrient) ->
+      if nutrient
+        "?nutrient=" + nutrient.Nutr_No
       else
         ""
 
@@ -304,6 +315,6 @@ app.filter "percent", ->
 app.directive "inputClearer", ->
   link: (scope, element, attrs) ->
     inputClearer = angular.element("<div class='input-clearer'>✕</div>")
-    inputClearer.bind "click", ->
-      element.val("").focus().trigger("input") # the trigger is needed to tell angular to sync the input's model
+    inputClearer.on "click", ->
+      element.val("").focus().trigger("input") # the trigger is needed to tell angular to sync the input's model :/
     element.after inputClearer

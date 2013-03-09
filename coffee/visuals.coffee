@@ -125,7 +125,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
         .style("font-size", Styles.smallFontSize)
         .style("fill", (d) -> d.color)
         .text((d) -> d.text)
-        .attr("onclick", (d) -> FoodData.getNutrientLink(d.NutrDesc))
+        .attr("onclick", (d) -> FoodData.getNutrientJSLink(d.NutrDesc))
 
     # Draw each item in the list
     for foodIndex in [0...foods.length]
@@ -178,7 +178,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
           .style("font-size", Styles.smallFontSize)
           .style("fill", (d, i) -> Styles.colors.getRainbowColor(i))
           .text((d) -> FoodData.nutrients[d].text)
-          .attr("onclick", (d) -> FoodData.getNutrientLink(d))
+          .attr("onclick", (d) -> FoodData.getNutrientJSLink(d))
 
      # Draw each item in the list
     for foodIndex in [0...foods.length]
@@ -267,10 +267,11 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
       render()
 
 
-visuals.directive "foodDetail", (Styles, FoodData, DrawingHelpers) ->
+visuals.directive "foodDetail", (Styles, FoodData, DrawingHelpers, ComparePage) ->
   restrict: "E"
   templateUrl: "partials/food-detail.html"
   scope:
+    foodData: "="
     food: "="
   link: (scope, element, attrs) ->
 
@@ -302,6 +303,8 @@ visuals.directive "foodDetail", (Styles, FoodData, DrawingHelpers) ->
         .attr("width", pieChartRadius * 2)
       DrawingHelpers.drawPieChart pieChart, pieChartData, pieChartRadius
 
-
     scope.$watch "food", ->
       render()
+
+    scope.getCompareLink = (food) ->
+      ComparePage.getPathWithFoodAdded food

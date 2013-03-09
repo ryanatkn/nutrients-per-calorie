@@ -316,10 +316,6 @@ a {
   text-decoration: none;
 }
 /* line 135, ../sass/sassy/main.scss */
-a:visited {
-  color: #349e01;
-}
-/* line 139, ../sass/sassy/main.scss */
 a:hover {
   text-decoration: underline;
 }

@@ -40,6 +40,7 @@ $black-text: #222;
 $light-gray-text: #bbb;
 
 $master-color: $green;
+$master-dark-color: $dark-green;
 $master-text-color: saturate(darken($master-color, 35%), 30%);
 $master-text-dark-color: saturate(darken($master-color, 42%), 30%);
 

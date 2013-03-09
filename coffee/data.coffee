@@ -145,6 +145,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     loaded: false
     foods: null
     nutrients: null
+    foodGroups: []
     selectedFoods: []
     
     macronutrientKeys
@@ -185,14 +186,14 @@ data.factory "FoodData", ($rootScope, Styles) ->
         cb()
 
     # Helper function for proper 2-way routing with asynchronously loaded data.
-    # $scope is needed because we're going outside of Angular to load data. (replace with $http promises?)
-    loadAsyncCtrl: ($scope, cb) ->
+    # scope is needed because we're going outside of Angular to load data. (replace with $http promises?)
+    afterLoading: (scope, cb) ->
       if @loaded
         cb()
       else
         @onLoad ->
           cb()
-          $scope.$apply()
+          scope.$apply()
   }
 
   loadCsvData = (path, cb) ->
@@ -253,6 +254,16 @@ data.factory "FoodData", ($rootScope, Styles) ->
       item[alcoholKey] /= item[calculatedCalorieKey]
       
     rawFoods
+
+  setFoodGroups = (foods) ->
+    foodGroups = []
+    for food, i in foods
+      if !_.find(foodGroups, (g) -> g.name is food.FdGrp_Desc)
+        foodGroups.push 
+          name: food.FdGrp_Desc
+          id: "food-group-#{i}"
+          enabled: true
+    FoodData.foodGroups = foodGroups
   
   # Asynchronously load the data
   loadCsvData "data/nutrients.csv", (rawNutrients) ->
@@ -260,6 +271,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
 
     loadCsvData "data/foods.csv", (rawFoods) ->
       FoodData.foods = processFoods(rawFoods)
+
+      setFoodGroups FoodData.foods
 
       FoodData.loaded = true
 

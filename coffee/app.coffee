@@ -104,7 +104,7 @@ app.factory "ComparePage", ($location, FoodData) ->
 
 app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
   
-  FoodData.loadAsyncCtrl $scope, ->
+  FoodData.afterLoading $scope, ->
     if $routeParams.foods
       ComparePage.selectedFoods = _.clone(FoodData.findFoodsById($routeParams.foods.split(",")))
     else
@@ -144,7 +144,7 @@ app.factory "FoodsPage", ($location) ->
 
 app.controller "FoodsCtrl", ($scope, $routeParams, FoodData, FoodsPage) ->
   
-  FoodData.loadAsyncCtrl $scope, ->
+  FoodData.afterLoading $scope, ->
     if $routeParams.food
       FoodsPage.selectedFood = _.clone(FoodData.findFoodById($routeParams.food))
     else
@@ -190,7 +190,7 @@ app.factory "NutrientsPage", ($location, FoodData) ->
 
 app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, NutrientsPage) ->
 
-  FoodData.loadAsyncCtrl $scope, ->
+  FoodData.afterLoading $scope, ->
     if $routeParams.nutrient
       NutrientsPage.selectedNutrient = _.clone(FoodData.findNutrientById($routeParams.nutrient))
     else
@@ -248,7 +248,7 @@ app.directive "foodSearch", ->
   restrict: "E"
   templateUrl: "partials/food-search.html"
   scope:
-    foods: "="
+    foodData: "="
     helpers: "="
     
 
@@ -261,6 +261,30 @@ app.directive "nutrientList", (FoodData) ->
     helpers: "="
   link: (scope, element, attrs) ->
     scope.nutrients = _.map(scope.nutrientKeys, (n) -> FoodData.nutrients[n])
+
+
+# Provides a dropdown with food group checkboxes to filter the food search.
+app.directive "foodGroupFilter", (FoodData) ->
+  restrict: "E"
+  templateUrl: "partials/food-group-filter.html"
+  scope:
+    foodData: "="
+  link: (scope, element, attrs) ->
+
+    onClick = (e) ->
+      if element.hasClass("open") and element isnt e.target and !element.find(e.target).length
+        scope.toggle()
+      true
+
+    FoodData.afterLoading scope, ->
+      scope.items = FoodData.foodGroups
+      $(window).on "click", onClick
+
+    scope.toggle = ->
+      element.toggleClass "open"
+
+    scope.$on "$destroy", ->
+      $(window).off "click", onClick
 
 
 # Searches the `Long_Desc` field of the foods list, including `FdGrp_Desc` if includeFoodGroups is true

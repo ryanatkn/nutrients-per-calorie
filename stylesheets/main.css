@@ -110,19 +110,19 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   border: 2px dashed transparent;
   border-radius: 2px;
 }
-/* line 21, ../sass/sassy/mixins.scss */
+/* line 36, ../sass/sassy/mixins.scss */
 .selectable:hover {
   background-color: rgba(148, 228, 109, 0.1);
   border-color: rgba(148, 228, 109, 0.6);
 }
-/* line 26, ../sass/sassy/mixins.scss */
+/* line 40, ../sass/sassy/mixins.scss */
 .selectable.selected {
   background-color: rgba(148, 228, 109, 0.25);
   border-color: #94e46d;
 }
-/* line 31, ../sass/sassy/mixins.scss */
+/* line 44, ../sass/sassy/mixins.scss */
 .selectable:active {
-  background-color: rgba(148, 228, 109, 0.15);
+  background-color: rgba(148, 228, 109, 0.17);
   border-color: rgba(148, 228, 109, 0.8);
 }
 
@@ -384,16 +384,17 @@ a:hover {
 
 /* line 59, ../sass/main.scss */
 .search-form {
+  width: 976px;
   padding: 6px;
   white-space: nowrap;
 }
 
-/* line 68, ../sass/main.scss */
+/* line 69, ../sass/main.scss */
 food-comparison {
   position: relative;
 }
 
-/* line 72, ../sass/main.scss */
+/* line 73, ../sass/main.scss */
 .food-comparison-list {
   width: 230px;
   position: absolute;
@@ -401,26 +402,26 @@ food-comparison {
   top: 80px;
   z-index: 1;
 }
-/* line 79, ../sass/main.scss */
+/* line 80, ../sass/main.scss */
 .food-comparison-list li {
   position: relative;
   height: 46px;
   padding-right: 6px;
 }
-/* line 85, ../sass/main.scss */
+/* line 86, ../sass/main.scss */
 .food-comparison-list .food-label {
   height: 100%;
   width: 100%;
   display: table;
 }
-/* line 90, ../sass/main.scss */
+/* line 91, ../sass/main.scss */
 .food-comparison-list .food-label a {
   display: table-cell;
   vertical-align: middle;
   padding: 0 6px;
   color: #222222;
 }
-/* line 98, ../sass/main.scss */
+/* line 99, ../sass/main.scss */
 .food-comparison-list .remove-button {
   position: absolute;
   left: -20px;
@@ -431,43 +432,43 @@ food-comparison {
   padding-left: 6px;
   color: #bbbbbb;
 }
-/* line 108, ../sass/main.scss */
+/* line 109, ../sass/main.scss */
 .food-comparison-list .remove-button:hover {
   font-weight: bold;
   color: #ff6a61;
 }
-/* line 113, ../sass/main.scss */
+/* line 114, ../sass/main.scss */
 .food-comparison-list .remove-button:active {
   color: #fa0e00;
 }
 
-/* line 119, ../sass/main.scss */
+/* line 120, ../sass/main.scss */
 .food-comparison-graphs {
   white-space: nowrap;
   margin-left: 236px;
 }
-/* line 123, ../sass/main.scss */
+/* line 124, ../sass/main.scss */
 .food-comparison-graphs svg {
   margin-left: -4px;
 }
 
-/* line 128, ../sass/main.scss */
+/* line 129, ../sass/main.scss */
 .clear-selected-button {
   position: relative;
   top: 10px;
   margin-left: 6px;
 }
 
-/* line 134, ../sass/main.scss */
+/* line 135, ../sass/main.scss */
 .nutrient-label {
   cursor: pointer;
 }
-/* line 137, ../sass/main.scss */
+/* line 138, ../sass/main.scss */
 .nutrient-label:hover {
   text-decoration: underline;
 }
 
-/* line 142, ../sass/main.scss */
+/* line 143, ../sass/main.scss */
 .text-with-icon {
   width: 976px;
   position: relative;
@@ -475,7 +476,7 @@ food-comparison {
   min-height: 48px;
   margin-bottom: 28px;
 }
-/* line 150, ../sass/main.scss */
+/* line 151, ../sass/main.scss */
 .text-with-icon img {
   width: 48px;
   height: 48px;
@@ -484,13 +485,13 @@ food-comparison {
   top: 0;
 }
 
-/* line 159, ../sass/main.scss */
+/* line 160, ../sass/main.scss */
 nutrient-list {
   display: block;
   margin-bottom: 14px;
 }
 
-/* line 164, ../sass/main.scss */
+/* line 165, ../sass/main.scss */
 .nutrient-graph {
   display: inline-block;
   width: 100px;
@@ -500,24 +501,24 @@ nutrient-list {
   top: 3px;
 }
 
-/* line 173, ../sass/main.scss */
+/* line 174, ../sass/main.scss */
 .nutrient-bar {
   background-color: #94e46d;
   height: 16px;
 }
 
-/* line 178, ../sass/main.scss */
+/* line 179, ../sass/main.scss */
 food-detail {
   white-space: nowrap;
 }
 
-/* line 182, ../sass/main.scss */
+/* line 183, ../sass/main.scss */
 .food-detail-graph {
   margin: 14px 0;
   display: inline-block;
 }
 
-/* line 187, ../sass/main.scss */
+/* line 188, ../sass/main.scss */
 .food-detail-pie-chart-labels {
   display: inline-block;
   font-size: 24px;
@@ -526,22 +527,86 @@ food-detail {
   left: 13px;
 }
 
-/* line 195, ../sass/main.scss */
+/* line 196, ../sass/main.scss */
 .fat {
   color: #ff6a61;
 }
 
-/* line 199, ../sass/main.scss */
+/* line 200, ../sass/main.scss */
 .carbohydrate {
   color: #94e46d;
 }
 
-/* line 203, ../sass/main.scss */
+/* line 204, ../sass/main.scss */
 .protein {
   color: #6ed2ef;
 }
 
-/* line 207, ../sass/main.scss */
+/* line 208, ../sass/main.scss */
 .padded-left {
   padding-left: 6px;
+}
+
+/* line 212, ../sass/main.scss */
+food-group-filter {
+  float: right;
+  position: relative;
+}
+/* line 56, ../sass/sassy/mixins.scss */
+food-group-filter .dropdown-toggle {
+  padding: 2px 6px;
+  cursor: pointer;
+  cursor: pointer;
+  border: 2px dashed transparent;
+  border-radius: 2px;
+  position: relative;
+  top: 3px;
+}
+/* line 36, ../sass/sassy/mixins.scss */
+food-group-filter .dropdown-toggle:hover {
+  background-color: rgba(148, 228, 109, 0.1);
+  border-color: rgba(148, 228, 109, 0.6);
+}
+/* line 40, ../sass/sassy/mixins.scss */
+food-group-filter .dropdown-toggle.selected {
+  background-color: rgba(148, 228, 109, 0.25);
+  border-color: #94e46d;
+}
+/* line 44, ../sass/sassy/mixins.scss */
+food-group-filter .dropdown-toggle:active {
+  background-color: rgba(148, 228, 109, 0.17);
+  border-color: rgba(148, 228, 109, 0.8);
+}
+/* line 65, ../sass/sassy/mixins.scss */
+food-group-filter.open .dropdown-toggle {
+  background-color: rgba(148, 228, 109, 0.25);
+  border-color: #94e46d;
+}
+/* line 68, ../sass/sassy/mixins.scss */
+food-group-filter.open .dropdown-toggle:active {
+  background-color: rgba(148, 228, 109, 0.17);
+  border-color: rgba(148, 228, 109, 0.8);
+}
+/* line 74, ../sass/sassy/mixins.scss */
+food-group-filter > ul {
+  position: absolute;
+  top: 33px;
+  right: 0;
+  display: none;
+  z-index: 10;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid #bbbbbb;
+  -webkit-box-shadow: 0 2px 14px 1px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 2px 14px 1px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 14px 1px rgba(0, 0, 0, 0.15);
+  padding: 5px 0;
+}
+/* line 86, ../sass/sassy/mixins.scss */
+food-group-filter > ul > li {
+  padding: 3px 6px;
+}
+/* line 92, ../sass/sassy/mixins.scss */
+food-group-filter.open > ul {
+  display: block;
 }

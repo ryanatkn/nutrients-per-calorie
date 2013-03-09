@@ -57,6 +57,7 @@
 }
 
 .search-form {
+  width: $content-width;
   padding: $horizontal-padding;
   white-space: nowrap;
 }
@@ -206,4 +207,9 @@ food-detail {
 
 .padded-left {
   padding-left: $horizontal-padding;
+}
+
+food-group-filter {
+  float: right;
+  @include dropdown(3px);
 }

@@ -13,7 +13,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
   allFoods = null
 
   allKeys = [
-    "NDB_No", "Long_Desc", "FdGrp_Desc", "10:0" , "12:0", "13:0", "14:0", "14:1", "15:0",
+    "NDB_No", "Long_Desc", "FdGrp_Desc", "10:0", "12:0", "13:0", "14:0", "14:1", "15:0",
     "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0",
     "18:1 c", "18:1 t", "18:1 undifferentiated", "18:1-11t (18:1t n-7)", "18:2 CLAs",
     "18:2 i", "18:2 n-6 c,c", "18:2 t not further defined", "18:2 t,t", "18:2 undifferentiated",
@@ -48,7 +48,6 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Alcohol, ethyl":                 "Alcohol"
     "Vitamin A, RAE":                 "Vitamin A" 
     "Vitamin C, total ascorbic acid": "Vitamin C"
-    "Vitamin D (D2 + D3)":            "Vitamin D"
     "Vitamin E (alpha-tocopherol)":   "Vitamin E"
     "Vitamin K (phylloquinone)":      "Vitamin K"
     "Folate, total":                  "Folate"
@@ -84,7 +83,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
   vitaminKeys = _.extend [
     "Vitamin A, RAE"
     "Vitamin C, total ascorbic acid"
-    "Vitamin D (D2 + D3)"
+    "Vitamin D"
     "Vitamin E (alpha-tocopherol)"
     "Vitamin K (phylloquinone)"
     "Thiamin"
@@ -148,9 +147,30 @@ data.factory "FoodData", ($rootScope, Styles) ->
     text: "Sugars"
     color: Styles.colors.red
 
-  nutrientKeys = _.union(fiberKeys, vitaminKeys, mineralKeys, aminoAcidKeys, miscKeys, sugarKeys)
+  listedKeys = _.union(macronutrientKeys, fiberKeys, vitaminKeys, mineralKeys, aminoAcidKeys, miscKeys, sugarKeys)
 
-  unusedKeys = _.difference(allKeys, macronutrientKeys, nutrientKeys)
+  ignoredKeys = [
+    "NDB_No", "Long_Desc", "FdGrp_Desc", "10:0", "12:0", "13:0", "14:0", "14:1", "15:0",
+    "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0",
+    "18:1 c", "18:1 t", "18:1 undifferentiated", "18:1-11t (18:1t n-7)", "18:2 CLAs",
+    "18:2 i", "18:2 n-6 c,c", "18:2 t not further defined", "18:2 t,t", "18:2 undifferentiated",
+    "18:3 n-3 c,c,c (ALA)", "18:3 n-6 c,c,c", "18:3 undifferentiated", "18:3i", "18:4", "20:0",
+    "20:1", "20:2 n-6 c,c", "20:3 n-3", "20:3 n-6", "20:3 undifferentiated", "20:4 n-6",
+    "20:4 undifferentiated", "20:5 n-3 (EPA)", "21:5", "22:0", "22:1 c", "22:1 t",
+    "22:1 undifferentiated", "22:4", "22:5 n-3 (DPA)", "22:6 n-3 (DHA)", "24:0", "24:1 c",
+    "4:0", "6:0", "8:0", "Adjusted Protein", "Alcohol, ethyl", "Ash", "Caffeine", "Energy", "Energy (kj)",
+    "Folic acid", "Folate, DFE", "Fatty acids, total trans-monoenoic", "Fatty acids, total trans-polyenoic",
+    "Fluoride, F", "Vitamin A, IU", "Vitamin B-12, added", "Vitamin D (D2 + D3)", "Vitamin E, added", "Water",
+
+  ]
+
+  otherKeys = _.extend _.difference(allKeys, listedKeys, ignoredKeys),
+    text: "Other"
+    color: Styles.colors.greenBlue
+
+  nutrientKeys = _.union(listedKeys, otherKeys)
+
+  unusedKeys = _.difference(allKeys, nutrientKeys)
 
   onLoadCbs = []
 
@@ -162,14 +182,13 @@ data.factory "FoodData", ($rootScope, Styles) ->
     selectedFoods: []
     
     macronutrientKeys
-
-    nutrientKeys
     fiberKeys
     vitaminKeys
     mineralKeys
     aminoAcidKeys
     miscKeys
     sugarKeys
+    otherKeys
 
     unusedKeys
 

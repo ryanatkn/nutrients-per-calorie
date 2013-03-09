@@ -267,7 +267,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
       render()
 
 
-visuals.directive "foodDetail", (Styles, FoodData, DrawingHelpers) ->
+visuals.directive "foodDetail", (Styles, FoodData, DrawingHelpers, ComparePage) ->
   restrict: "E"
   templateUrl: "partials/food-detail.html"
   scope:
@@ -302,6 +302,8 @@ visuals.directive "foodDetail", (Styles, FoodData, DrawingHelpers) ->
         .attr("width", pieChartRadius * 2)
       DrawingHelpers.drawPieChart pieChart, pieChartData, pieChartRadius
 
-
     scope.$watch "food", ->
       render()
+
+    scope.getCompareLink = (food) ->
+      ComparePage.getPathWithFoodAdded food

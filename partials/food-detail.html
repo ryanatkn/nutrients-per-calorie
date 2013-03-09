@@ -4,6 +4,9 @@
 <div ng-show="food">
   <h3 class="padded-left">{{food.Long_Desc}}</h3>
   <p class="padded-left">{{food.FdGrp_Desc}}</p>
+  <p class="padded-left">
+    <a href="{{getCompareLink(food)}}">Compare</a>
+  </p>
   <div class="food-detail-graph"></div>
   <ul class="food-detail-pie-chart-labels">
     <li class="protein">

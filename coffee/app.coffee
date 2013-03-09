@@ -322,7 +322,7 @@ app.filter "searchFoods", ->
   (foods, query) ->
     {text, includeFoodGroups} = query
     if text and typeof text is "string"
-      text = text.replace(/[^a-zA-Z0-9.,% ]/g, "")
+      text = text.replace(/[^a-zA-Z0-9.,%\-! ]/g, "")
       filteredFoods = []
       negativeSearchPrefixes = ["!", "-"]
       words = text.split(" ")

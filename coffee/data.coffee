@@ -161,8 +161,11 @@ data.factory "FoodData", ($rootScope, Styles) ->
     findFoodsById: (ids) -> @findFoodById id for id in ids
 
     # Uses a JS click event because anchors in svgs don't play nicely with every browser.
+    getNutrientJSLink: (NutrDesc) ->
+      "javascript: window.location = '#{@getNutrientLink(NutrDesc)}';"
+
     getNutrientLink: (NutrDesc) ->
-      "javascript: window.location = '#/nutrients?nutrient=#{@nutrients[NutrDesc].Nutr_No}';"
+      "#/nutrients?nutrient=#{@nutrients[NutrDesc].Nutr_No}"
 
     # Mutates `foods` with compared values
     calculateRelativeValues: (foods) ->

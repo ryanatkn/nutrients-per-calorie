@@ -132,10 +132,6 @@ a {
   color: $master-text-color;
   text-decoration: none;
 
-  &:visited {
-    color: $master-text-color;
-  }
-
   &:hover {
     text-decoration: underline;
   }

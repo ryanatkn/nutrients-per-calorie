@@ -511,8 +511,11 @@
         }
         return _results;
       },
+      getNutrientJSLink: function(NutrDesc) {
+        return "javascript: window.location = '" + (this.getNutrientLink(NutrDesc)) + "';";
+      },
       getNutrientLink: function(NutrDesc) {
-        return "javascript: window.location = '#/nutrients?nutrient=" + this.nutrients[NutrDesc].Nutr_No + "';";
+        return "#/nutrients?nutrient=" + this.nutrients[NutrDesc].Nutr_No;
       },
       calculateRelativeValues: function(foods) {
         var comparedKey, food, key, max, _i, _j, _len, _len1;
@@ -742,7 +745,7 @@
       }).text(function(d) {
         return d.text;
       }).attr("onclick", function(d) {
-        return FoodData.getNutrientLink(d.NutrDesc);
+        return FoodData.getNutrientJSLink(d.NutrDesc);
       });
       _results = [];
       for (foodIndex = _i = 0, _ref = foods.length; 0 <= _ref ? _i < _ref : _i > _ref; foodIndex = 0 <= _ref ? ++_i : --_i) {
@@ -793,7 +796,7 @@
       }).text(function(d) {
         return FoodData.nutrients[d].text;
       }).attr("onclick", function(d) {
-        return FoodData.getNutrientLink(d);
+        return FoodData.getNutrientJSLink(d);
       });
       _results = [];
       for (foodIndex = _i = 0, _ref = foods.length; 0 <= _ref ? _i < _ref : _i > _ref; foodIndex = 0 <= _ref ? ++_i : --_i) {
@@ -871,6 +874,7 @@
       restrict: "E",
       templateUrl: "partials/food-detail.html",
       scope: {
+        foodData: "=",
         food: "="
       },
       link: function(scope, element, attrs) {

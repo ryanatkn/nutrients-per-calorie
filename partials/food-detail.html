@@ -9,14 +9,20 @@
   </p>
   <div class="food-detail-graph"></div>
   <ul class="food-detail-pie-chart-labels">
-    <li class="protein">
-      {{food["Protein"] | percent}} protein
+    <li>
+      <a class="protein" href="{{foodData.getNutrientLink('Protein')}}">
+        {{food["Protein"] | percent}} protein
+      </a>
     </li>
-    <li class="carbohydrate">
-      {{food["Carbohydrate, by difference"] | percent}} carbohydrate
+    <li>
+      <a class="carbohydrate" href="{{foodData.getNutrientLink('Carbohydrate, by difference')}}">
+        {{food["Carbohydrate, by difference"] | percent}} carbohydrate
+      </a>
     </li>
-    <li class="fat">
-      {{food["Total lipid (fat)"] | percent}} fat
+    <li>
+      <a class="fat" href="{{foodData.getNutrientLink('Total lipid (fat)')}}">
+        {{food["Total lipid (fat)"] | percent}} fat
+      </a>
     </li>
   </ul>
 </div>

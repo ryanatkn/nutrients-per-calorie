@@ -270,6 +270,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
           name: food.FdGrp_Desc
           id: "food-group-#{i}"
           enabled: true
+    for group in foodGroups
+      group.count = _.filter(foods, (f) -> f.FdGrp_Desc is group.name).length
     FoodData.foodGroups = foodGroups
   
   # Asynchronously load the data

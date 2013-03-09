@@ -669,7 +669,7 @@
       return rawFoods;
     };
     setFoodGroups = function(foods) {
-      var food, foodGroups, i, _i, _len;
+      var food, foodGroups, group, i, _i, _j, _len, _len1;
       foodGroups = [];
       for (i = _i = 0, _len = foods.length; _i < _len; i = ++_i) {
         food = foods[i];
@@ -682,6 +682,12 @@
             enabled: true
           });
         }
+      }
+      for (_j = 0, _len1 = foodGroups.length; _j < _len1; _j++) {
+        group = foodGroups[_j];
+        group.count = _.filter(foods, function(f) {
+          return f.FdGrp_Desc === group.name;
+        }).length;
       }
       return FoodData.foodGroups = foodGroups;
     };

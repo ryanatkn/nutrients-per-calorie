@@ -1,0 +1,9 @@
+<div class="dropdown-toggle" ng-click="toggle()">
+  Choose food groups ▽
+</div>
+<ul>
+  <li ng-repeat="item in items">
+    <input type="checkbox" ng-model="item.enabled" id="{{item.id}}">
+    <label for="{{item.id}}">{{item.name}}</label>
+  </li>
+</ul>

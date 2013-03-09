@@ -13,23 +13,84 @@
   }
 }
 
+@mixin selectable-hover {
+  background-color: $highlight-hover-color;
+  border-color: $highlight-hover-border-color;
+}
+
+@mixin selectable-selected {
+  background-color: $highlight-color;
+  border-color: $highlight-border-color;
+}
+
+@mixin selectable-active {
+  background-color: $highlight-active-color;
+  border-color: $highlight-active-border-color;
+}
+
 @mixin selectable {
   cursor: pointer;
   border: 2px dashed transparent;
   border-radius: $border-radius;
 
   &:hover {
-    background-color: $highlight-hover-color;
-    border-color: $highlight-hover-border-color;
+    @include selectable-hover;
   }
 
   &.selected {
-    background-color: $highlight-color;
-    border-color: $highlight-border-color;
+    @include selectable-selected;
   }
 
   &:active {
-    background-color: $highlight-active-color;
-    border-color: $highlight-active-border-color;
+    @include selectable-active;
+  }
+}
+
+@mixin drop-shadow {
+  @include box-shadow(0 2px 14px 1px rgba(0, 0, 0, 0.15));
+}
+
+@mixin dropdown($top-offset: 0px) {
+  position: relative;
+
+  .dropdown-toggle {
+    padding: 2px $horizontal-padding;
+    cursor: pointer;
+    @include selectable;
+    position: relative;
+    top: $top-offset;
+  }
+
+  &.open {
+    .dropdown-toggle {
+      @include selectable-selected;
+
+      &:active {
+        @include selectable-active;
+      }
+    }
+  }
+
+  > ul {
+    position: absolute;
+    top: $input-height + $top-offset;
+    right: 0;
+    display: none;
+    z-index: 10;
+    background-color: #fff;
+    border-radius: $border-radius;
+    border: 1px solid $border-color;
+    @include drop-shadow;
+    padding: 5px 0;
+
+    > li {
+      padding: 3px $horizontal-padding;
+    }
+  }
+
+  &.open {
+    > ul {
+      display: block;
+    }
   }
 }

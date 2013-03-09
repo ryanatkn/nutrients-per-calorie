@@ -81,7 +81,7 @@
     border-radius: $border-radius;
     border: 1px solid $border-color;
     @include drop-shadow;
-    padding: 5px 0;
+    padding: 4px 0;
 
     > li {
       padding: 3px $horizontal-padding;

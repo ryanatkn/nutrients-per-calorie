@@ -309,7 +309,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
           enabled: true
     for group in foodGroups
       group.count = _.filter(foods, (f) -> f.FdGrp_Desc is group.name).length
-    FoodData.foodGroups = foodGroups
+    FoodData.foodGroups = _.sortBy(foodGroups, (f) -> f.name)
   
   # Asynchronously load the data
   loadCsvData "data/nutrients.csv", (rawNutrients) ->

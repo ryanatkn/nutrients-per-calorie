@@ -745,7 +745,9 @@
           return f.FdGrp_Desc === group.name;
         }).length;
       }
-      return FoodData.foodGroups = foodGroups;
+      return FoodData.foodGroups = _.sortBy(foodGroups, function(f) {
+        return f.name;
+      });
     };
     loadCsvData("data/nutrients.csv", function(rawNutrients) {
       FoodData.nutrients = processNutrients(rawNutrients);

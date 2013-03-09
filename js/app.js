@@ -517,7 +517,7 @@
       "Glucose (dextrose)": "Glucose"
     };
     comparedKeys = _.difference(allKeys, ["NDB_No", "Long_Desc", "FdGrp_Desc"]);
-    macronutrientKeys = _.extend(["Total lipid (fat)", "Protein", "Carbohydrate, by difference", "Alcohol, ethyl"], {
+    macronutrientKeys = _.extend(["Total lipid (fat)", "Protein", "Carbohydrate, by difference", "Fiber, total dietary"], {
       text: "Macronutrients"
     });
     fiberKeys = _.extend(["Fiber, total dietary"], {
@@ -536,7 +536,7 @@
       text: "Amino Acids",
       color: Styles.colors.blue
     });
-    miscKeys = _.extend(["Carotene, alpha", "Carotene, beta", "Choline, total", "Cryptoxanthin, beta", "Lutein + zeaxanthin", "Lycopene", "Phytosterols"], {
+    miscKeys = _.extend(["Carotene, alpha", "Carotene, beta", "Choline, total", "Lutein + zeaxanthin", "Lycopene", "Phytosterols"], {
       text: "Misc",
       color: Styles.colors.yellow
     });

@@ -69,7 +69,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Total lipid (fat)"
     "Protein"
     "Carbohydrate, by difference"
-    "Alcohol, ethyl"
+    "Fiber, total dietary"
   ],
     text: "Macronutrients"
 
@@ -127,7 +127,6 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Carotene, alpha"
     "Carotene, beta"
     "Choline, total"
-    "Cryptoxanthin, beta"
     "Lutein + zeaxanthin"
     "Lycopene"
     "Phytosterols"

@@ -62,6 +62,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Sodium, Na":                     "Sodium"
     "Zinc, Zn":                       "Zinc"
     "Glucose (dextrose)":             "Glucose"
+    "Carotene, alpha":                "Alpha-Carotene"
+    "Carotene, beta":                 "Beta-Carotene"
 
   comparedKeys = _.difference(allKeys, ["NDB_No", "Long_Desc", "FdGrp_Desc"])
 

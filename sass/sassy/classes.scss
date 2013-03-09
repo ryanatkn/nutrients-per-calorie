@@ -16,3 +16,25 @@
   width: $column-width;
   padding: 0 $horizontal-padding $horizontal-padding $horizontal-padding;
 }
+
+.input-clearer {
+  display: inline-block;
+  width: $input-height;
+  height: $input-height;
+  line-height: $input-height;
+  margin-right: -$input-height;
+  position: relative;
+  left: -$input-height;
+  color: $light-gray-text;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    font-weight: bold;
+    color: $red;
+  }
+
+  &:active {
+    color: $dark-red;
+  }
+}

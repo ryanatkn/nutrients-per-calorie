@@ -73,12 +73,10 @@ data.factory "FoodData", ($rootScope, Styles) ->
   ],
     text: "Macronutrients"
 
-  miscKeys = _.extend [
+  fiberKeys = _.extend [
     "Fiber, total dietary"
-    "Lutein + zeaxanthin"
-    "Choline, total"
   ],
-    text: "Special"
+    text: "Fiber"
     color: Styles.colors.yellow
 
   vitaminKeys = _.extend [
@@ -125,6 +123,19 @@ data.factory "FoodData", ($rootScope, Styles) ->
     text: "Amino Acids"
     color: Styles.colors.blue
 
+  miscKeys = _.extend [
+    "Carotene, alpha"
+    "Carotene, beta"
+    "Choline, total"
+    "Cryptoxanthin, beta"
+    "Lutein + zeaxanthin"
+    "Lycopene"
+    "Phytosterols"
+    "Theobromine"
+  ],
+    text: "Misc"
+    color: Styles.colors.yellow
+
   sugarKeys = _.extend [
     "Fructose"
     "Galactose"
@@ -137,7 +148,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     text: "Sugars"
     color: Styles.colors.red
 
-  nutrientKeys = _.union(miscKeys, vitaminKeys, mineralKeys, aminoAcidKeys, sugarKeys)
+  nutrientKeys = _.union(fiberKeys, vitaminKeys, mineralKeys, aminoAcidKeys, miscKeys, sugarKeys)
 
   unusedKeys = _.difference(allKeys, macronutrientKeys, nutrientKeys)
 
@@ -151,12 +162,16 @@ data.factory "FoodData", ($rootScope, Styles) ->
     selectedFoods: []
     
     macronutrientKeys
+
     nutrientKeys
-    miscKeys
+    fiberKeys
     vitaminKeys
     mineralKeys
     aminoAcidKeys
+    miscKeys
     sugarKeys
+
+    unusedKeys
 
     findNutrientById: (Nutr_No) -> _.find(@nutrients, (n) -> n.Nutr_No is Nutr_No)
 

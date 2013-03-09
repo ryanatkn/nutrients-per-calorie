@@ -160,7 +160,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location) ->
       .style("font-size", Styles.largeFontSize)
       .style("fill", nutrients.color)
       .text(switch nutrients.text
-        when "Special" then ""
+        when "Fiber" then ""
         else nutrients.text)
 
     # Draw each nutrient label
@@ -257,8 +257,8 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
       DrawingHelpers.drawPieCharts vis, foods
 
       nutrientGroups = [ # TODO add a control to toggle these
-        FoodData.miscKeys, FoodData.vitaminKeys, FoodData.mineralKeys,
-        FoodData.aminoAcidKeys, FoodData.sugarKeys
+        FoodData.fiberKeys, FoodData.vitaminKeys, FoodData.mineralKeys,
+        FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.sugarKeys
       ]
       DrawingHelpers.drawNutrientGroups vis, foods, nutrientGroups
 

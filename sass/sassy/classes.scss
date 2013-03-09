@@ -6,17 +6,6 @@
   @include selectable;
 }
 
-.column-wrapper {
-  white-space: nowrap;
-}
-
-.column {
-  display: inline-block;
-  vertical-align: top;
-  width: $column-width;
-  padding: 0 $horizontal-padding $horizontal-padding $horizontal-padding;
-}
-
 .input-clearer {
   display: inline-block;
   width: $input-height;

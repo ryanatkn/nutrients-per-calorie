@@ -127,19 +127,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 /* line 9, ../sass/sassy/classes.scss */
-.column-wrapper {
-  white-space: nowrap;
-}
-
-/* line 13, ../sass/sassy/classes.scss */
-.column {
-  display: inline-block;
-  vertical-align: top;
-  width: 195.2px;
-  padding: 0 6px 6px 6px;
-}
-
-/* line 20, ../sass/sassy/classes.scss */
 .input-clearer {
   display: inline-block;
   width: 30px;
@@ -152,12 +139,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   text-align: center;
   cursor: pointer;
 }
-/* line 32, ../sass/sassy/classes.scss */
+/* line 21, ../sass/sassy/classes.scss */
 .input-clearer:hover {
   font-weight: bold;
   color: #94e46d;
 }
-/* line 37, ../sass/sassy/classes.scss */
+/* line 26, ../sass/sassy/classes.scss */
 .input-clearer:active {
   color: #5ac625;
 }
@@ -620,4 +607,51 @@ food-group-filter ul li span {
   position: absolute;
   right: 6px;
   top: 6px;
+}
+
+/* line 233, ../sass/main.scss */
+#nutrient-columns {
+  position: relative;
+  height: 350px;
+  width: 1448px;
+}
+
+/* line 239, ../sass/main.scss */
+.column {
+  position: absolute;
+  top: 0;
+  width: 195px;
+  padding: 0 6px 6px 6px;
+}
+/* line 247, ../sass/main.scss */
+.column:nth-child(1) {
+  left: 0px;
+}
+/* line 247, ../sass/main.scss */
+.column:nth-child(2) {
+  left: 195px;
+}
+/* line 247, ../sass/main.scss */
+.column:nth-child(3) {
+  left: 390px;
+}
+/* line 247, ../sass/main.scss */
+.column:nth-child(4) {
+  left: 585px;
+}
+/* line 247, ../sass/main.scss */
+.column:nth-child(5) {
+  left: 780px;
+}
+/* line 247, ../sass/main.scss */
+.column:nth-child(6) {
+  left: 975px;
+}
+/* line 247, ../sass/main.scss */
+.column:nth-child(7) {
+  left: 1170px;
+}
+/* line 253, ../sass/main.scss */
+.column:last-child {
+  width: 250px;
 }

@@ -226,3 +226,31 @@ food-group-filter {
     }
   }
 }
+
+$nutrient-column-width: 250px;
+$num-columns: 7;
+
+#nutrient-columns {
+  position: relative;
+  height: 350px;
+  width: $column-width * ($num-columns - 1) + $nutrient-column-width + $body-padding;
+}
+
+.column {
+  position: absolute;
+  top: 0;
+  width: $column-width;
+  padding: 0 $horizontal-padding $horizontal-padding $horizontal-padding;
+
+  $i: 1;
+  @while $i <= $num-columns {
+    &:nth-child(#{$i}) {
+      left: ($i - 1) * $column-width;
+    }
+    $i: $i + 1;
+  }
+
+  &:last-child {
+    width: $nutrient-column-width;
+  }
+}

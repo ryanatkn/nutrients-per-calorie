@@ -4,12 +4,17 @@
 # MIT License
 
 
-# Use cases
-# [x] Compare n foods against one another.
-# [ ] What are the best sources of nutrient x?
-# [ ] What does food x look like in detail?
-# [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
+###
 
+Use cases
+  [x] Compare n foods against one another.
+    [ ] Daily recommendation baseline
+  [x] What are the best sources of nutrient x?
+  [x] What does food x look like in detail?
+    [ ] More detail?
+  [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
+
+###
 
 app = angular.module("nutrients-per-calorie", ["food-visuals", "food-data"])
 
@@ -42,6 +47,9 @@ app.config ($routeProvider) ->
       reloadOnSearch: false
     .when "/about",
       templateUrl: "partials/about.html"
+    .when "/options",
+      templateUrl: "partials/options.html"
+      controller: "OptionsCtrl"
     .otherwise redirectTo: "/compare"
 
 
@@ -60,6 +68,9 @@ app.controller "MainCtrl", ($scope, $location, FoodData, ComparePage, FoodsPage,
   ,
     text: "About"
     getPath: -> "#/about"
+  ,
+    text: "Options"
+    getPath: -> "#/options"
   ],
     isActive: (navLink) ->
       _.contains navLink.getPath(), $location.path()
@@ -189,7 +200,6 @@ app.factory "NutrientsPage", ($location, FoodData) ->
 
 
 app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, NutrientsPage) ->
-
   FoodData.afterLoading $scope, ->
     if $routeParams.nutrient
       NutrientsPage.selectedNutrient = _.clone(FoodData.findNutrientById($routeParams.nutrient))
@@ -244,6 +254,21 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
 
   $scope.$watch "foodData.foods", (newVal, oldVal) ->
     updateFilteredFoods true
+
+
+app.factory "OptionsPage", (FoodData) ->
+  data =
+    setActiveDatabase: (database) ->
+      if FoodData.databases.getActive() isnt database
+        FoodData.databases.setActive database
+    getActiveDatabase: -> FoodData.databases.getActive().name
+
+
+app.controller "OptionsCtrl", ($scope, OptionsPage, FoodData) ->
+  $scope.options = OptionsPage
+
+  FoodData.afterLoading $scope, ->
+    # console.log "Loaded options controller.", FoodData.databases.getActive().name
 
   
 # Provides a search box and food list from which foods can be selected.

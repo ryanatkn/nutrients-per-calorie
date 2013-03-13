@@ -63,6 +63,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
+/* line 1, ../sass/sassy/classes.scss */
+.master-color {
+  color: #94e46d;
+}
+
 /* line 9, ../sass/sassy/mixins.scss */
 .rainbow :nth-child(10n + 1) {
   background-color: #ff6a61;
@@ -104,7 +109,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   background-color: #e77eaa;
 }
 
-/* line 5, ../sass/sassy/classes.scss */
+/* line 9, ../sass/sassy/classes.scss */
 .selectable {
   cursor: pointer;
   border: 2px dashed transparent;
@@ -117,16 +122,22 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 /* line 40, ../sass/sassy/mixins.scss */
 .selectable.selected {
+  cursor: default;
   background-color: rgba(148, 228, 109, 0.25);
   border-color: #94e46d;
 }
-/* line 44, ../sass/sassy/mixins.scss */
+/* line 45, ../sass/sassy/mixins.scss */
 .selectable:active {
   background-color: rgba(148, 228, 109, 0.17);
   border-color: rgba(148, 228, 109, 0.8);
 }
 
-/* line 9, ../sass/sassy/classes.scss */
+/* line 51, ../sass/sassy/mixins.scss */
+.deselectable.selected {
+  cursor: pointer;
+}
+
+/* line 17, ../sass/sassy/classes.scss */
 .input-clearer {
   display: inline-block;
   width: 30px;
@@ -139,14 +150,24 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   text-align: center;
   cursor: pointer;
 }
-/* line 21, ../sass/sassy/classes.scss */
+/* line 29, ../sass/sassy/classes.scss */
 .input-clearer:hover {
   font-weight: bold;
   color: #94e46d;
 }
-/* line 26, ../sass/sassy/classes.scss */
+/* line 34, ../sass/sassy/classes.scss */
 .input-clearer:active {
   color: #5ac625;
+}
+
+/* line 39, ../sass/sassy/classes.scss */
+.hidden {
+  display: none;
+}
+
+/* line 43, ../sass/sassy/classes.scss */
+.inactive {
+  color: #bbbbbb;
 }
 
 /* line 9, ../sass/sassy/main.scss */
@@ -535,11 +556,16 @@ food-detail {
 }
 
 /* line 212, ../sass/main.scss */
+.padded {
+  padding: 6px;
+}
+
+/* line 216, ../sass/main.scss */
 food-group-filter {
   float: right;
   position: relative;
 }
-/* line 56, ../sass/sassy/mixins.scss */
+/* line 63, ../sass/sassy/mixins.scss */
 food-group-filter .dropdown-toggle {
   padding: 2px 6px;
   cursor: pointer;
@@ -556,25 +582,26 @@ food-group-filter .dropdown-toggle:hover {
 }
 /* line 40, ../sass/sassy/mixins.scss */
 food-group-filter .dropdown-toggle.selected {
+  cursor: default;
   background-color: rgba(148, 228, 109, 0.25);
   border-color: #94e46d;
 }
-/* line 44, ../sass/sassy/mixins.scss */
+/* line 45, ../sass/sassy/mixins.scss */
 food-group-filter .dropdown-toggle:active {
   background-color: rgba(148, 228, 109, 0.17);
   border-color: rgba(148, 228, 109, 0.8);
 }
-/* line 65, ../sass/sassy/mixins.scss */
+/* line 72, ../sass/sassy/mixins.scss */
 food-group-filter.open .dropdown-toggle {
   background-color: rgba(148, 228, 109, 0.25);
   border-color: #94e46d;
 }
-/* line 68, ../sass/sassy/mixins.scss */
+/* line 75, ../sass/sassy/mixins.scss */
 food-group-filter.open .dropdown-toggle:active {
   background-color: rgba(148, 228, 109, 0.17);
   border-color: rgba(148, 228, 109, 0.8);
 }
-/* line 74, ../sass/sassy/mixins.scss */
+/* line 81, ../sass/sassy/mixins.scss */
 food-group-filter > ul {
   position: absolute;
   top: 33px;
@@ -589,69 +616,69 @@ food-group-filter > ul {
   box-shadow: 0 2px 14px 1px rgba(0, 0, 0, 0.15);
   padding: 4px 0;
 }
-/* line 86, ../sass/sassy/mixins.scss */
+/* line 93, ../sass/sassy/mixins.scss */
 food-group-filter > ul > li {
   padding: 3px 6px;
 }
-/* line 92, ../sass/sassy/mixins.scss */
+/* line 99, ../sass/sassy/mixins.scss */
 food-group-filter.open > ul {
   display: block;
 }
-/* line 217, ../sass/main.scss */
+/* line 221, ../sass/main.scss */
 food-group-filter ul li {
   position: relative;
   padding-right: 48px;
 }
-/* line 221, ../sass/main.scss */
+/* line 225, ../sass/main.scss */
 food-group-filter ul li span {
   position: absolute;
   right: 6px;
   top: 6px;
 }
 
-/* line 233, ../sass/main.scss */
+/* line 237, ../sass/main.scss */
 #nutrient-columns {
   position: relative;
   height: 350px;
-  width: 1448px;
+  width: 1388px;
 }
 
-/* line 239, ../sass/main.scss */
+/* line 243, ../sass/main.scss */
 .column {
   position: absolute;
   top: 0;
-  width: 195px;
+  width: 185px;
   padding: 0 6px 6px 6px;
 }
-/* line 247, ../sass/main.scss */
+/* line 251, ../sass/main.scss */
 .column:nth-child(1) {
   left: 0px;
 }
-/* line 247, ../sass/main.scss */
+/* line 251, ../sass/main.scss */
 .column:nth-child(2) {
-  left: 195px;
+  left: 185px;
 }
-/* line 247, ../sass/main.scss */
+/* line 251, ../sass/main.scss */
 .column:nth-child(3) {
-  left: 390px;
+  left: 370px;
 }
-/* line 247, ../sass/main.scss */
+/* line 251, ../sass/main.scss */
 .column:nth-child(4) {
-  left: 585px;
+  left: 555px;
 }
-/* line 247, ../sass/main.scss */
+/* line 251, ../sass/main.scss */
 .column:nth-child(5) {
-  left: 780px;
+  left: 740px;
 }
-/* line 247, ../sass/main.scss */
+/* line 251, ../sass/main.scss */
 .column:nth-child(6) {
-  left: 975px;
+  left: 925px;
 }
-/* line 247, ../sass/main.scss */
+/* line 251, ../sass/main.scss */
 .column:nth-child(7) {
-  left: 1170px;
+  left: 1110px;
 }
-/* line 253, ../sass/main.scss */
+/* line 257, ../sass/main.scss */
 .column:last-child {
   width: 250px;
 }

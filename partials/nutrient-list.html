@@ -3,7 +3,7 @@
 </h3>
 <ul class="nutrient-list">
   <li ng-repeat="nutrient in nutrients" ng-click="helpers.toggle(nutrient)"
-      class="selectable" ng-class="{selected: helpers.isSelected(nutrient)}">
+      class="selectable deselectable" ng-class="{selected: helpers.isSelected(nutrient)}">
     {{nutrient.text}}
   </li>
 </ul>

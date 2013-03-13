@@ -38,11 +38,18 @@
   }
 
   &.selected {
+    cursor: default;
     @include selectable-selected;
   }
 
   &:active {
     @include selectable-active;
+  }
+}
+
+@mixin deselectable {
+  &.selected {
+    cursor: pointer;
   }
 }
 

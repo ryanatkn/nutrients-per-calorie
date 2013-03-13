@@ -7,7 +7,7 @@
 <ul class="food-list">
   <li ng-repeat="food in foodData.foods | searchFoods: helpers.query | limitTo: 50"
       ng-click="helpers.toggle(food)" ng-class="{selected: helpers.isSelected(food)}"
-      class="selectable">
+      class="selectable deselectable">
     <span class="food-label">{{food.Long_Desc}}</span>
     <span class="food-group">{{food.FdGrp_Desc}}</span>
   </li>

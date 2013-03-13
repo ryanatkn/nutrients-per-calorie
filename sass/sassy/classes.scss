@@ -1,9 +1,17 @@
+.master-color {
+  color: $master-color;
+}
+
 .rainbow {
   @include rainbow;
 }
 
 .selectable {
   @include selectable;
+}
+
+.deselectable {
+  @include deselectable;
 }
 
 .input-clearer {
@@ -26,4 +34,12 @@
   &:active {
     color: $master-dark-color;
   }
+}
+
+.hidden {
+  display: none;
+}
+
+.inactive {
+  color: $light-gray-text;
 }

@@ -172,6 +172,12 @@ data.factory "FoodData", ($rootScope, Styles) ->
 
   unusedKeys = _.difference(allKeys, nutrientKeys)
 
+  loadCsvData = (path, cb) ->
+    console.log "Loading .csv: ", path
+    d3.csv path, (err, data) ->
+      console.error err if err
+      cb data
+
   onLoadCbs = []
 
   FoodData = {
@@ -238,13 +244,74 @@ data.factory "FoodData", ($rootScope, Styles) ->
         @onLoad ->
           cb()
           scope.$apply()
+
+    databases: _.extend [ # invoked into init
+      name: "main"
+      size: "2.7mb"
+      title: "Main database"
+      text: "Excludes name brands, beverages, sweets, baby food, and some outliers for a smaller download that works on more devices."
+      active: true
+    ,
+      name: "complete"
+      size: "3.7mb"
+      title: "Complete database"
+      text: "Every food available at http://ndb.nal.usda.gov/. Note: this is a large file that does not work on certain devices."
+    ,
+      name: "vegetarian"
+      title: "Vegetarian database"
+      text: "Plants, fungi, and meatless animal products."
+    ,
+      name: "vegan"
+      title: "Vegan database"
+      text: "Plants and fungi."
+    ,
+      name: "paleo"
+    ],
+      getPath: (database) -> "data/foods-#{database.name}.csv"
+      getActive: -> _.find(FoodData.databases, (d) -> d.active)
+      setActive: (database = FoodData.databases.getActive()) ->
+        if typeof database is "string"
+          database = _.find(FoodData.databases, (d) -> d.name is database)
+        return unless database?.name
+        lastActive = FoodData.databases.getActive()
+        lastActive.active = false
+        database.active = true
+        if FoodData.loaded
+          FoodData.databases.save()
+          FoodData.databases.load()
+      save: -> window.localStorage?.setItem "food-database", FoodData.databases.getActive().name
+      load: (database) ->
+        if typeof database is "string"
+          database = _.find(FoodData.databases, (d) -> d.name is database)
+        if !database
+          databaseName = window.localStorage?.getItem("food-database")
+          database = _.find(FoodData.databases, (d) -> d.name is databaseName)
+        database ?= FoodData.databases.getActive()
+        FoodData.loaded = false
+        loadCsvData "data/nutrients.csv", (rawNutrients) ->
+          FoodData.nutrients = processNutrients(rawNutrients)
+
+          loadCsvData "data/foods-#{database.name}.csv", (rawFoods) ->
+            FoodData.foods = allFoods = processFoods(rawFoods)
+
+            setFoodGroups FoodData.foods
+
+            FoodData.databases.setActive database
+
+            FoodData.loaded = true
+
+            # Tell the rest of the app to refresh
+            cb() for cb in onLoadCbs
+            onLoadCbs = []
+
+            # Refresh once loaded
+            $rootScope.$apply()
+            console.log "Loaded FoodData", FoodData
+
   }
 
-  loadCsvData = (path, cb) ->
-    console.log "Loading .csv: ", path
-    d3.csv path, (err, data) ->
-      console.error err if err
-      cb data
+  # Initialize the database
+  FoodData.databases.load()
 
   # Convert array of nutrients to objected keyed by nutrient name
   processNutrients = (rawNutrients) ->
@@ -310,24 +377,5 @@ data.factory "FoodData", ($rootScope, Styles) ->
     for group in foodGroups
       group.count = _.filter(foods, (f) -> f.FdGrp_Desc is group.name).length
     FoodData.foodGroups = _.sortBy(foodGroups, (f) -> f.name)
-  
-  # Asynchronously load the data
-  loadCsvData "data/nutrients.csv", (rawNutrients) ->
-    FoodData.nutrients = processNutrients(rawNutrients)
-
-    loadCsvData "data/foods.csv", (rawFoods) ->
-      FoodData.foods = allFoods = processFoods(rawFoods)
-
-      setFoodGroups FoodData.foods
-
-      FoodData.loaded = true
-
-      # Refresh once loaded
-      $rootScope.$apply()
-      console.log "Loaded FoodData", FoodData
-
-      # Tell the rest of the app to refresh
-      cb() for cb in onLoadCbs
-      onLoadCbs = null
 
   FoodData

@@ -1,0 +1,10 @@
+<div>
+  <ul>
+    <li ng-repeat="database in foodData.databases" ng-show="!!database.size" 
+        class="selectable padded" ng-class="{selected: database.name == options.getActiveDatabase()}"
+        ng-click="options.setActiveDatabase(database)">
+      <h3>{{database.title}} <span class="inactive">{{database.size}}</span></h3>
+      <p>{{database.text}}</p>
+    </li>
+  </ul>
+</div>

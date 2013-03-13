@@ -209,6 +209,10 @@ food-detail {
   padding-left: $horizontal-padding;
 }
 
+.padded {
+  padding: $horizontal-padding;
+}
+
 food-group-filter {
   float: right;
   @include dropdown(3px);

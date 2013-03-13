@@ -1,11 +1,11 @@
-<h3 ng-show="!food" class="padded-left">
+<h3 ng-show="!food" class="padded-left master-color">
   Click a food to view its details.
 </h3>
 <div ng-show="food">
   <h3 class="padded-left">{{food.Long_Desc}}</h3>
   <p class="padded-left">{{food.FdGrp_Desc}}</p>
   <p class="padded-left">
-    <a href="{{getCompareLink(food)}}">Compare</a>
+    <a href="{{getCompareLink(food)}}">Compare this</a>
   </p>
   <div class="food-detail-graph"></div>
   <ul class="food-detail-pie-chart-labels">

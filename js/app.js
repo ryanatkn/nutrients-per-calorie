@@ -166,6 +166,8 @@ Use cases
     $scope.createPreset = function(name) {
       if (!name) {
         return alert("Please name the set of foods to save it.");
+      } else if (!ComparePage.selectedFoods.length) {
+        return alert("Choose some foods before saving the set.");
       } else {
         Presets.create(name);
         return $scope.newPresetName = "";
@@ -499,10 +501,11 @@ Use cases
       link: function(scope, element, attrs) {
         return element.on("keydown", function(e) {
           if (_.contains(attrs.mmKeyCodes.split(" "), e.keyCode.toString())) {
-            return scope.$apply(function() {
+            scope.$apply(function() {
               return scope.$eval(attrs.mmKeydown);
             });
           }
+          return true;
         });
       }
     };

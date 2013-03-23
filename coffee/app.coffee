@@ -126,6 +126,8 @@ app.controller "CompareCtrl", ($scope, $routeParams, $timeout, FoodData, Compare
   $scope.createPreset = (name) ->
     if !name
       alert "Please name the set of foods to save it."
+    else if !ComparePage.selectedFoods.length
+      alert "Choose some foods before saving the set."
     else
       Presets.create name
       $scope.newPresetName = ""
@@ -383,3 +385,4 @@ app.directive "mmKeydown", ->
       if _.contains(attrs.mmKeyCodes.split(" "), e.keyCode.toString())
         scope.$apply ->
           scope.$eval attrs.mmKeydown
+      true

@@ -6,7 +6,7 @@
     <li ng-repeat="food in compare.selectedFoods" class="food-compare-item">
       <div ng-click="compare.toggle(food)" class="remove-button">✕</div>
       <div class="food-label">
-        <a href="#foods/?food={{food.NDB_No}}">{{food.Long_Desc}}</a>
+        <span>{{food.Long_Desc}}</span>
       </div>
     </li>
     <li class="food-compare-item">

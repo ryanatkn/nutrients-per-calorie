@@ -88,7 +88,7 @@ food-comparison {
     width: 100%;
     display: table; // vertical centering hack for variable height children
 
-    a {
+    span {
       display: table-cell;
       vertical-align: middle;
       padding: 0 $horizontal-padding;
@@ -226,6 +226,19 @@ food-group-filter {
         position: absolute;
         right: $horizontal-padding;
         top: 6px;
+      }
+    }
+  }
+}
+
+
+#nutrients {
+  .food-list {
+    .food-label {
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
       }
     }
   }

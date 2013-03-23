@@ -5,9 +5,9 @@
 Use cases
   [x] Compare n foods against one another.
     [ ] Daily recommendation baseline
+    [ ] Comparison presets
+    [ ] Option to show comparison graphs in search
   [x] What are the best sources of nutrient x?
-  [x] What does food x look like in detail?
-    [ ] More detail?
   [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
 */
 
@@ -25,14 +25,6 @@ Use cases
     }).when("/compare/:foods", {
       templateUrl: "partials/compare.html",
       controller: "CompareCtrl",
-      reloadOnSearch: false
-    }).when("/foods", {
-      templateUrl: "partials/foods.html",
-      controller: "FoodsCtrl",
-      reloadOnSearch: false
-    }).when("/foods/:food", {
-      templateUrl: "partials/foods.html",
-      controller: "FoodsCtrl",
       reloadOnSearch: false
     }).when("/nutrients", {
       templateUrl: "partials/nutrients.html",
@@ -52,15 +44,12 @@ Use cases
     });
   });
 
-  app.controller("MainCtrl", function($scope, $location, FoodData, ComparePage, FoodsPage, NutrientsPage) {
+  app.controller("MainCtrl", function($scope, $location, FoodData, ComparePage, NutrientsPage) {
     $scope.foodData = FoodData;
     return $scope.navLinks = _.extend([
       {
         text: "Compare",
         getPath: ComparePage.getPath
-      }, {
-        text: "Foods",
-        getPath: FoodsPage.getPath
       }, {
         text: "Nutrients",
         getPath: NutrientsPage.getPath
@@ -96,13 +85,20 @@ Use cases
         });
       },
       toggle: function(food) {
-        if (this.isSelected(food)) {
-          return this.selectedFoods = _.reject(this.selectedFoods, function(f) {
-            return f.NDB_No === food.NDB_No;
-          });
+        if (data.isSelected(food)) {
+          return data.deselect(food);
         } else {
-          return this.selectedFoods = _.union(this.selectedFoods, _.clone(food));
+          return data.select(food);
         }
+      },
+      deselect: function(food) {
+        return data.selectedFoods = _.reject(data.selectedFoods, function(f) {
+          return f.NDB_No === food.NDB_No;
+        });
+      },
+      select: function(food) {
+        data.deselect(food);
+        return data.selectedFoods.push(_.clone(food));
       },
       clear: function() {
         var food, _i, _len, _ref;
@@ -167,64 +163,6 @@ Use cases
     });
   });
 
-  app.factory("FoodsPage", function($location) {
-    var data;
-    return data = {
-      query: {
-        text: "",
-        includeFoodGroups: false
-      },
-      selectedFood: null,
-      isSelected: function(food) {
-        var _ref;
-        return ((_ref = this.selectedFood) != null ? _ref.NDB_No : void 0) === (food != null ? food.NDB_No : void 0);
-      },
-      toggle: function(food) {
-        if (this.isSelected(food)) {
-          return this.selectedFood = null;
-        } else {
-          return this.selectedFood = _.clone(food);
-        }
-      },
-      basePath: "#/foods",
-      updatePath: function() {
-        return window.location.hash = this.getPath();
-      },
-      getPath: function(food) {
-        if (food == null) {
-          food = data.selectedFood;
-        }
-        return data.basePath + data.getSearch(food);
-      },
-      getSearch: function(food) {
-        if (food == null) {
-          food = data.selectedFood;
-        }
-        if (food) {
-          return "?food=" + food.NDB_No;
-        } else {
-          return "";
-        }
-      }
-    };
-  });
-
-  app.controller("FoodsCtrl", function($scope, $routeParams, FoodData, FoodsPage) {
-    FoodData.afterLoading($scope, function() {
-      if ($routeParams.food) {
-        return FoodsPage.selectedFood = _.clone(FoodData.findFoodById($routeParams.food));
-      } else {
-        return FoodsPage.selectedFood = null;
-      }
-    });
-    $scope.foods = FoodsPage;
-    return $scope.$watch("foods.selectedFood", function(newVal, oldVal) {
-      if (FoodData.loaded) {
-        return FoodsPage.updatePath();
-      }
-    });
-  });
-
   app.factory("NutrientsPage", function($location, FoodData) {
     var data;
     return data = {
@@ -277,7 +215,7 @@ Use cases
     };
   });
 
-  app.controller("NutrientsCtrl", function($scope, $routeParams, $filter, FoodData, NutrientsPage) {
+  app.controller("NutrientsCtrl", function($scope, $routeParams, $filter, FoodData, NutrientsPage, ComparePage) {
     var calculateMaxValue, filteredFoodsWithoutValues, maxValue, updateFilteredFoods;
     FoodData.afterLoading($scope, function() {
       if ($routeParams.nutrient) {
@@ -287,6 +225,10 @@ Use cases
       }
     });
     $scope.nutrients = NutrientsPage;
+    $scope.selectFood = function(food) {
+      ComparePage.select(food);
+      return ComparePage.updatePath();
+    };
     filteredFoodsWithoutValues = null;
     maxValue = null;
     calculateMaxValue = function(nutrient) {

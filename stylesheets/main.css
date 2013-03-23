@@ -65,7 +65,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 
 /* line 1, ../sass/sassy/classes.scss */
 .master-color {
-  color: #94e46d;
+  color: #349e01;
 }
 
 /* line 9, ../sass/sassy/mixins.scss */
@@ -423,7 +423,7 @@ food-comparison {
   display: table;
 }
 /* line 91, ../sass/main.scss */
-.food-comparison-list .food-label a {
+.food-comparison-list .food-label span {
   display: table-cell;
   vertical-align: middle;
   padding: 0 6px;
@@ -637,48 +637,57 @@ food-group-filter ul li span {
 }
 
 /* line 237, ../sass/main.scss */
+#nutrients .food-list .food-label {
+  cursor: pointer;
+}
+/* line 240, ../sass/main.scss */
+#nutrients .food-list .food-label:hover {
+  text-decoration: underline;
+}
+
+/* line 250, ../sass/main.scss */
 #nutrient-columns {
   position: relative;
   height: 350px;
   width: 1388px;
 }
 
-/* line 243, ../sass/main.scss */
+/* line 256, ../sass/main.scss */
 .column {
   position: absolute;
   top: 0;
   width: 185px;
   padding: 0 6px 6px 6px;
 }
-/* line 251, ../sass/main.scss */
+/* line 264, ../sass/main.scss */
 .column:nth-child(1) {
   left: 0px;
 }
-/* line 251, ../sass/main.scss */
+/* line 264, ../sass/main.scss */
 .column:nth-child(2) {
   left: 185px;
 }
-/* line 251, ../sass/main.scss */
+/* line 264, ../sass/main.scss */
 .column:nth-child(3) {
   left: 370px;
 }
-/* line 251, ../sass/main.scss */
+/* line 264, ../sass/main.scss */
 .column:nth-child(4) {
   left: 555px;
 }
-/* line 251, ../sass/main.scss */
+/* line 264, ../sass/main.scss */
 .column:nth-child(5) {
   left: 740px;
 }
-/* line 251, ../sass/main.scss */
+/* line 264, ../sass/main.scss */
 .column:nth-child(6) {
   left: 925px;
 }
-/* line 251, ../sass/main.scss */
+/* line 264, ../sass/main.scss */
 .column:nth-child(7) {
   left: 1110px;
 }
-/* line 257, ../sass/main.scss */
+/* line 270, ../sass/main.scss */
 .column:last-child {
   width: 250px;
 }

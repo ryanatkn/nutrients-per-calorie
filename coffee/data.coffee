@@ -379,3 +379,48 @@ data.factory "FoodData", ($rootScope, Styles) ->
     FoodData.foodGroups = _.sortBy(foodGroups, (f) -> f.name)
 
   FoodData
+
+
+app.factory "Presets", (FoodData, ComparePage) ->
+
+  defaultPresets = [
+    text: "Calcium please"
+    foods: "11096,11457,11270,01079,01026,05009,23267"
+  ,
+    text: "White rice vs brown rice"
+    foods: "20037,20445"
+  ,
+    text: "Beans vs rice"
+    foods: "16043,20037"
+  ,
+    text: "Leafy goodness"
+    foods: "11622,11457,11270,11252,11250,11251,11959"
+  #,
+  #  text: "Uberfoods"
+  #  foods: "11096,11457"
+  ]
+
+  presetSaveKey = "presets"
+
+  savedPresets = window.localStorage.getItem(presetSaveKey)
+  savedPresets = JSON.parse(savedPresets) if savedPresets
+
+  data =
+    save: -> window.localStorage.setItem(presetSaveKey, JSON.stringify(data.presets))
+    create: (text) ->
+      preset = 
+        text: text
+        foods: _.pluck(ComparePage.selectedFoods, "NDB_No").join(",")
+      data.presets.unshift preset
+      data.save()
+    presets: savedPresets or defaultPresets
+    add: (text, foods) ->
+      data.presets.push {text, foods}
+      data.save()
+    remove: (preset) ->
+      data.presets = _.without(data.presets, preset)
+      data.save()
+    activate: (preset) ->
+      ids = preset.foods.split(",")
+      foods = _.clone(FoodData.findFoodsById(ids))
+      ComparePage.selectedFoods = foods

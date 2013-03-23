@@ -107,7 +107,7 @@ app.factory "ComparePage", ($location, FoodData) ->
         @basePath
 
 
-app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
+app.controller "CompareCtrl", ($scope, $routeParams, $timeout, FoodData, ComparePage, Presets) ->
   
   FoodData.afterLoading $scope, ->
     if $routeParams.foods
@@ -120,6 +120,19 @@ app.controller "CompareCtrl", ($scope, $routeParams, FoodData, ComparePage) ->
   $scope.$watch "compare.selectedFoods", (newVal, oldVal) ->
     FoodData.calculateRelativeValues newVal
     ComparePage.updatePath() if FoodData.loaded
+
+  $scope.newPresetName = ""
+  $scope.Presets = Presets
+  $scope.createPreset = (name) ->
+    if !name
+      alert "Please name the set of foods to save it."
+    else
+      Presets.create name
+      $scope.newPresetName = ""
+  $scope.removePreset = (preset) ->
+    $timeout -> # hack that prevents the dropdown from closing -- the remove button gets removed from the DOM, so the dropdown thinks something outside of it was clicked
+      Presets.remove preset
+    , 0
 
 
 app.factory "NutrientsPage", ($location, FoodData) ->
@@ -226,9 +239,6 @@ app.factory "OptionsPage", (FoodData) ->
 app.controller "OptionsCtrl", ($scope, OptionsPage, FoodData) ->
   $scope.options = OptionsPage
 
-  FoodData.afterLoading $scope, ->
-    # console.log "Loaded options controller.", FoodData.databases.getActive().name
-
   
 # Provides a search box and food list from which foods can be selected.
 app.directive "foodSearch", ->
@@ -260,21 +270,9 @@ app.directive "foodGroupFilter", (FoodData) ->
     foodData: "="
   link: (scope, element, attrs) ->
 
-    onClick = (e) ->
-      if element.hasClass("open") and element isnt e.target and !element.find(e.target).length
-        scope.toggle()
-      true
-
     FoodData.afterLoading scope, ->
       scope.foodGroups = FoodData.foodGroups
-      $(window).on "click", onClick
       scope.enableAllFoodGroups = FoodData.areAllFoodGroupsEnabled()
-
-    scope.toggle = ->
-      element.toggleClass "open"
-
-    scope.$on "$destroy", ->
-      $(window).off "click", onClick
 
     scope.$watch "foodGroups", (newVal, oldVal) ->
       FoodData.updateFoodGroups()
@@ -348,9 +346,40 @@ app.filter "percent", ->
 
 
 # Adds an X to text input fields for quick clearing.
-app.directive "inputClearer", ->
+app.directive "mmInputClearer", ->
   link: (scope, element, attrs) ->
     inputClearer = angular.element("<div class='input-clearer'>✕</div>")
     inputClearer.on "click", ->
       element.val("").focus().trigger("input") # the trigger is needed to tell angular to sync the input's model :/
     element.after inputClearer
+
+
+# Adds dropdown functionality to an element.
+# Performs no transclusion - you must manually call `toggle` from a child element.
+# CSS requires children with the classes `dropdown-toggle` and `dropdown-content`.
+app.directive "mmDropdown", (FoodData) ->
+  restrict: "C"
+  link: (scope, element, attrs) ->
+
+    onClick = (e) ->
+      if element.hasClass("open") and element isnt e.target and !element.find(e.target).length
+        scope.toggle()
+      true
+
+    FoodData.afterLoading scope, ->
+      $(window).on "click", onClick
+
+    scope.toggle = ->
+      element.toggleClass "open"
+
+    scope.$on "$destroy", ->
+      $(window).off "click", onClick
+
+
+# Evalulates `mm-keydown` when one of the space-separated `mm-key-codes` are pressed.
+app.directive "mmKeydown", ->
+  link: (scope, element, attrs) ->
+    element.on "keydown", (e) ->
+      if _.contains(attrs.mmKeyCodes.split(" "), e.keyCode.toString())
+        scope.$apply ->
+          scope.$eval attrs.mmKeydown

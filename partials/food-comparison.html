@@ -1,8 +1,8 @@
 <h3 ng-show="!compare.selectedFoods.length" class="padded-left master-color">
-  Click two or more foods to compare them.
+  Click two or more foods to compare them or load a saved set of foods.
 </h3>
 <div ng-show="compare.selectedFoods.length">
-  <ul class="food-comparison-list" ng-show="compare.selectedFoods.length">
+  <ul class="food-comparison-list">
     <li ng-repeat="food in compare.selectedFoods" class="food-compare-item">
       <div ng-click="compare.toggle(food)" class="remove-button">✕</div>
       <div class="food-label">
@@ -10,10 +10,27 @@
       </div>
     </li>
     <li class="food-compare-item">
-      <button class="clear-selected-button" ng-click="compare.clear()" ng-show="compare.selectedFoods.length">
+      <button class="clear-selected-button" ng-click="compare.clear()">
         Remove all
       </button>
     </li>
   </ul>
   <div class="food-comparison-graphs"></div>
+</div>
+<div id="presets" class="mm-dropdown">
+  <div class="dropdown-toggle" ng-click="toggle()">
+    Saved food sets ▽
+  </div>
+  <ul class="dropdown-content">
+    <li id="save-preset">
+      <input type="text" placeholder="Name the selected foods to save the set" ng-model="newPresetName" mm-keydown="createPreset(newPresetName)" mm-key-codes="13" />
+      <button ng-click="createPreset(newPresetName)">
+        Save
+      </button>
+    </li>
+    <li ng-repeat="preset in Presets.presets">
+      <div ng-click="Presets.activate(preset)" class="selectable">{{preset.text}}</div>
+      <div ng-click="removePreset(preset)" class="remove-button">✕</div>
+    </li>
+  </ul>
 </div>

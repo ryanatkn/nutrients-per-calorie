@@ -35,10 +35,10 @@
   
   <div ng-show="nutrients.selectedNutrient">
     <div class="search-form">
-      <input type="text" ng-model="nutrients.query.text" placeholder="Search foods, using - to exclude results" input-clearer />
+      <input type="text" ng-model="nutrients.query.text" placeholder="Search foods, using - to exclude results" mm-input-clearer />
       <input type="checkbox" ng-model="nutrients.query.includeFoodGroups" id="include-food-groups" />
       <label for="include-food-groups">Include food groups in search</label>
-      <food-group-filter></food-group-filter>
+      <food-group-filter class="mm-dropdown"></food-group-filter>
     </div>
     <ul class="food-list">
       <li ng-repeat="food in nutrients.filteredFoods | orderBy: nutrients.orderBy : true | limitTo: 100">

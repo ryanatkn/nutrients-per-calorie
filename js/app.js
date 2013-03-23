@@ -146,7 +146,7 @@ Use cases
     };
   });
 
-  app.controller("CompareCtrl", function($scope, $routeParams, FoodData, ComparePage) {
+  app.controller("CompareCtrl", function($scope, $routeParams, $timeout, FoodData, ComparePage, Presets) {
     FoodData.afterLoading($scope, function() {
       if ($routeParams.foods) {
         return ComparePage.selectedFoods = _.clone(FoodData.findFoodsById($routeParams.foods.split(",")));
@@ -155,12 +155,27 @@ Use cases
       }
     });
     $scope.compare = ComparePage;
-    return $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
+    $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
       FoodData.calculateRelativeValues(newVal);
       if (FoodData.loaded) {
         return ComparePage.updatePath();
       }
     });
+    $scope.newPresetName = "";
+    $scope.Presets = Presets;
+    $scope.createPreset = function(name) {
+      if (!name) {
+        return alert("Please name the set of foods to save it.");
+      } else {
+        Presets.create(name);
+        return $scope.newPresetName = "";
+      }
+    };
+    return $scope.removePreset = function(preset) {
+      return $timeout(function() {
+        return Presets.remove(preset);
+      }, 0);
+    };
   });
 
   app.factory("NutrientsPage", function($location, FoodData) {
@@ -303,8 +318,7 @@ Use cases
   });
 
   app.controller("OptionsCtrl", function($scope, OptionsPage, FoodData) {
-    $scope.options = OptionsPage;
-    return FoodData.afterLoading($scope, function() {});
+    return $scope.options = OptionsPage;
   });
 
   app.directive("foodSearch", function() {
@@ -344,23 +358,9 @@ Use cases
         foodData: "="
       },
       link: function(scope, element, attrs) {
-        var onClick;
-        onClick = function(e) {
-          if (element.hasClass("open") && element !== e.target && !element.find(e.target).length) {
-            scope.toggle();
-          }
-          return true;
-        };
         FoodData.afterLoading(scope, function() {
           scope.foodGroups = FoodData.foodGroups;
-          $(window).on("click", onClick);
           return scope.enableAllFoodGroups = FoodData.areAllFoodGroupsEnabled();
-        });
-        scope.toggle = function() {
-          return element.toggleClass("open");
-        };
-        scope.$on("$destroy", function() {
-          return $(window).off("click", onClick);
         });
         scope.$watch("foodGroups", function(newVal, oldVal) {
           FoodData.updateFoodGroups();
@@ -457,7 +457,7 @@ Use cases
     };
   });
 
-  app.directive("inputClearer", function() {
+  app.directive("mmInputClearer", function() {
     return {
       link: function(scope, element, attrs) {
         var inputClearer;
@@ -466,6 +466,44 @@ Use cases
           return element.val("").focus().trigger("input");
         });
         return element.after(inputClearer);
+      }
+    };
+  });
+
+  app.directive("mmDropdown", function(FoodData) {
+    return {
+      restrict: "C",
+      link: function(scope, element, attrs) {
+        var onClick;
+        onClick = function(e) {
+          if (element.hasClass("open") && element !== e.target && !element.find(e.target).length) {
+            scope.toggle();
+          }
+          return true;
+        };
+        FoodData.afterLoading(scope, function() {
+          return $(window).on("click", onClick);
+        });
+        scope.toggle = function() {
+          return element.toggleClass("open");
+        };
+        return scope.$on("$destroy", function() {
+          return $(window).off("click", onClick);
+        });
+      }
+    };
+  });
+
+  app.directive("mmKeydown", function() {
+    return {
+      link: function(scope, element, attrs) {
+        return element.on("keydown", function(e) {
+          if (_.contains(attrs.mmKeyCodes.split(" "), e.keyCode.toString())) {
+            return scope.$apply(function() {
+              return scope.$eval(attrs.mmKeydown);
+            });
+          }
+        });
       }
     };
   });
@@ -828,6 +866,62 @@ Use cases
     return FoodData;
   });
 
+  app.factory("Presets", function(FoodData, ComparePage) {
+    var defaultPresets, presetSaveKey, savedPresets;
+    defaultPresets = [
+      {
+        text: "Calcium please",
+        foods: "11096,11457,11270,01079,01026,05009,23267"
+      }, {
+        text: "White rice vs brown rice",
+        foods: "20037,20445"
+      }, {
+        text: "Beans vs rice",
+        foods: "16043,20037"
+      }, {
+        text: "Leafy goodness",
+        foods: "11622,11457,11270,11252,11250,11251,11959"
+      }
+    ];
+    presetSaveKey = "presets";
+    savedPresets = window.localStorage.getItem(presetSaveKey);
+    if (savedPresets) {
+      savedPresets = JSON.parse(savedPresets);
+    }
+    return data = {
+      save: function() {
+        return window.localStorage.setItem(presetSaveKey, JSON.stringify(data.presets));
+      },
+      create: function(text) {
+        var preset;
+        preset = {
+          text: text,
+          foods: _.pluck(ComparePage.selectedFoods, "NDB_No").join(",")
+        };
+        data.presets.unshift(preset);
+        return data.save();
+      },
+      presets: savedPresets || defaultPresets,
+      add: function(text, foods) {
+        data.presets.push({
+          text: text,
+          foods: foods
+        });
+        return data.save();
+      },
+      remove: function(preset) {
+        data.presets = _.without(data.presets, preset);
+        return data.save();
+      },
+      activate: function(preset) {
+        var foods, ids;
+        ids = preset.foods.split(",");
+        foods = _.clone(FoodData.findFoodsById(ids));
+        return ComparePage.selectedFoods = foods;
+      }
+    };
+  });
+
   visuals = angular.module("food-visuals", []);
 
   visuals.factory("Styles", function() {
@@ -1050,7 +1144,7 @@ Use cases
           nutrientGroups = [FoodData.fiberKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.sugarKeys];
           return DrawingHelpers.drawNutrientGroups(vis, foods, nutrientGroups);
         };
-        return scope.$watch("compare.selectedFoods.length", function() {
+        return scope.$watch("compare.selectedFoods", function() {
           return render();
         });
       }

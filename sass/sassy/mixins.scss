@@ -61,7 +61,7 @@
   position: relative;
 
   .dropdown-toggle {
-    padding: 2px $horizontal-padding;
+    padding: 3px $horizontal-padding;
     cursor: pointer;
     @include selectable;
     position: relative;
@@ -78,25 +78,30 @@
     }
   }
 
-  > ul {
+  .dropdown-content {
     position: absolute;
     top: $input-height + $top-offset;
-    right: 0;
+    left: 0;
     display: none;
     z-index: 10;
     background-color: #fff;
     border-radius: $border-radius;
     border: 1px solid $border-color;
     @include drop-shadow;
-    padding: 4px 0;
+    padding: $horizontal-padding 0;
 
     > li {
       padding: 3px $horizontal-padding;
     }
+
+    &.dropdown-content-right {
+      left: auto;
+      right: 0;
+    }
   }
 
   &.open {
-    > ul {
+    .dropdown-content {
       display: block;
     }
   }

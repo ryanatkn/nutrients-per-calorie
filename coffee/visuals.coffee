@@ -263,7 +263,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
       DrawingHelpers.drawNutrientGroups vis, foods, nutrientGroups
 
     # Redraw when items are selected or deselected
-    scope.$watch "compare.selectedFoods.length", ->
+    scope.$watch "compare.selectedFoods", ->
       render()
 
 

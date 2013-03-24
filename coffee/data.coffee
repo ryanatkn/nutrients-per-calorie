@@ -403,7 +403,7 @@ app.factory "Presets", (FoodData, ComparePage) ->
 
   defaultPresets = [
     text: "Greens and meats"
-    foods: "11457,11161,11233,11270,11250,11959,05009,23267"
+    foods: "11457,11161,11250,05009,13443"
   ,
     text: "Calcium (doesn't account for absorption!)"
     foods: "11161,11096,11457,01079,01026,01009"

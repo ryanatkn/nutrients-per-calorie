@@ -60,6 +60,7 @@
   width: $content-width;
   padding: $horizontal-padding 0 $horizontal-padding $horizontal-padding;
   white-space: nowrap;
+  position: relative;
 }
 
 $comparison-list-width: 230px;
@@ -228,7 +229,9 @@ food-detail {
 }
 
 food-group-filter {
-  float: right;
+  position: absolute !important;
+  right: 0;
+  top: $horizontal-padding;
 
   ul {
     li {
@@ -322,4 +325,8 @@ $num-columns: 7;
   &:last-child {
     width: $nutrient-column-width;
   }
+}
+
+#database-list {
+  width: $content-width;
 }

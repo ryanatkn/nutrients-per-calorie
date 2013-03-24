@@ -72,6 +72,10 @@ food-comparison {
   h3 {
     margin-bottom: 2px;
   }
+
+  > div {
+    position: relative;
+  }
 }
 
 .food-comparison-list {

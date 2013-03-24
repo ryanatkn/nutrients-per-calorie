@@ -249,13 +249,13 @@ data.factory "FoodData", ($rootScope, Styles) ->
       name: "main"
       size: "2.7mb"
       title: "Main database"
-      text: "Excludes name brands, beverages, sweets, baby food, and some outliers for a smaller download that works on more devices."
+      text: "Excludes name brands, beverages, sweets, baby food, a few outliers, and some redundant data for a speedier experience."
       active: true
     ,
       name: "complete"
       size: "3.7mb"
       title: "Complete database"
-      text: "Every food available at http://ndb.nal.usda.gov/. Note: this is a large file that does not work on certain devices."
+      text: "Every food available at http://ndb.nal.usda.gov/. This is a large file that may not work on all devices."
     ,
       name: "vegetarian"
       title: "Vegetarian database"

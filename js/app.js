@@ -933,17 +933,17 @@ Use cases
     var defaultPresets, presetSaveKey, savedPresets;
     defaultPresets = [
       {
-        text: "Greens and meats",
-        foods: "11457,11161,11250,05009,13443"
-      }, {
-        text: "Calcium (doesn't account for absorption!)",
-        foods: "11161,11096,11457,01079,01026,01009"
-      }, {
         text: "Brown rice vs white rice",
         foods: "20037,20445"
       }, {
         text: "Wheat flour vs white flour",
         foods: "20080,20481"
+      }, {
+        text: "Greens and meats",
+        foods: "11457,11161,11250,05009,13443"
+      }, {
+        text: "Calcium (doesn't account for absorption!)",
+        foods: "11161,11096,11457,01079,01026,01009"
       }, {
         text: "Beans vs rice",
         foods: "16043,20041"

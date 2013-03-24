@@ -8,8 +8,8 @@
 
 Use cases
   [x] Compare n foods against one another.
-    [ ] Daily recommendation baseline
-    [ ] Comparison presets
+    [x] Daily recommendation baseline
+    [x] Comparison presets
     [ ] Option to show comparison graphs in search
   [x] What are the best sources of nutrient x?
   [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)

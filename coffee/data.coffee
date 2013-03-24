@@ -1,9 +1,3 @@
-# Nutrients Per Calorie is a web interface to the nutritional data available at http://ndb.nal.usda.gov/
-# https://github.com/ryanatkn/nutrients-per-calorie
-# Copyright (c) Ryan Atkinson 2013
-# MIT License
-
-
 data = angular.module("food-data", [])
 
 
@@ -63,6 +57,12 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Glucose (dextrose)":             "Glucose"
     "Carotene, alpha":                "Alpha-Carotene"
     "Carotene, beta":                 "Beta-Carotene"
+
+  calorieKey = "Energy"
+  fatKey = "Total lipid (fat)"
+  proteinKey = "Protein"
+  carbohydrateKey = "Carbohydrate, by difference"
+  alcoholKey = "Alcohol, ethyl"
 
   comparedKeys = _.difference(allKeys, ["NDB_No", "Long_Desc", "FdGrp_Desc"])
 
@@ -201,7 +201,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     findNutrientById: (Nutr_No) -> _.find(@nutrients, (n) -> n.Nutr_No is Nutr_No)
 
     findFoodById: (id) -> _.find(allFoods, (f) -> f.NDB_No is id)
-    findFoodsById: (ids) -> @findFoodById id for id in ids
+    findFoodsById: (ids) -> _.compact(@findFoodById id for id in ids)
 
     # Uses a JS click event because anchors in svgs don't play nicely with every browser.
     getNutrientJSLink: (NutrDesc) ->
@@ -245,7 +245,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
           cb()
           scope.$apply()
 
-    databases: _.extend [ # invoked into init
+    databases: _.extend [
       name: "main"
       size: "2.7mb"
       title: "Main database"
@@ -291,10 +291,12 @@ data.factory "FoodData", ($rootScope, Styles) ->
         loadCsvData "data/nutrients.csv", (rawNutrients) ->
           FoodData.nutrients = processNutrients(rawNutrients)
 
+          FoodData.benchmarkFood = createBenchmarkFood(FoodData.nutrients)
+
           loadCsvData "data/foods-#{database.name}.csv", (rawFoods) ->
             FoodData.foods = allFoods = processFoods(rawFoods)
 
-            setFoodGroups FoodData.foods
+            FoodData.foodGroups = createFoodGroups(FoodData.foods)
 
             FoodData.databases.setActive database
 
@@ -321,52 +323,49 @@ data.factory "FoodData", ($rootScope, Styles) ->
       item.text = keyAliases[item.NutrDesc] or item.NutrDesc
     data
 
+  processFoods = (foods) ->
+    for food in foods
+      processFood food
+    foods
+
   # Prepare food data using the formula nutrients/calories
-  processFoods = (rawFoods) ->
-    for item in rawFoods
+  processFood = (food) ->
+    # Parse strings to numbers and clean up empty values
+    for k, v of food
+      if _.contains(comparedKeys, k)
+        if v
+          food[k] = parseFloat(v)
+        else
+          delete food[k]
 
-      # Parse strings to numbers and clean up empty values
-      for k, v of item
-        if _.contains(comparedKeys, k)
-          if v
-            item[k] = parseFloat(v)
-          else
-            delete item[k]
+    # Convert nutrients/100g to nutrients/calorie by dividing by calories/100g
+    ignoredKeys = [calorieKey, "Energy (kj)", "Total lipid (fat)", "Protein", "Carbohydrate, by difference"] # TODO TODO TODOOOOOOOOOOO
+    calories = food[calorieKey]
+    for k, v of food
+      if typeof v is "number" and not _.contains(ignoredKeys, k)
+        if calories
+          food[k] = v / calories
+        else
+          food[k] = -v # water...
 
-      # Convert nutrients/100g to nutrients/calorie by dividing by calories/100g
-      calorieKey = "Energy"
-      ignoredKeys = [calorieKey, "Energy (kj)", "Total lipid (fat)", "Protein", "Carbohydrate, by difference"] # TODO TODO TODOOOOOOOOOOO
-      calories = item[calorieKey]
-      for k, v of item
-        if typeof v is "number" and not _.contains(ignoredKeys, k)
-          if calories
-            item[k] = v / calories
-          else
-            item[k] = -v # water...
+    # Convert fat, protein, carbohydrate, and alcohol to percentages of the whole
+    calculatedCalorieKey = "Calories, calculated"
+    food[fatKey] or= 0
+    food[proteinKey] or= 0
+    food[carbohydrateKey] or= 0
+    food[alcoholKey] or= 0
+    food[fatKey] *= 9
+    food[proteinKey] *= 4
+    food[carbohydrateKey] *= 4
+    food[alcoholKey] *= 7
+    food[calculatedCalorieKey] = food[fatKey] + food[proteinKey] + food[carbohydrateKey] + food[alcoholKey]
+    food[fatKey] /= food[calculatedCalorieKey]
+    food[proteinKey] /= food[calculatedCalorieKey]
+    food[carbohydrateKey] /= food[calculatedCalorieKey]
+    food[alcoholKey] /= food[calculatedCalorieKey]
+    food
 
-      # Convert fat, protein, carbohydrate, and alcohol to percentages of the whole
-      calculatedCalorieKey = "Calories, calculated"
-      fatKey = "Total lipid (fat)"
-      proteinKey = "Protein"
-      carbohydrateKey = "Carbohydrate, by difference"
-      alcoholKey = "Alcohol, ethyl"
-      item[fatKey] or= 0
-      item[proteinKey] or= 0
-      item[carbohydrateKey] or= 0
-      item[alcoholKey] or= 0
-      item[fatKey] *= 9
-      item[proteinKey] *= 4
-      item[carbohydrateKey] *= 4
-      item[alcoholKey] *= 7
-      item[calculatedCalorieKey] = item[fatKey] + item[proteinKey] + item[carbohydrateKey] + item[alcoholKey]
-      item[fatKey] /= item[calculatedCalorieKey]
-      item[proteinKey] /= item[calculatedCalorieKey]
-      item[carbohydrateKey] /= item[calculatedCalorieKey]
-      item[alcoholKey] /= item[calculatedCalorieKey]
-      
-    rawFoods
-
-  setFoodGroups = (foods) ->
+  createFoodGroups = (foods) ->
     foodGroups = []
     for food, i in foods
       if !_.find(foodGroups, (g) -> g.name is food.FdGrp_Desc)
@@ -376,7 +375,26 @@ data.factory "FoodData", ($rootScope, Styles) ->
           enabled: true
     for group in foodGroups
       group.count = _.filter(foods, (f) -> f.FdGrp_Desc is group.name).length
-    FoodData.foodGroups = _.sortBy(foodGroups, (f) -> f.name)
+    _.sortBy(foodGroups, (f) -> f.name)
+
+  createBenchmarkFood = (nutrients) ->
+    benchmarkFood = {}
+
+    # RDI is still used on nutrition labels, but the more modern DRI is also included - TODO option switch to DRI
+    benchmarkKey = "RDI"
+
+    # Copy the benchmark values from the nutrients table
+    for key, value of nutrients
+      benchmarkValue = value[benchmarkKey]
+      if benchmarkValue
+        benchmarkFood[key] = benchmarkValue
+
+    benchmarkFood.Long_Desc = "Recommended daily intake"
+    benchmarkFood.NDB_No = "0"
+    benchmarkFood[calorieKey] = 2000
+
+    # Reuse the process function
+    benchmarkFood = processFood(benchmarkFood)
 
   FoodData
 
@@ -384,20 +402,20 @@ data.factory "FoodData", ($rootScope, Styles) ->
 app.factory "Presets", (FoodData, ComparePage) ->
 
   defaultPresets = [
-    text: "Calcium please"
-    foods: "11096,11457,11270,01079,01026,05009,23267"
+    text: "Greens and meats"
+    foods: "11457,11161,11233,11270,11250,11959,05009,23267"
   ,
-    text: "White rice vs brown rice"
+    text: "Calcium (doesn't account for absorption!)"
+    foods: "11161,11096,11457,01079,01026,01009"
+  ,
+    text: "Brown rice vs white rice"
     foods: "20037,20445"
   ,
-    text: "Beans vs rice"
-    foods: "16043,20037"
+    text: "Wheat flour vs white flour"
+    foods: "20080,20481"
   ,
-    text: "Leafy goodness"
-    foods: "11622,11457,11270,11252,11250,11251,11959"
-  #,
-  #  text: "Uberfoods"
-  #  foods: "11096,11457"
+    text: "Beans vs rice"
+    foods: "16043,20041"
   ]
 
   presetSaveKey = "presets"
@@ -422,5 +440,5 @@ app.factory "Presets", (FoodData, ComparePage) ->
       data.save()
     activate: (preset) ->
       ids = preset.foods.split(",")
-      foods = _.clone(FoodData.findFoodsById(ids))
-      ComparePage.selectedFoods = foods
+      foods = FoodData.findFoodsById(ids)
+      ComparePage.reset foods

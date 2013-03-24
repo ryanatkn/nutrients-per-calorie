@@ -72,7 +72,7 @@ app.factory "ComparePage", ($location, FoodData) ->
       includeFoodGroups: false
     selectedFoods: []
     isSelected: (food) ->
-      !!_.find @selectedFoods, (f) -> f.NDB_No is food.NDB_No
+      !!_.find data.selectedFoods, (f) -> f.NDB_No is food.NDB_No
     toggle: (food) ->
       if data.isSelected(food)
         data.deselect food
@@ -84,36 +84,40 @@ app.factory "ComparePage", ($location, FoodData) ->
       data.deselect food
       data.selectedFoods.push _.clone(food)
     clear: ->
-      for food in @selectedFoods
+      for food in data.selectedFoods.slice(1)
         FoodData.findFoodById(food.NDB_No).selected = false
-      @selectedFoods = []
+      data.reset()
+    reset: (foods) ->
+      data.selectedFoods = if FoodData.benchmarkFood then [FoodData.benchmarkFood] else []
+      if foods
+        data.selectedFoods = data.selectedFoods.concat(foods)
     basePath: "#/compare"
     updatePath: ->
-      window.location.hash = @getPath()
-    getPath: (foods = data.selectedFoods) ->
+      window.location.hash = data.getPath()
+    getPath: (foods = data.selectedFoods.slice(1)) ->
       data.basePath + data.getSearch(foods)
-    getSearch: (foods = data.selectedFoods) ->
+    getSearch: (foods = data.selectedFoods.slice(1)) ->
       if foods.length
         "?foods=" + _.pluck(foods, "NDB_No").join(",")
       else
         ""
     getPathWithFoodAdded: (food) ->
       if food
-        foods = _.clone(@selectedFoods)
+        foods = _.clone(data.selectedFoods)
         if !_.find(foods, (f) -> f.NDB_No is food.NDB_No)
           foods.push food
-        @getPath foods
+        data.getPath foods
       else
-        @basePath
+        data.basePath
 
 
 app.controller "CompareCtrl", ($scope, $routeParams, $timeout, FoodData, ComparePage, Presets) ->
   
   FoodData.afterLoading $scope, ->
+    foods = null
     if $routeParams.foods
-      ComparePage.selectedFoods = _.clone(FoodData.findFoodsById($routeParams.foods.split(",")))
-    else
-      ComparePage.selectedFoods = []
+      foods = FoodData.findFoodsById($routeParams.foods.split(","))
+    ComparePage.reset foods
 
   $scope.compare = ComparePage
 
@@ -121,10 +125,14 @@ app.controller "CompareCtrl", ($scope, $routeParams, $timeout, FoodData, Compare
     FoodData.calculateRelativeValues newVal
     ComparePage.updatePath() if FoodData.loaded
 
+  $scope.hasSelectedFoods = -> ComparePage.selectedFoods.length > 1
+
   $scope.newPresetName = ""
   $scope.Presets = Presets
   $scope.createPreset = (name) ->
-    if !name
+    if !$scope.hasSelectedFoods()
+      alert "Choose some foods before saving the set."
+    else if !name
       alert "Please name the set of foods to save it."
     else
       Presets.create name
@@ -133,6 +141,9 @@ app.controller "CompareCtrl", ($scope, $routeParams, $timeout, FoodData, Compare
     $timeout -> # hack that prevents the dropdown from closing -- the remove button gets removed from the DOM, so the dropdown thinks something outside of it was clicked
       Presets.remove preset
     , 0
+
+  $scope.isRemoveable = (food) ->
+    food.NDB_No isnt "0"
 
 
 app.factory "NutrientsPage", ($location, FoodData) ->
@@ -383,3 +394,4 @@ app.directive "mmKeydown", ->
       if _.contains(attrs.mmKeyCodes.split(" "), e.keyCode.toString())
         scope.$apply ->
           scope.$eval attrs.mmKeydown
+      true

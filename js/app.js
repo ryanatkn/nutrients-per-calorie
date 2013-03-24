@@ -80,7 +80,7 @@ Use cases
       },
       selectedFoods: [],
       isSelected: function(food) {
-        return !!_.find(this.selectedFoods, function(f) {
+        return !!_.find(data.selectedFoods, function(f) {
           return f.NDB_No === food.NDB_No;
         });
       },
@@ -102,26 +102,32 @@ Use cases
       },
       clear: function() {
         var food, _i, _len, _ref;
-        _ref = this.selectedFoods;
+        _ref = data.selectedFoods.slice(1);
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           food = _ref[_i];
           FoodData.findFoodById(food.NDB_No).selected = false;
         }
-        return this.selectedFoods = [];
+        return data.reset();
+      },
+      reset: function(foods) {
+        data.selectedFoods = FoodData.benchmarkFood ? [FoodData.benchmarkFood] : [];
+        if (foods) {
+          return data.selectedFoods = data.selectedFoods.concat(foods);
+        }
       },
       basePath: "#/compare",
       updatePath: function() {
-        return window.location.hash = this.getPath();
+        return window.location.hash = data.getPath();
       },
       getPath: function(foods) {
         if (foods == null) {
-          foods = data.selectedFoods;
+          foods = data.selectedFoods.slice(1);
         }
         return data.basePath + data.getSearch(foods);
       },
       getSearch: function(foods) {
         if (foods == null) {
-          foods = data.selectedFoods;
+          foods = data.selectedFoods.slice(1);
         }
         if (foods.length) {
           return "?foods=" + _.pluck(foods, "NDB_No").join(",");
@@ -132,15 +138,15 @@ Use cases
       getPathWithFoodAdded: function(food) {
         var foods;
         if (food) {
-          foods = _.clone(this.selectedFoods);
+          foods = _.clone(data.selectedFoods);
           if (!_.find(foods, function(f) {
             return f.NDB_No === food.NDB_No;
           })) {
             foods.push(food);
           }
-          return this.getPath(foods);
+          return data.getPath(foods);
         } else {
-          return this.basePath;
+          return data.basePath;
         }
       }
     };
@@ -148,11 +154,12 @@ Use cases
 
   app.controller("CompareCtrl", function($scope, $routeParams, $timeout, FoodData, ComparePage, Presets) {
     FoodData.afterLoading($scope, function() {
+      var foods;
+      foods = null;
       if ($routeParams.foods) {
-        return ComparePage.selectedFoods = _.clone(FoodData.findFoodsById($routeParams.foods.split(",")));
-      } else {
-        return ComparePage.selectedFoods = [];
+        foods = FoodData.findFoodsById($routeParams.foods.split(","));
       }
+      return ComparePage.reset(foods);
     });
     $scope.compare = ComparePage;
     $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
@@ -161,20 +168,28 @@ Use cases
         return ComparePage.updatePath();
       }
     });
+    $scope.hasSelectedFoods = function() {
+      return ComparePage.selectedFoods.length > 1;
+    };
     $scope.newPresetName = "";
     $scope.Presets = Presets;
     $scope.createPreset = function(name) {
-      if (!name) {
+      if (!$scope.hasSelectedFoods()) {
+        return alert("Choose some foods before saving the set.");
+      } else if (!name) {
         return alert("Please name the set of foods to save it.");
       } else {
         Presets.create(name);
         return $scope.newPresetName = "";
       }
     };
-    return $scope.removePreset = function(preset) {
+    $scope.removePreset = function(preset) {
       return $timeout(function() {
         return Presets.remove(preset);
       }, 0);
+    };
+    return $scope.isRemoveable = function(food) {
+      return food.NDB_No !== "0";
     };
   });
 
@@ -499,10 +514,11 @@ Use cases
       link: function(scope, element, attrs) {
         return element.on("keydown", function(e) {
           if (_.contains(attrs.mmKeyCodes.split(" "), e.keyCode.toString())) {
-            return scope.$apply(function() {
+            scope.$apply(function() {
               return scope.$eval(attrs.mmKeydown);
             });
           }
+          return true;
         });
       }
     };
@@ -511,7 +527,7 @@ Use cases
   data = angular.module("food-data", []);
 
   data.factory("FoodData", function($rootScope, Styles) {
-    var FoodData, allFoods, allKeys, aminoAcidKeys, comparedKeys, fiberKeys, ignoredKeys, keyAliases, listedKeys, loadCsvData, macronutrientKeys, mineralKeys, miscKeys, nutrientKeys, onLoadCbs, otherKeys, processFoods, processNutrients, setFoodGroups, sugarKeys, unusedKeys, vitaminKeys;
+    var FoodData, alcoholKey, allFoods, allKeys, aminoAcidKeys, calorieKey, carbohydrateKey, comparedKeys, createBenchmarkFood, createFoodGroups, fatKey, fiberKeys, ignoredKeys, keyAliases, listedKeys, loadCsvData, macronutrientKeys, mineralKeys, miscKeys, nutrientKeys, onLoadCbs, otherKeys, processFood, processFoods, processNutrients, proteinKey, sugarKeys, unusedKeys, vitaminKeys;
     allFoods = null;
     allKeys = ["NDB_No", "Long_Desc", "FdGrp_Desc", "10:0", "12:0", "13:0", "14:0", "14:1", "15:0", "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0", "18:1 c", "18:1 t", "18:1 undifferentiated", "18:1-11t (18:1t n-7)", "18:2 CLAs", "18:2 i", "18:2 n-6 c,c", "18:2 t not further defined", "18:2 t,t", "18:2 undifferentiated", "18:3 n-3 c,c,c (ALA)", "18:3 n-6 c,c,c", "18:3 undifferentiated", "18:3i", "18:4", "20:0", "20:1", "20:2 n-6 c,c", "20:3 n-3", "20:3 n-6", "20:3 undifferentiated", "20:4 n-6", "20:4 undifferentiated", "20:5 n-3 (EPA)", "21:5", "22:0", "22:1 c", "22:1 t", "22:1 undifferentiated", "22:4", "22:5 n-3 (DPA)", "22:6 n-3 (DHA)", "24:0", "24:1 c", "4:0", "6:0", "8:0", "Adjusted Protein", "Alanine", "Alcohol, ethyl", "Arginine", "Ash", "Aspartic acid", "Betaine", "Beta-sitosterol", "Caffeine", "Calcium, Ca", "Campesterol", "Carbohydrate, by difference", "Carotene, alpha", "Carotene, beta", "Cholesterol", "Choline, total", "Copper, Cu", "Cryptoxanthin, beta", "Cystine", "Dihydrophylloquinone", "Energy", "Energy (kj)", "Fatty acids, total monounsaturated", "Fatty acids, total polyunsaturated", "Fatty acids, total saturated", "Fatty acids, total trans", "Fatty acids, total trans-monoenoic", "Fatty acids, total trans-polyenoic", "Fiber, total dietary", "Fluoride, F", "Folate, DFE", "Folate, food", "Folate, total", "Folic acid", "Fructose", "Galactose", "Glucose (dextrose)", "Glutamic acid", "Glycine", "Histidine", "Hydroxyproline", "Iron, Fe", "Isoleucine", "Lactose", "Leucine", "Lutein + zeaxanthin", "Lycopene", "Lysine", "Magnesium, Mg", "Maltose", "Manganese, Mn", "Menaquinone-4", "Methionine", "Niacin", "Pantothenic acid", "Phenylalanine", "Phosphorus, P", "Phytosterols", "Potassium, K", "Proline", "Protein", "Retinol", "Riboflavin", "Selenium, Se", "Serine", "Sodium, Na", "Starch", "Stigmasterol", "Sucrose", "Sugars, total", "Theobromine", "Thiamin", "Threonine", "Tocopherol, beta", "Tocopherol, delta", "Tocopherol, gamma", "Total lipid (fat)", "Tryptophan", "Tyrosine", "Valine", "Vitamin A, IU", "Vitamin A, RAE", "Vitamin B-12", "Vitamin B-12, added", "Vitamin B-6", "Vitamin C, total ascorbic acid", "Vitamin D", "Vitamin D (D2 + D3)", "Vitamin D2 (ergocalciferol)", "Vitamin D3 (cholecalciferol)", "Vitamin E (alpha-tocopherol)", "Vitamin E, added", "Vitamin K (phylloquinone)", "Water", "Zinc, Zn"];
     keyAliases = {
@@ -537,6 +553,11 @@ Use cases
       "Carotene, alpha": "Alpha-Carotene",
       "Carotene, beta": "Beta-Carotene"
     };
+    calorieKey = "Energy";
+    fatKey = "Total lipid (fat)";
+    proteinKey = "Protein";
+    carbohydrateKey = "Carbohydrate, by difference";
+    alcoholKey = "Alcohol, ethyl";
     comparedKeys = _.difference(allKeys, ["NDB_No", "Long_Desc", "FdGrp_Desc"]);
     macronutrientKeys = _.extend(["Total lipid (fat)", "Protein", "Carbohydrate, by difference", "Fiber, total dietary"], {
       text: "Macronutrients"
@@ -609,13 +630,16 @@ Use cases
         });
       },
       findFoodsById: function(ids) {
-        var id, _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = ids.length; _i < _len; _i++) {
-          id = ids[_i];
-          _results.push(this.findFoodById(id));
-        }
-        return _results;
+        var id;
+        return _.compact((function() {
+          var _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = ids.length; _i < _len; _i++) {
+            id = ids[_i];
+            _results.push(this.findFoodById(id));
+          }
+          return _results;
+        }).call(this));
       },
       getNutrientJSLink: function(NutrDesc) {
         return "javascript: window.location = '" + (this.getNutrientLink(NutrDesc)) + "';";
@@ -761,10 +785,11 @@ Use cases
           FoodData.loaded = false;
           return loadCsvData("data/nutrients.csv", function(rawNutrients) {
             FoodData.nutrients = processNutrients(rawNutrients);
+            FoodData.benchmarkFood = createBenchmarkFood(FoodData.nutrients);
             return loadCsvData("data/foods-" + database.name + ".csv", function(rawFoods) {
               var cb, _i, _len;
               FoodData.foods = allFoods = processFoods(rawFoods);
-              setFoodGroups(FoodData.foods);
+              FoodData.foodGroups = createFoodGroups(FoodData.foods);
               FoodData.databases.setActive(database);
               FoodData.loaded = true;
               for (_i = 0, _len = onLoadCbs.length; _i < _len; _i++) {
@@ -790,55 +815,55 @@ Use cases
       }
       return data;
     };
-    processFoods = function(rawFoods) {
-      var alcoholKey, calculatedCalorieKey, calorieKey, calories, carbohydrateKey, fatKey, item, k, proteinKey, v, _i, _len;
-      for (_i = 0, _len = rawFoods.length; _i < _len; _i++) {
-        item = rawFoods[_i];
-        for (k in item) {
-          v = item[k];
-          if (_.contains(comparedKeys, k)) {
-            if (v) {
-              item[k] = parseFloat(v);
-            } else {
-              delete item[k];
-            }
-          }
-        }
-        calorieKey = "Energy";
-        ignoredKeys = [calorieKey, "Energy (kj)", "Total lipid (fat)", "Protein", "Carbohydrate, by difference"];
-        calories = item[calorieKey];
-        for (k in item) {
-          v = item[k];
-          if (typeof v === "number" && !_.contains(ignoredKeys, k)) {
-            if (calories) {
-              item[k] = v / calories;
-            } else {
-              item[k] = -v;
-            }
-          }
-        }
-        calculatedCalorieKey = "Calories, calculated";
-        fatKey = "Total lipid (fat)";
-        proteinKey = "Protein";
-        carbohydrateKey = "Carbohydrate, by difference";
-        alcoholKey = "Alcohol, ethyl";
-        item[fatKey] || (item[fatKey] = 0);
-        item[proteinKey] || (item[proteinKey] = 0);
-        item[carbohydrateKey] || (item[carbohydrateKey] = 0);
-        item[alcoholKey] || (item[alcoholKey] = 0);
-        item[fatKey] *= 9;
-        item[proteinKey] *= 4;
-        item[carbohydrateKey] *= 4;
-        item[alcoholKey] *= 7;
-        item[calculatedCalorieKey] = item[fatKey] + item[proteinKey] + item[carbohydrateKey] + item[alcoholKey];
-        item[fatKey] /= item[calculatedCalorieKey];
-        item[proteinKey] /= item[calculatedCalorieKey];
-        item[carbohydrateKey] /= item[calculatedCalorieKey];
-        item[alcoholKey] /= item[calculatedCalorieKey];
+    processFoods = function(foods) {
+      var food, _i, _len;
+      for (_i = 0, _len = foods.length; _i < _len; _i++) {
+        food = foods[_i];
+        processFood(food);
       }
-      return rawFoods;
+      return foods;
     };
-    setFoodGroups = function(foods) {
+    processFood = function(food) {
+      var calculatedCalorieKey, calories, k, v;
+      for (k in food) {
+        v = food[k];
+        if (_.contains(comparedKeys, k)) {
+          if (v) {
+            food[k] = parseFloat(v);
+          } else {
+            delete food[k];
+          }
+        }
+      }
+      ignoredKeys = [calorieKey, "Energy (kj)", "Total lipid (fat)", "Protein", "Carbohydrate, by difference"];
+      calories = food[calorieKey];
+      for (k in food) {
+        v = food[k];
+        if (typeof v === "number" && !_.contains(ignoredKeys, k)) {
+          if (calories) {
+            food[k] = v / calories;
+          } else {
+            food[k] = -v;
+          }
+        }
+      }
+      calculatedCalorieKey = "Calories, calculated";
+      food[fatKey] || (food[fatKey] = 0);
+      food[proteinKey] || (food[proteinKey] = 0);
+      food[carbohydrateKey] || (food[carbohydrateKey] = 0);
+      food[alcoholKey] || (food[alcoholKey] = 0);
+      food[fatKey] *= 9;
+      food[proteinKey] *= 4;
+      food[carbohydrateKey] *= 4;
+      food[alcoholKey] *= 7;
+      food[calculatedCalorieKey] = food[fatKey] + food[proteinKey] + food[carbohydrateKey] + food[alcoholKey];
+      food[fatKey] /= food[calculatedCalorieKey];
+      food[proteinKey] /= food[calculatedCalorieKey];
+      food[carbohydrateKey] /= food[calculatedCalorieKey];
+      food[alcoholKey] /= food[calculatedCalorieKey];
+      return food;
+    };
+    createFoodGroups = function(foods) {
       var food, foodGroups, group, i, _i, _j, _len, _len1;
       foodGroups = [];
       for (i = _i = 0, _len = foods.length; _i < _len; i = ++_i) {
@@ -859,9 +884,25 @@ Use cases
           return f.FdGrp_Desc === group.name;
         }).length;
       }
-      return FoodData.foodGroups = _.sortBy(foodGroups, function(f) {
+      return _.sortBy(foodGroups, function(f) {
         return f.name;
       });
+    };
+    createBenchmarkFood = function(nutrients) {
+      var benchmarkFood, benchmarkKey, benchmarkValue, key, value;
+      benchmarkFood = {};
+      benchmarkKey = "RDI";
+      for (key in nutrients) {
+        value = nutrients[key];
+        benchmarkValue = value[benchmarkKey];
+        if (benchmarkValue) {
+          benchmarkFood[key] = benchmarkValue;
+        }
+      }
+      benchmarkFood.Long_Desc = "Recommended daily intake";
+      benchmarkFood.NDB_No = "0";
+      benchmarkFood[calorieKey] = 2000;
+      return benchmarkFood = processFood(benchmarkFood);
     };
     return FoodData;
   });
@@ -870,17 +911,20 @@ Use cases
     var defaultPresets, presetSaveKey, savedPresets;
     defaultPresets = [
       {
-        text: "Calcium please",
-        foods: "11096,11457,11270,01079,01026,05009,23267"
+        text: "Greens and meats",
+        foods: "11457,11161,11233,11270,11250,11959,05009,23267"
       }, {
-        text: "White rice vs brown rice",
+        text: "Calcium (doesn't account for absorption!)",
+        foods: "11161,11096,11457,01079,01026,01009"
+      }, {
+        text: "Brown rice vs white rice",
         foods: "20037,20445"
       }, {
-        text: "Beans vs rice",
-        foods: "16043,20037"
+        text: "Wheat flour vs white flour",
+        foods: "20080,20481"
       }, {
-        text: "Leafy goodness",
-        foods: "11622,11457,11270,11252,11250,11251,11959"
+        text: "Beans vs rice",
+        foods: "16043,20041"
       }
     ];
     presetSaveKey = "presets";
@@ -916,8 +960,8 @@ Use cases
       activate: function(preset) {
         var foods, ids;
         ids = preset.foods.split(",");
-        foods = _.clone(FoodData.findFoodsById(ids));
-        return ComparePage.selectedFoods = foods;
+        foods = FoodData.findFoodsById(ids);
+        return ComparePage.reset(foods);
       }
     };
   });

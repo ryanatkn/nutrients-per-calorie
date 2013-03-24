@@ -1,10 +1,12 @@
-<h3 ng-show="!compare.selectedFoods.length" class="padded-left master-color">
-  Click two or more foods to compare them or load a saved set of foods.
+<h3 ng-show="!hasSelectedFoods()" class="padded-left master-color">
+  Click foods to compare them or load a saved set of foods.
 </h3>
-<div ng-show="compare.selectedFoods.length">
+<div ng-show="hasSelectedFoods()">
   <ul class="food-comparison-list">
     <li ng-repeat="food in compare.selectedFoods" class="food-compare-item">
-      <div ng-click="compare.toggle(food)" class="remove-button">✕</div>
+      <div ng-click="compare.toggle(food)" class="remove-button" ng-show="isRemoveable(food)">
+        ✕
+      </div>
       <div class="food-label">
         <span>{{food.Long_Desc}}</span>
       </div>

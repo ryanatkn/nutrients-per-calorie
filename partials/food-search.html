@@ -5,7 +5,7 @@
   <food-group-filter class="mm-dropdown"></food-group-filter>
 </div>
 <ul class="food-list">
-  <li ng-repeat="food in foodData.foods | searchFoods: helpers.query | limitTo: 50"
+  <li ng-repeat="food in foodData.foods | searchFoods: helpers.query | limitTo: 100"
       ng-click="helpers.toggle(food)" ng-class="{selected: helpers.isSelected(food)}"
       class="selectable deselectable">
     <span class="food-label">{{food.Long_Desc}}</span>

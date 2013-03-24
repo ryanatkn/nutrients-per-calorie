@@ -14,20 +14,8 @@
 This app attempts to help us make better food choices by putting the nutrition data from the [USDA National Nutrient Database](http://ndb.nal.usda.gov/) in an easily digestible form. By comparing foods in terms of nutrients per calorie, we're able to get an idea of what's healthy and what's empty.
 
 
-:monkey: It works offline too!
-==============================
-
-1. Download and unzip [everything](https://github.com/ryanatkn/nutrients-per-calorie/archive/master.zip).
-
-2. Serve the extracted folder from a web server. If you have Python installed, you have [a server](http://docs.python.org/2/library/simplehttpserver.html) ready to go. See instructions below for Node. There's no server code required, but this step is necessary to load the food data due to browser security restrictons.
-
-3. Navigate to localhost:1337 or wherever your server is.
-
-4. Compare f☯☮ds!
-
-
-:octopus: For developers
-========================
+:octopus: Play with the code
+============================
 
 To tinker with the uncompiled code, you'll need [Node](http://nodejs.org), [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/).
   

@@ -132,6 +132,11 @@ food-comparison {
 
   svg {
     margin-left: -4px; // to prevent text disappearance problems
+
+    &:first-child {
+      position: relative;
+      top: 3px;
+    }
   }
 }
 

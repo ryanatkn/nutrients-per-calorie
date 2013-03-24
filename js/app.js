@@ -4,8 +4,8 @@
 
 Use cases
   [x] Compare n foods against one another.
-    [ ] Daily recommendation baseline
-    [ ] Comparison presets
+    [x] Daily recommendation baseline
+    [x] Comparison presets
     [ ] Option to show comparison graphs in search
   [x] What are the best sources of nutrient x?
   [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
@@ -72,8 +72,8 @@ Use cases
   });
 
   app.factory("ComparePage", function($location, FoodData) {
-    var data;
-    return data = {
+    var data, save, saveKey, selectedFoods;
+    data = {
       query: {
         text: "",
         includeFoodGroups: false
@@ -92,13 +92,15 @@ Use cases
         }
       },
       deselect: function(food) {
-        return data.selectedFoods = _.reject(data.selectedFoods, function(f) {
+        data.selectedFoods = _.reject(data.selectedFoods, function(f) {
           return f.NDB_No === food.NDB_No;
         });
+        return save();
       },
       select: function(food) {
         data.deselect(food);
-        return data.selectedFoods.push(_.clone(food));
+        data.selectedFoods.push(_.clone(food));
+        return save();
       },
       clear: function() {
         var food, _i, _len, _ref;
@@ -112,8 +114,9 @@ Use cases
       reset: function(foods) {
         data.selectedFoods = FoodData.benchmarkFood ? [FoodData.benchmarkFood] : [];
         if (foods) {
-          return data.selectedFoods = data.selectedFoods.concat(foods);
+          data.selectedFoods = data.selectedFoods.concat(foods);
         }
+        return save();
       },
       basePath: "#/compare",
       updatePath: function() {
@@ -150,6 +153,15 @@ Use cases
         }
       }
     };
+    saveKey = "selectedFoods";
+    selectedFoods = window.localStorage.getItem(saveKey);
+    if (selectedFoods) {
+      data.selectedFoods = JSON.parse(selectedFoods);
+    }
+    save = function() {
+      return window.localStorage.setItem(saveKey, JSON.stringify(data.selectedFoods));
+    };
+    return data;
   });
 
   app.controller("CompareCtrl", function($scope, $routeParams, $timeout, FoodData, ComparePage, Presets) {
@@ -194,8 +206,8 @@ Use cases
   });
 
   app.factory("NutrientsPage", function($location, FoodData) {
-    var data;
-    return data = {
+    var data, save, saveKey, selectedNutrient;
+    data = {
       query: {
         text: "",
         includeFoodGroups: false
@@ -208,10 +220,11 @@ Use cases
       },
       toggle: function(nutrient) {
         if (this.isSelected(nutrient)) {
-          return this.selectedNutrient = null;
+          this.selectedNutrient = null;
         } else {
-          return this.selectedNutrient = _.clone(nutrient);
+          this.selectedNutrient = _.clone(nutrient);
         }
+        return save();
       },
       orderBy: function(food) {
         var value;
@@ -243,6 +256,15 @@ Use cases
         }
       }
     };
+    saveKey = "selectedNutrient";
+    selectedNutrient = window.localStorage.getItem(saveKey);
+    if (selectedNutrient) {
+      data.selectedNutrient = JSON.parse(selectedNutrient);
+    }
+    save = function() {
+      return window.localStorage.setItem(saveKey, JSON.stringify(data.selectedNutrient));
+    };
+    return data;
   });
 
   app.controller("NutrientsCtrl", function($scope, $routeParams, $filter, FoodData, NutrientsPage, ComparePage) {

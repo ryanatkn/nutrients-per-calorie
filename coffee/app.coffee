@@ -80,9 +80,11 @@ app.factory "ComparePage", ($location, FoodData) ->
         data.select food
     deselect: (food) ->
       data.selectedFoods = _.reject(data.selectedFoods, (f) -> f.NDB_No is food.NDB_No)
+      save()
     select: (food) ->
       data.deselect food
       data.selectedFoods.push _.clone(food)
+      save()
     clear: ->
       for food in data.selectedFoods.slice(1)
         FoodData.findFoodById(food.NDB_No).selected = false
@@ -91,6 +93,7 @@ app.factory "ComparePage", ($location, FoodData) ->
       data.selectedFoods = if FoodData.benchmarkFood then [FoodData.benchmarkFood] else []
       if foods
         data.selectedFoods = data.selectedFoods.concat(foods)
+      save()
     basePath: "#/compare"
     updatePath: ->
       window.location.hash = data.getPath()
@@ -109,6 +112,15 @@ app.factory "ComparePage", ($location, FoodData) ->
         data.getPath foods
       else
         data.basePath
+
+  # Try to load selected foods from localStorage
+  saveKey = "selectedFoods"
+  selectedFoods = window.localStorage.getItem(saveKey)
+  if selectedFoods
+    data.selectedFoods = JSON.parse(selectedFoods)
+  save = -> window.localStorage.setItem saveKey, JSON.stringify(data.selectedFoods)
+
+  data
 
 
 app.controller "CompareCtrl", ($scope, $routeParams, $timeout, FoodData, ComparePage, Presets) ->
@@ -160,6 +172,7 @@ app.factory "NutrientsPage", ($location, FoodData) ->
         @selectedNutrient = null
       else
         @selectedNutrient = _.clone(nutrient)
+      save()
     orderBy: (food) ->
       value = food.nutrientValue
       if value?
@@ -177,6 +190,14 @@ app.factory "NutrientsPage", ($location, FoodData) ->
       else
         ""
 
+  # Try to load selected nutrient from localStorage
+  saveKey = "selectedNutrient"
+  selectedNutrient = window.localStorage.getItem(saveKey)
+  if selectedNutrient
+    data.selectedNutrient = JSON.parse(selectedNutrient)
+  save = -> window.localStorage.setItem saveKey, JSON.stringify(data.selectedNutrient)
+
+  data
 
 app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, NutrientsPage, ComparePage) ->
   FoodData.afterLoading $scope, ->

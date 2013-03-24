@@ -21,7 +21,7 @@ This app attempts to help us make better food choices by putting the nutrition d
 
 2. Serve the extracted folder from a web server. If you have Python installed, you have [a server](http://docs.python.org/2/library/simplehttpserver.html) ready to go. See instructions below for Node. There's no server code, but this step is necessary to load the food data due to browser security restrictons.
 
-3. Navigate to localhost:1337 or wherever your server is.
+3. Visit localhost:1337 in your browser or wherever your server is.
 
 4. Compare f☯☮ds!
 

@@ -324,6 +324,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     data
 
   processFoods = (foods) ->
+    foods = _.sortBy(foods, (f) -> f.Long_Desc)
     for food in foods
       processFood food
     foods

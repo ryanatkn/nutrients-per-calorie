@@ -12,6 +12,13 @@
   white-space: nowrap;
   padding-bottom: $body-padding;
   padding-left: $horizontal-padding;
+  position: relative;
+}
+
+#help-link {
+  position: absolute;
+  left: 9px;
+  top: 52px;
 }
 
 #title {

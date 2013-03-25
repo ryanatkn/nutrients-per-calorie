@@ -942,6 +942,9 @@ Use cases
         text: "Wheat flour vs white flour",
         foods: "20080,20481"
       }, {
+        text: "Vegetable protein, not just from beans!",
+        foods: "11096,11090,11233,11457,11019,16043,16015"
+      }, {
         text: "Greens and meats",
         foods: "11457,11161,11250,05009,13443"
       }, {

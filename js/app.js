@@ -839,6 +839,9 @@ Use cases
     };
     processFoods = function(foods) {
       var food, _i, _len;
+      foods = _.sortBy(foods, function(f) {
+        return f.Long_Desc;
+      });
       for (_i = 0, _len = foods.length; _i < _len; _i++) {
         food = foods[_i];
         processFood(food);

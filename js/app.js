@@ -742,7 +742,7 @@ Use cases
           name: "complete",
           size: "3.7mb",
           title: "Complete database",
-          text: "Every food available at http://ndb.nal.usda.gov/. This is a large file that may not work on all devices."
+          text: "Every food available at http://ndb.nal.usda.gov/."
         }, {
           name: "vegetarian",
           title: "Vegetarian database",

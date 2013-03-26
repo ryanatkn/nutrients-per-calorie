@@ -277,6 +277,7 @@ Use cases
       }
     });
     $scope.nutrients = NutrientsPage;
+    $scope.nutrientKeyLists = [FoodData.macronutrientKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.sugarKeys, FoodData.otherKeys];
     $scope.selectFood = function(food) {
       ComparePage.select(food);
       return ComparePage.updatePath();

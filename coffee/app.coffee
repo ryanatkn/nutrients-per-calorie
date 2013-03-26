@@ -208,6 +208,16 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
 
   $scope.nutrients = NutrientsPage
 
+  $scope.nutrientKeyLists = [
+    FoodData.macronutrientKeys
+    FoodData.vitaminKeys
+    FoodData.mineralKeys
+    FoodData.aminoAcidKeys
+    FoodData.miscKeys
+    FoodData.sugarKeys
+    FoodData.otherKeys
+  ]
+
   $scope.selectFood = (food) ->
     ComparePage.select food
     ComparePage.updatePath() # bc the compare controller isn't alive to watch for changes

@@ -409,7 +409,7 @@ app.factory "Presets", (FoodData, ComparePage) ->
     text: "Wheat flour vs white flour"
     foods: "20080,20481"
   ,
-    text: "Vegetable protein, not just from beans!"
+    text: "Vegetable protein - not just from beans!"
     foods: "11096,11090,11233,11457,11019,16043,16015"
   ,
     text: "Greens and meats"

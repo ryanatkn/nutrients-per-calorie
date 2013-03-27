@@ -1049,7 +1049,7 @@ Use cases
     };
   });
 
-  visuals.factory("DrawingHelpers", function(Styles, FoodData, $location) {
+  visuals.factory("DrawingHelpers", function(Styles, FoodData, $location, $filter) {
     var DrawingHelpers, drawNutrientGroups, drawNutrients, drawPieChart, drawPieCharts;
     drawPieChart = function(svg, data, radius, options) {
       var arc, arcs, g, pie, x, y;
@@ -1121,10 +1121,11 @@ Use cases
             color: Styles.colors.lightGray
           }
         ];
-        _results.push(drawPieChart(svg, pieChartData, Styles.pieChartRadius, {
+        drawPieChart(svg, pieChartData, Styles.pieChartRadius, {
           x: Styles.pieChartRadius,
           y: foodY + Styles.pieChartRadius
-        }));
+        });
+        _results.push(svg.append("text").text($filter("percent")(food.Protein)).attr("fill", Styles.colors.blueText).style("font-size", Styles.smallFontSize).attr("x", Styles.pieChartRadius * 2 + 5).attr("y", foodY + Styles.pieChartRadius + 4).attr("text-anchor", "left"));
       }
       return _results;
     };
@@ -1220,53 +1221,6 @@ Use cases
         return scope.$watch("compare.selectedFoods", function() {
           return render();
         });
-      }
-    };
-  });
-
-  visuals.directive("foodDetail", function(Styles, FoodData, DrawingHelpers, ComparePage) {
-    return {
-      restrict: "E",
-      templateUrl: "partials/food-detail.html",
-      scope: {
-        foodData: "=",
-        food: "="
-      },
-      link: function(scope, element, attrs) {
-        var render, vis;
-        vis = d3.select(element[0]).select(".food-detail-graph");
-        render = function() {
-          var food, pieChart, pieChartData, pieChartRadius;
-          vis.selectAll("*").remove();
-          food = scope.food;
-          if (!food) {
-            return;
-          }
-          pieChartData = [
-            {
-              value: food["Total lipid (fat)"],
-              color: Styles.colors.red
-            }, {
-              value: food["Protein"],
-              color: Styles.colors.blue
-            }, {
-              value: food["Carbohydrate, by difference"],
-              color: Styles.colors.green
-            }, {
-              value: food["Alcohol, ethyl"],
-              color: Styles.colors.lightGray
-            }
-          ];
-          pieChartRadius = 100;
-          pieChart = vis.append("svg").attr("height", pieChartRadius * 2).attr("width", pieChartRadius * 2);
-          return DrawingHelpers.drawPieChart(pieChart, pieChartData, pieChartRadius);
-        };
-        scope.$watch("food", function() {
-          return render();
-        });
-        return scope.getCompareLink = function(food) {
-          return ComparePage.getPathWithFoodAdded(food);
-        };
       }
     };
   });

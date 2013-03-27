@@ -873,11 +873,11 @@ Use cases
           }
         }
       }
-      calculatedCalorieKey = "Calories, calculated";
       food[fatKey] || (food[fatKey] = 0);
       food[proteinKey] || (food[proteinKey] = 0);
       food[carbohydrateKey] || (food[carbohydrateKey] = 0);
       food[alcoholKey] || (food[alcoholKey] = 0);
+      calculatedCalorieKey = "Calories, calculated";
       food[fatKey] *= 9;
       food[proteinKey] *= 4;
       food[carbohydrateKey] *= 4;

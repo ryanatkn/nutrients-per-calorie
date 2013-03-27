@@ -350,11 +350,19 @@ data.factory "FoodData", ($rootScope, Styles) ->
           food[k] = -v # water...
 
     # Convert fat, protein, carbohydrate, and alcohol to percentages of the whole
-    calculatedCalorieKey = "Calories, calculated"
     food[fatKey] or= 0
     food[proteinKey] or= 0
     food[carbohydrateKey] or= 0
     food[alcoholKey] or= 0
+
+    # Calculate by subtraction, ignoring the carbohydrate data
+    # food[fatKey] = (food[fatKey] * 9) / food[calorieKey]
+    # food[proteinKey] = (food[proteinKey] * 4) / food[calorieKey]
+    # food[alcoholKey] = (food[alcoholKey] * 7) / food[calorieKey]
+    # food[carbohydrateKey] = 1 - food[fatKey] - food[proteinKey] - food[alcoholKey]
+
+    # Calculate by macronutrient amounts, ignoring the energy data
+    calculatedCalorieKey = "Calories, calculated"
     food[fatKey] *= 9
     food[proteinKey] *= 4
     food[carbohydrateKey] *= 4
@@ -364,6 +372,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     food[proteinKey] /= food[calculatedCalorieKey]
     food[carbohydrateKey] /= food[calculatedCalorieKey]
     food[alcoholKey] /= food[calculatedCalorieKey]
+    
     food
 
   createFoodGroups = (foods) ->

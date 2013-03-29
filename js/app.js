@@ -8,6 +8,7 @@ Use cases
     [x] Comparison presets
     [ ] Option to show comparison graphs in search
   [x] What are the best sources of nutrient x?
+  [ ] Compose meals that get added to the food list, choosing foods and their quantities.
   [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
 */
 
@@ -277,7 +278,7 @@ Use cases
       }
     });
     $scope.nutrients = NutrientsPage;
-    $scope.nutrientKeyLists = [FoodData.macronutrientKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.sugarKeys, FoodData.otherKeys];
+    $scope.nutrientKeyLists = [FoodData.macronutrientKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.fattyAcidKeys, FoodData.sugarKeys, FoodData.otherKeys];
     $scope.selectFood = function(food) {
       ComparePage.select(food);
       return ComparePage.updatePath();

@@ -576,10 +576,10 @@ Use cases
       "Glucose (dextrose)": "Glucose",
       "Carotene, alpha": "Alpha-Carotene",
       "Carotene, beta": "Beta-Carotene",
-      "Fatty acids, total saturated": "Saturated",
-      "Fatty acids, total trans": "Trans",
-      "Fatty acids, total monounsaturated": "Monounsaturated",
-      "Fatty acids, total polyunsaturated": "Polyunsaturated"
+      "Fatty acids, total saturated": "Saturated fats",
+      "Fatty acids, total trans": "Trans fats",
+      "Fatty acids, total monounsaturated": "Monounsaturated fats",
+      "Fatty acids, total polyunsaturated": "Polyunsaturated fats"
     };
     calorieKey = "Energy";
     fatKey = "Total lipid (fat)";
@@ -1026,7 +1026,7 @@ Use cases
       smallFontLineHeight: 13,
       largeFontSize: 24,
       horizontalPadding: 6,
-      comparisonHeaderHeight: 80,
+      comparisonHeaderHeight: 92,
       comparisonRowHeight: comparisonRowHeight,
       comparisonCellWidth: 20,
       comparisonHorizontalSpacing: 44,

@@ -418,7 +418,7 @@ food-comparison > div {
 
 /* line 89, ../sass/main.scss */
 .food-comparison-list {
-  width: 230px;
+  width: 300px;
   position: absolute;
   left: 0;
   top: 92px;
@@ -469,7 +469,7 @@ food-comparison > div {
 /* line 137, ../sass/main.scss */
 .food-comparison-graphs {
   white-space: nowrap;
-  margin-left: 236px;
+  margin-left: 306px;
 }
 /* line 141, ../sass/main.scss */
 .food-comparison-graphs svg {

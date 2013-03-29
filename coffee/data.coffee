@@ -272,14 +272,21 @@ data.factory "FoodData", ($rootScope, Styles) ->
       title: "Complete database"
       text: "Every food available at http://ndb.nal.usda.gov/."
     ,
-      name: "vegetarian"
-      title: "Vegetarian database"
-      text: "Plants, fungi, and meatless animal products."
-    ,
       name: "vegan"
       size: "0.8mb"
       title: "Vegan database"
       text: "Plants and fungi. Compiled by hand, so if you see an oversight please let me know!"
+    ,
+      name: "vegetarian"
+      size: "1.3mb"
+      title: "Vegetarian database (ovo-lacto)"
+      text: "Plants, fungi, and meatless animal products."
+    ,
+      name: "raw"
+    ,
+      name: "natural"
+    ,
+      name: "pescatarian"
     ,
       name: "paleo"
     ],

@@ -13,7 +13,7 @@ Use cases
     [ ] Option to show comparison graphs in search
   [x] What are the best sources of nutrient x?
   [ ] Compose meals that get added to the food list, choosing foods and their quantities.
-  [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
+  [.] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
 
 ###
 

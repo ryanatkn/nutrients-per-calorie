@@ -132,9 +132,9 @@ app.controller "CompareCtrl", ($scope, $routeParams, $timeout, FoodData, Compare
       foods = FoodData.findFoodsById($routeParams.foods.split(","))
     ComparePage.reset foods
 
-  $scope.compare = ComparePage
+  $scope.ComparePage = ComparePage
 
-  $scope.$watch "compare.selectedFoods", (newVal, oldVal) ->
+  $scope.$watch "ComparePage.selectedFoods", (newVal, oldVal) ->
     FoodData.calculateRelativeValues newVal
     ComparePage.updatePath() if FoodData.loaded
 

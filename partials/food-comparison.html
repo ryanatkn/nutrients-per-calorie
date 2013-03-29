@@ -3,8 +3,8 @@
 </h3>
 <div ng-show="hasSelectedFoods()">
   <ul class="food-comparison-list">
-    <li ng-repeat="food in compare.selectedFoods" class="food-compare-item">
-      <div ng-click="compare.toggle(food)" class="remove-button" ng-show="isRemoveable(food)">
+    <li ng-repeat="food in ComparePage.selectedFoods" class="food-compare-item">
+      <div ng-click="ComparePage.toggle(food)" class="remove-button" ng-show="isRemoveable(food)">
         ✕
       </div>
       <div class="food-label">
@@ -12,7 +12,7 @@
       </div>
     </li>
     <li class="food-compare-item">
-      <button class="clear-selected-button" ng-click="compare.clear()">
+      <button class="clear-selected-button" ng-click="ComparePage.clear()">
         Remove all
       </button>
     </li>

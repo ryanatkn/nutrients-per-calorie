@@ -174,8 +174,8 @@ Use cases
       }
       return ComparePage.reset(foods);
     });
-    $scope.compare = ComparePage;
-    $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
+    $scope.ComparePage = ComparePage;
+    $scope.$watch("ComparePage.selectedFoods", function(newVal, oldVal) {
       FoodData.calculateRelativeValues(newVal);
       if (FoodData.loaded) {
         return ComparePage.updatePath();
@@ -1215,7 +1215,7 @@ Use cases
         render = function() {
           var foods, height, numSelected, nutrientGroups;
           vis.selectAll("*").remove();
-          foods = scope.compare.selectedFoods;
+          foods = scope.ComparePage.selectedFoods;
           numSelected = foods.length;
           if (!numSelected) {
             vis.style("display", "none");
@@ -1228,7 +1228,7 @@ Use cases
           nutrientGroups = [FoodData.fiberKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.fattyAcidKeys, FoodData.miscKeys, FoodData.sugarKeys];
           return DrawingHelpers.drawNutrientGroups(vis, foods, nutrientGroups);
         };
-        return scope.$watch("compare.selectedFoods", function() {
+        return scope.$watch("ComparePage.selectedFoods", function() {
           return render();
         });
       }

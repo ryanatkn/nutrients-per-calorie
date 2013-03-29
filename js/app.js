@@ -9,7 +9,7 @@ Use cases
     [ ] Option to show comparison graphs in search
   [x] What are the best sources of nutrient x?
   [ ] Compose meals that get added to the food list, choosing foods and their quantities.
-  [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
+  [.] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
 */
 
 
@@ -755,14 +755,21 @@ Use cases
           title: "Complete database",
           text: "Every food available at http://ndb.nal.usda.gov/."
         }, {
-          name: "vegetarian",
-          title: "Vegetarian database",
-          text: "Plants, fungi, and meatless animal products."
-        }, {
           name: "vegan",
           size: "0.8mb",
           title: "Vegan database",
           text: "Plants and fungi. Compiled by hand, so if you see an oversight please let me know!"
+        }, {
+          name: "vegetarian",
+          size: "1.3mb",
+          title: "Vegetarian database (ovo-lacto)",
+          text: "Plants, fungi, and meatless animal products."
+        }, {
+          name: "raw"
+        }, {
+          name: "natural"
+        }, {
+          name: "pescatarian"
         }, {
           name: "paleo"
         }

@@ -306,13 +306,14 @@ food-group-filter {
   }
 }
 
-$nutrient-column-width: 250px;
-$num-columns: 7;
+$column-width: 175px;
+$overflow-column-width: 250px;
+$num-columns: 8;
 
 #nutrient-columns {
   position: relative;
   height: 350px;
-  width: $column-width * ($num-columns - 1) + $nutrient-column-width + $body-padding;
+  width: $column-width * ($num-columns - 1) + $overflow-column-width + $body-padding;
 }
 
 .column {
@@ -330,7 +331,7 @@ $num-columns: 7;
   }
 
   &:last-child {
-    width: $nutrient-column-width;
+    width: $overflow-column-width;
   }
 }
 

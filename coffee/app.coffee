@@ -215,6 +215,7 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
     FoodData.mineralKeys
     FoodData.aminoAcidKeys
     FoodData.miscKeys
+    FoodData.fattyAcidKeys
     FoodData.sugarKeys
     FoodData.otherKeys
   ]

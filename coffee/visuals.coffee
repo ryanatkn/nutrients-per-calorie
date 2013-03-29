@@ -261,7 +261,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
 
       nutrientGroups = [
         FoodData.fiberKeys, FoodData.vitaminKeys, FoodData.mineralKeys,
-        FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.sugarKeys
+        FoodData.aminoAcidKeys, FoodData.fattyAcidKeys, FoodData.miscKeys, FoodData.sugarKeys
       ]
       DrawingHelpers.drawNutrientGroups vis, foods, nutrientGroups
 

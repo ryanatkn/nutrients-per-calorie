@@ -550,7 +550,7 @@ Use cases
   data = angular.module("food-data", []);
 
   data.factory("FoodData", function($rootScope, Styles) {
-    var FoodData, alcoholKey, allFoods, allKeys, aminoAcidKeys, calorieKey, carbohydrateKey, comparedKeys, createBenchmarkFood, createFoodGroups, fatKey, fiberKeys, ignoredKeys, keyAliases, listedKeys, loadCsvData, macronutrientKeys, mineralKeys, miscKeys, nutrientKeys, onLoadCbs, otherKeys, processFood, processFoods, processNutrients, proteinKey, sugarKeys, unusedKeys, vitaminKeys;
+    var FoodData, alcoholKey, allFoods, allKeys, aminoAcidKeys, calorieKey, carbohydrateKey, comparedKeys, createBenchmarkFood, createFoodGroups, fatKey, fattyAcidKeys, fiberKeys, ignoredKeys, keyAliases, listedKeys, loadCsvData, macronutrientKeys, mineralKeys, miscKeys, nutrientKeys, onLoadCbs, otherKeys, processFood, processFoods, processNutrients, proteinKey, sugarKeys, unusedKeys, vitaminKeys;
     allFoods = null;
     allKeys = ["NDB_No", "Long_Desc", "FdGrp_Desc", "10:0", "12:0", "13:0", "14:0", "14:1", "15:0", "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0", "18:1 c", "18:1 t", "18:1 undifferentiated", "18:1-11t (18:1t n-7)", "18:2 CLAs", "18:2 i", "18:2 n-6 c,c", "18:2 t not further defined", "18:2 t,t", "18:2 undifferentiated", "18:3 n-3 c,c,c (ALA)", "18:3 n-6 c,c,c", "18:3 undifferentiated", "18:3i", "18:4", "20:0", "20:1", "20:2 n-6 c,c", "20:3 n-3", "20:3 n-6", "20:3 undifferentiated", "20:4 n-6", "20:4 undifferentiated", "20:5 n-3 (EPA)", "21:5", "22:0", "22:1 c", "22:1 t", "22:1 undifferentiated", "22:4", "22:5 n-3 (DPA)", "22:6 n-3 (DHA)", "24:0", "24:1 c", "4:0", "6:0", "8:0", "Adjusted Protein", "Alanine", "Alcohol, ethyl", "Arginine", "Ash", "Aspartic acid", "Betaine", "Beta-sitosterol", "Caffeine", "Calcium, Ca", "Campesterol", "Carbohydrate, by difference", "Carotene, alpha", "Carotene, beta", "Cholesterol", "Choline, total", "Copper, Cu", "Cryptoxanthin, beta", "Cystine", "Dihydrophylloquinone", "Energy", "Energy (kj)", "Fatty acids, total monounsaturated", "Fatty acids, total polyunsaturated", "Fatty acids, total saturated", "Fatty acids, total trans", "Fatty acids, total trans-monoenoic", "Fatty acids, total trans-polyenoic", "Fiber, total dietary", "Fluoride, F", "Folate, DFE", "Folate, food", "Folate, total", "Folic acid", "Fructose", "Galactose", "Glucose (dextrose)", "Glutamic acid", "Glycine", "Histidine", "Hydroxyproline", "Iron, Fe", "Isoleucine", "Lactose", "Leucine", "Lutein + zeaxanthin", "Lycopene", "Lysine", "Magnesium, Mg", "Maltose", "Manganese, Mn", "Menaquinone-4", "Methionine", "Niacin", "Pantothenic acid", "Phenylalanine", "Phosphorus, P", "Phytosterols", "Potassium, K", "Proline", "Protein", "Retinol", "Riboflavin", "Selenium, Se", "Serine", "Sodium, Na", "Starch", "Stigmasterol", "Sucrose", "Sugars, total", "Theobromine", "Thiamin", "Threonine", "Tocopherol, beta", "Tocopherol, delta", "Tocopherol, gamma", "Total lipid (fat)", "Tryptophan", "Tyrosine", "Valine", "Vitamin A, IU", "Vitamin A, RAE", "Vitamin B-12", "Vitamin B-12, added", "Vitamin B-6", "Vitamin C, total ascorbic acid", "Vitamin D", "Vitamin D (D2 + D3)", "Vitamin D2 (ergocalciferol)", "Vitamin D3 (cholecalciferol)", "Vitamin E (alpha-tocopherol)", "Vitamin E, added", "Vitamin K (phylloquinone)", "Water", "Zinc, Zn"];
     keyAliases = {
@@ -574,7 +574,11 @@ Use cases
       "Zinc, Zn": "Zinc",
       "Glucose (dextrose)": "Glucose",
       "Carotene, alpha": "Alpha-Carotene",
-      "Carotene, beta": "Beta-Carotene"
+      "Carotene, beta": "Beta-Carotene",
+      "Fatty acids, total saturated": "Saturated",
+      "Fatty acids, total trans": "Trans",
+      "Fatty acids, total monounsaturated": "Monounsaturated",
+      "Fatty acids, total polyunsaturated": "Polyunsaturated"
     };
     calorieKey = "Energy";
     fatKey = "Total lipid (fat)";
@@ -601,15 +605,19 @@ Use cases
       text: "Amino Acids",
       color: Styles.colors.blue
     });
-    miscKeys = _.extend(["Carotene, alpha", "Carotene, beta", "Choline, total", "Lutein + zeaxanthin", "Lycopene", "Phytosterols"], {
+    fattyAcidKeys = _.extend(["Fatty acids, total monounsaturated", "Fatty acids, total polyunsaturated", "Fatty acids, total saturated", "Fatty acids, total trans"], {
+      text: "Fats",
+      color: Styles.colors.redYellow
+    });
+    miscKeys = _.extend(["Carotene, alpha", "Carotene, beta", "Choline, total", "Lutein + zeaxanthin", "Lycopene", "Phytosterols", "Cholesterol"], {
       text: "Misc",
-      color: Styles.colors.yellow
+      color: Styles.colors.greenBlue
     });
     sugarKeys = _.extend(["Fructose", "Galactose", "Glucose (dextrose)", "Lactose", "Maltose", "Sucrose", "Sugars, total"], {
       text: "Sugars",
       color: Styles.colors.red
     });
-    listedKeys = _.union(macronutrientKeys, fiberKeys, vitaminKeys, mineralKeys, aminoAcidKeys, miscKeys, sugarKeys);
+    listedKeys = _.union(macronutrientKeys, fiberKeys, vitaminKeys, mineralKeys, aminoAcidKeys, fattyAcidKeys, miscKeys, sugarKeys);
     ignoredKeys = ["NDB_No", "Long_Desc", "FdGrp_Desc", "10:0", "12:0", "13:0", "14:0", "14:1", "15:0", "15:1", "16:0", "16:1 c", "16:1 t", "16:1 undifferentiated", "17:0", "17:1", "18:0", "18:1 c", "18:1 t", "18:1 undifferentiated", "18:1-11t (18:1t n-7)", "18:2 CLAs", "18:2 i", "18:2 n-6 c,c", "18:2 t not further defined", "18:2 t,t", "18:2 undifferentiated", "18:3 n-3 c,c,c (ALA)", "18:3 n-6 c,c,c", "18:3 undifferentiated", "18:3i", "18:4", "20:0", "20:1", "20:2 n-6 c,c", "20:3 n-3", "20:3 n-6", "20:3 undifferentiated", "20:4 n-6", "20:4 undifferentiated", "20:5 n-3 (EPA)", "21:5", "22:0", "22:1 c", "22:1 t", "22:1 undifferentiated", "22:4", "22:5 n-3 (DPA)", "22:6 n-3 (DHA)", "24:0", "24:1 c", "4:0", "6:0", "8:0", "Adjusted Protein", "Alcohol, ethyl", "Ash", "Caffeine", "Energy", "Energy (kj)", "Folic acid", "Folate, DFE", "Fatty acids, total trans-monoenoic", "Fatty acids, total trans-polyenoic", "Fluoride, F", "Vitamin A, IU", "Vitamin B-12, added", "Vitamin D (D2 + D3)", "Vitamin E, added", "Water"];
     otherKeys = _.extend(_.difference(allKeys, listedKeys, ignoredKeys), {
       text: "Other",
@@ -638,6 +646,7 @@ Use cases
       vitaminKeys: vitaminKeys,
       mineralKeys: mineralKeys,
       aminoAcidKeys: aminoAcidKeys,
+      fattyAcidKeys: fattyAcidKeys,
       miscKeys: miscKeys,
       sugarKeys: sugarKeys,
       otherKeys: otherKeys,
@@ -1215,7 +1224,7 @@ Use cases
           height = Styles.comparisonHeaderHeight + (Styles.comparisonRowHeight * (numSelected + 1));
           vis.attr("height", height);
           DrawingHelpers.drawPieCharts(vis, foods);
-          nutrientGroups = [FoodData.fiberKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.sugarKeys];
+          nutrientGroups = [FoodData.fiberKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.fattyAcidKeys, FoodData.miscKeys, FoodData.sugarKeys];
           return DrawingHelpers.drawNutrientGroups(vis, foods, nutrientGroups);
         };
         return scope.$watch("compare.selectedFoods", function() {

@@ -36,27 +36,31 @@ data.factory "FoodData", ($rootScope, Styles) ->
   ]
 
   keyAliases =
-    "Total lipid (fat)":              "Fat"
-    "Carbohydrate, by difference":    "Carbohydrate"
-    "Fiber, total dietary":           "Fiber"
-    "Alcohol, ethyl":                 "Alcohol"
-    "Vitamin A, RAE":                 "Vitamin A" 
-    "Vitamin C, total ascorbic acid": "Vitamin C"
-    "Vitamin E (alpha-tocopherol)":   "Vitamin E"
-    "Vitamin K (phylloquinone)":      "Vitamin K"
-    "Folate, total":                  "Folate"
-    "Choline, total":                 "Choline"
-    "Calcium, Ca":                    "Calcium"
-    "Iron, Fe":                       "Iron"
-    "Magnesium, Mg":                  "Magnesium"
-    "Manganese, Mn":                  "Manganese"
-    "Phosphorus, P":                  "Phosphorus"
-    "Potassium, K":                   "Potassium"
-    "Sodium, Na":                     "Sodium"
-    "Zinc, Zn":                       "Zinc"
-    "Glucose (dextrose)":             "Glucose"
-    "Carotene, alpha":                "Alpha-Carotene"
-    "Carotene, beta":                 "Beta-Carotene"
+    "Total lipid (fat)":                  "Fat"
+    "Carbohydrate, by difference":        "Carbohydrate"
+    "Fiber, total dietary":               "Fiber"
+    "Alcohol, ethyl":                     "Alcohol"
+    "Vitamin A, RAE":                     "Vitamin A" 
+    "Vitamin C, total ascorbic acid":     "Vitamin C"
+    "Vitamin E (alpha-tocopherol)":       "Vitamin E"
+    "Vitamin K (phylloquinone)":          "Vitamin K"
+    "Folate, total":                      "Folate"
+    "Choline, total":                     "Choline"
+    "Calcium, Ca":                        "Calcium"
+    "Iron, Fe":                           "Iron"
+    "Magnesium, Mg":                      "Magnesium"
+    "Manganese, Mn":                      "Manganese"
+    "Phosphorus, P":                      "Phosphorus"
+    "Potassium, K":                       "Potassium"
+    "Sodium, Na":                         "Sodium"
+    "Zinc, Zn":                           "Zinc"
+    "Glucose (dextrose)":                 "Glucose"
+    "Carotene, alpha":                    "Alpha-Carotene"
+    "Carotene, beta":                     "Beta-Carotene"
+    "Fatty acids, total saturated":       "Saturated"
+    "Fatty acids, total trans":           "Trans"
+    "Fatty acids, total monounsaturated": "Monounsaturated"
+    "Fatty acids, total polyunsaturated": "Polyunsaturated"
 
   calorieKey = "Energy"
   fatKey = "Total lipid (fat)"
@@ -124,6 +128,15 @@ data.factory "FoodData", ($rootScope, Styles) ->
     text: "Amino Acids"
     color: Styles.colors.blue
 
+  fattyAcidKeys = _.extend [
+    "Fatty acids, total monounsaturated"
+    "Fatty acids, total polyunsaturated"
+    "Fatty acids, total saturated"
+    "Fatty acids, total trans"
+  ],
+    text: "Fats"
+    color: Styles.colors.redYellow
+
   miscKeys = _.extend [
     "Carotene, alpha"
     "Carotene, beta"
@@ -131,9 +144,10 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "Lutein + zeaxanthin"
     "Lycopene"
     "Phytosterols"
+    "Cholesterol"
   ],
     text: "Misc"
-    color: Styles.colors.yellow
+    color: Styles.colors.greenBlue
 
   sugarKeys = _.extend [
     "Fructose"
@@ -147,7 +161,8 @@ data.factory "FoodData", ($rootScope, Styles) ->
     text: "Sugars"
     color: Styles.colors.red
 
-  listedKeys = _.union(macronutrientKeys, fiberKeys, vitaminKeys, mineralKeys, aminoAcidKeys, miscKeys, sugarKeys)
+  listedKeys = _.union(macronutrientKeys, fiberKeys, vitaminKeys, mineralKeys, 
+    aminoAcidKeys, fattyAcidKeys, miscKeys, sugarKeys)
 
   ignoredKeys = [
     "NDB_No", "Long_Desc", "FdGrp_Desc", "10:0", "12:0", "13:0", "14:0", "14:1", "15:0",
@@ -161,7 +176,6 @@ data.factory "FoodData", ($rootScope, Styles) ->
     "4:0", "6:0", "8:0", "Adjusted Protein", "Alcohol, ethyl", "Ash", "Caffeine", "Energy", "Energy (kj)",
     "Folic acid", "Folate, DFE", "Fatty acids, total trans-monoenoic", "Fatty acids, total trans-polyenoic",
     "Fluoride, F", "Vitamin A, IU", "Vitamin B-12, added", "Vitamin D (D2 + D3)", "Vitamin E, added", "Water",
-
   ]
 
   otherKeys = _.extend _.difference(allKeys, listedKeys, ignoredKeys),
@@ -192,6 +206,7 @@ data.factory "FoodData", ($rootScope, Styles) ->
     vitaminKeys
     mineralKeys
     aminoAcidKeys
+    fattyAcidKeys
     miscKeys
     sugarKeys
     otherKeys

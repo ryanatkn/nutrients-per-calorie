@@ -132,9 +132,9 @@ app.controller "CompareCtrl", ($scope, $routeParams, $timeout, FoodData, Compare
       foods = FoodData.findFoodsById($routeParams.foods.split(","))
     ComparePage.reset foods
 
-  $scope.compare = ComparePage
+  $scope.ComparePage = ComparePage
 
-  $scope.$watch "compare.selectedFoods", (newVal, oldVal) ->
+  $scope.$watch "ComparePage.selectedFoods", (newVal, oldVal) ->
     FoodData.calculateRelativeValues newVal
     ComparePage.updatePath() if FoodData.loaded
 
@@ -207,7 +207,7 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
     else
       NutrientsPage.selectedNutrient = null
 
-  $scope.nutrients = NutrientsPage
+  $scope.NutrientsPage = NutrientsPage
 
   $scope.nutrientKeyLists = [
     FoodData.macronutrientKeys
@@ -241,12 +241,12 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
   updateFilteredFoods = (applyFilter) ->
     return if !FoodData.loaded
     if applyFilter
-      filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, $scope.nutrients.query)
+      filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, NutrientsPage.query)
     else
       filteredFoodsWithoutValues ?= FoodData.foods
-    selectedNutrient = $scope.nutrients.selectedNutrient
+    selectedNutrient = NutrientsPage.selectedNutrient
     maxValue = calculateMaxValue(selectedNutrient)
-    $scope.nutrients.filteredFoods = if selectedNutrient
+    NutrientsPage.filteredFoods = if selectedNutrient
       _.map filteredFoodsWithoutValues, (f) ->
         food =
           NDB_No: f.NDB_No
@@ -259,13 +259,13 @@ app.controller "NutrientsCtrl", ($scope, $routeParams, $filter, FoodData, Nutrie
       []
     NutrientsPage.updatePath()
 
-  $scope.$watch "nutrients.query.text", (newVal, oldVal) ->
+  $scope.$watch "NutrientsPage.query.text", (newVal, oldVal) ->
     updateFilteredFoods true
 
-  $scope.$watch "nutrients.selectedNutrient", (newVal, oldVal) ->
+  $scope.$watch "NutrientsPage.selectedNutrient", (newVal, oldVal) ->
     updateFilteredFoods()
 
-  $scope.$watch "nutrients.query.includeFoodGroups", (newVal, oldVal) ->
+  $scope.$watch "NutrientsPage.query.includeFoodGroups", (newVal, oldVal) ->
     updateFilteredFoods true
 
   $scope.$watch "foodData.foods", (newVal, oldVal) ->

@@ -1,29 +1,29 @@
 <div id="nutrients">
   <div id="nutrient-columns">
     <div class="column" ng-repeat="nutrientKeys in nutrientKeyLists">
-      <nutrient-list helpers="nutrients" nutrient-keys="nutrientKeys"></nutrient-list>
+      <nutrient-list helpers="NutrientsPage" nutrient-keys="nutrientKeys"></nutrient-list>
     </div>
   </div>
   
   <h3>
-    <a href="{{nutrients.selectedNutrient.WikipediaLink}}" ng-show="nutrients.selectedNutrient.WikipediaLink" 
+    <a href="{{NutrientsPage.selectedNutrient.WikipediaLink}}" ng-show="NutrientsPage.selectedNutrient.WikipediaLink" 
       target="_blank" class="padded-left">
-      Wikipedia: {{nutrients.selectedNutrient.text}}
+      Wikipedia: {{NutrientsPage.selectedNutrient.text}}
     </a>
   </h3> 
   
   <!-- TODO add a food group checkbox dropdown on every search - globally shared data - saved to localStorage! -->
   <!-- TODO saved searches, quick clear -->
   
-  <div ng-show="nutrients.selectedNutrient">
+  <div ng-show="NutrientsPage.selectedNutrient">
     <div class="search-form">
-      <input type="text" ng-model="nutrients.query.text" placeholder="Search foods, using - to exclude results" mm-input-clearer />
-      <input type="checkbox" ng-model="nutrients.query.includeFoodGroups" id="include-food-groups" />
+      <input type="text" ng-model="NutrientsPage.query.text" placeholder="Search foods, using - to exclude results" mm-input-clearer />
+      <input type="checkbox" ng-model="NutrientsPage.query.includeFoodGroups" id="include-food-groups" />
       <label for="include-food-groups">Include food groups in search</label>
       <food-group-filter class="mm-dropdown"></food-group-filter>
     </div>
     <ul class="food-list">
-      <li ng-repeat="food in nutrients.filteredFoods | orderBy: nutrients.orderBy : true | limitTo: 100">
+      <li ng-repeat="food in NutrientsPage.filteredFoods | orderBy: NutrientsPage.orderBy : true | limitTo: 100">
         <div class="nutrient-graph">
           <div class="nutrient-bar" style="width: {{food.nutrientPercentOfMax}}"></div>
         </div>
@@ -32,7 +32,7 @@
       </li>
     </ul>
   </div>
-  <h3 class="padded-left master-color" ng-show="!nutrients.selectedNutrient">
+  <h3 class="padded-left master-color" ng-show="!NutrientsPage.selectedNutrient">
     Click a nutrient to see its best sources.
   </h3>
 </div>

@@ -174,8 +174,8 @@ Use cases
       }
       return ComparePage.reset(foods);
     });
-    $scope.compare = ComparePage;
-    $scope.$watch("compare.selectedFoods", function(newVal, oldVal) {
+    $scope.ComparePage = ComparePage;
+    $scope.$watch("ComparePage.selectedFoods", function(newVal, oldVal) {
       FoodData.calculateRelativeValues(newVal);
       if (FoodData.loaded) {
         return ComparePage.updatePath();
@@ -277,7 +277,7 @@ Use cases
         return NutrientsPage.selectedNutrient = null;
       }
     });
-    $scope.nutrients = NutrientsPage;
+    $scope.NutrientsPage = NutrientsPage;
     $scope.nutrientKeyLists = [FoodData.macronutrientKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.fattyAcidKeys, FoodData.sugarKeys, FoodData.otherKeys];
     $scope.selectFood = function(food) {
       ComparePage.select(food);
@@ -307,15 +307,15 @@ Use cases
         return;
       }
       if (applyFilter) {
-        filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, $scope.nutrients.query);
+        filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, NutrientsPage.query);
       } else {
         if (filteredFoodsWithoutValues == null) {
           filteredFoodsWithoutValues = FoodData.foods;
         }
       }
-      selectedNutrient = $scope.nutrients.selectedNutrient;
+      selectedNutrient = NutrientsPage.selectedNutrient;
       maxValue = calculateMaxValue(selectedNutrient);
-      $scope.nutrients.filteredFoods = selectedNutrient ? _.map(filteredFoodsWithoutValues, function(f) {
+      NutrientsPage.filteredFoods = selectedNutrient ? _.map(filteredFoodsWithoutValues, function(f) {
         var food;
         food = {
           NDB_No: f.NDB_No,
@@ -328,13 +328,13 @@ Use cases
       }) : [];
       return NutrientsPage.updatePath();
     };
-    $scope.$watch("nutrients.query.text", function(newVal, oldVal) {
+    $scope.$watch("NutrientsPage.query.text", function(newVal, oldVal) {
       return updateFilteredFoods(true);
     });
-    $scope.$watch("nutrients.selectedNutrient", function(newVal, oldVal) {
+    $scope.$watch("NutrientsPage.selectedNutrient", function(newVal, oldVal) {
       return updateFilteredFoods();
     });
-    $scope.$watch("nutrients.query.includeFoodGroups", function(newVal, oldVal) {
+    $scope.$watch("NutrientsPage.query.includeFoodGroups", function(newVal, oldVal) {
       return updateFilteredFoods(true);
     });
     return $scope.$watch("foodData.foods", function(newVal, oldVal) {
@@ -576,10 +576,10 @@ Use cases
       "Glucose (dextrose)": "Glucose",
       "Carotene, alpha": "Alpha-Carotene",
       "Carotene, beta": "Beta-Carotene",
-      "Fatty acids, total saturated": "Saturated",
-      "Fatty acids, total trans": "Trans",
-      "Fatty acids, total monounsaturated": "Monounsaturated",
-      "Fatty acids, total polyunsaturated": "Polyunsaturated"
+      "Fatty acids, total saturated": "Saturated fats",
+      "Fatty acids, total trans": "Trans fats",
+      "Fatty acids, total monounsaturated": "Monounsaturated fats",
+      "Fatty acids, total polyunsaturated": "Polyunsaturated fats"
     };
     calorieKey = "Energy";
     fatKey = "Total lipid (fat)";
@@ -1026,7 +1026,7 @@ Use cases
       smallFontLineHeight: 13,
       largeFontSize: 24,
       horizontalPadding: 6,
-      comparisonHeaderHeight: 80,
+      comparisonHeaderHeight: 92,
       comparisonRowHeight: comparisonRowHeight,
       comparisonCellWidth: 20,
       comparisonHorizontalSpacing: 44,
@@ -1215,7 +1215,7 @@ Use cases
         render = function() {
           var foods, height, numSelected, nutrientGroups;
           vis.selectAll("*").remove();
-          foods = scope.compare.selectedFoods;
+          foods = scope.ComparePage.selectedFoods;
           numSelected = foods.length;
           if (!numSelected) {
             vis.style("display", "none");
@@ -1228,7 +1228,7 @@ Use cases
           nutrientGroups = [FoodData.fiberKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.fattyAcidKeys, FoodData.miscKeys, FoodData.sugarKeys];
           return DrawingHelpers.drawNutrientGroups(vis, foods, nutrientGroups);
         };
-        return scope.$watch("compare.selectedFoods", function() {
+        return scope.$watch("ComparePage.selectedFoods", function() {
           return render();
         });
       }

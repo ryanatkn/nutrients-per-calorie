@@ -28,7 +28,7 @@ visuals.factory "Styles", ->
     smallFontLineHeight: 13
     largeFontSize: 24
     horizontalPadding: 6
-    comparisonHeaderHeight: 80 # $comparison-header-height in main.scss
+    comparisonHeaderHeight: 92 # $comparison-header-height in main.scss
     comparisonRowHeight # $comparison-row-height in main.scss
     comparisonCellWidth: 20
     comparisonHorizontalSpacing: 44
@@ -247,7 +247,7 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
     render = ->
       vis.selectAll("*").remove()
 
-      foods = scope.compare.selectedFoods
+      foods = scope.ComparePage.selectedFoods
       numSelected = foods.length
       if !numSelected
         vis.style "display", "none"
@@ -266,5 +266,5 @@ visuals.directive "foodComparison", (Styles, FoodData, DrawingHelpers) ->
       DrawingHelpers.drawNutrientGroups vis, foods, nutrientGroups
 
     # Redraw when items are selected or deselected
-    scope.$watch "compare.selectedFoods", ->
+    scope.$watch "ComparePage.selectedFoods", ->
       render()

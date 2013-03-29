@@ -277,7 +277,7 @@ Use cases
         return NutrientsPage.selectedNutrient = null;
       }
     });
-    $scope.nutrients = NutrientsPage;
+    $scope.NutrientsPage = NutrientsPage;
     $scope.nutrientKeyLists = [FoodData.macronutrientKeys, FoodData.vitaminKeys, FoodData.mineralKeys, FoodData.aminoAcidKeys, FoodData.miscKeys, FoodData.fattyAcidKeys, FoodData.sugarKeys, FoodData.otherKeys];
     $scope.selectFood = function(food) {
       ComparePage.select(food);
@@ -307,15 +307,15 @@ Use cases
         return;
       }
       if (applyFilter) {
-        filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, $scope.nutrients.query);
+        filteredFoodsWithoutValues = $filter("searchFoods")(FoodData.foods, NutrientsPage.query);
       } else {
         if (filteredFoodsWithoutValues == null) {
           filteredFoodsWithoutValues = FoodData.foods;
         }
       }
-      selectedNutrient = $scope.nutrients.selectedNutrient;
+      selectedNutrient = NutrientsPage.selectedNutrient;
       maxValue = calculateMaxValue(selectedNutrient);
-      $scope.nutrients.filteredFoods = selectedNutrient ? _.map(filteredFoodsWithoutValues, function(f) {
+      NutrientsPage.filteredFoods = selectedNutrient ? _.map(filteredFoodsWithoutValues, function(f) {
         var food;
         food = {
           NDB_No: f.NDB_No,
@@ -328,13 +328,13 @@ Use cases
       }) : [];
       return NutrientsPage.updatePath();
     };
-    $scope.$watch("nutrients.query.text", function(newVal, oldVal) {
+    $scope.$watch("NutrientsPage.query.text", function(newVal, oldVal) {
       return updateFilteredFoods(true);
     });
-    $scope.$watch("nutrients.selectedNutrient", function(newVal, oldVal) {
+    $scope.$watch("NutrientsPage.selectedNutrient", function(newVal, oldVal) {
       return updateFilteredFoods();
     });
-    $scope.$watch("nutrients.query.includeFoodGroups", function(newVal, oldVal) {
+    $scope.$watch("NutrientsPage.query.includeFoodGroups", function(newVal, oldVal) {
       return updateFilteredFoods(true);
     });
     return $scope.$watch("foodData.foods", function(newVal, oldVal) {

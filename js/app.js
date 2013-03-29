@@ -1135,7 +1135,7 @@ Use cases
           x: Styles.pieChartRadius,
           y: foodY + Styles.pieChartRadius
         });
-        _results.push(svg.append("text").text($filter("percent")(food.Protein)).attr("fill", Styles.colors.blueText).style("font-size", Styles.smallFontSize).attr("x", Styles.pieChartRadius * 2 + 5).attr("y", foodY + Styles.pieChartRadius + 4).attr("text-anchor", "left"));
+        _results.push(svg.append("text").text($filter("percent")(food.Protein)).attr("fill", Styles.colors.blueText).style("font-size", Styles.smallFontSize).attr("x", Styles.pieChartRadius * 2 + 7).attr("y", foodY + Styles.pieChartRadius + 4).attr("text-anchor", "left"));
       }
       return _results;
     };

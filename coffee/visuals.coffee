@@ -149,7 +149,7 @@ visuals.factory "DrawingHelpers", (Styles, FoodData, $location, $filter) ->
         .text($filter("percent")(food.Protein))
         .attr("fill", Styles.colors.blueText)
         .style("font-size", Styles.smallFontSize)
-        .attr("x", Styles.pieChartRadius * 2 + 5)
+        .attr("x", Styles.pieChartRadius * 2 + 7)
         .attr("y", foodY + Styles.pieChartRadius + 4)
         .attr("text-anchor", "left")
 

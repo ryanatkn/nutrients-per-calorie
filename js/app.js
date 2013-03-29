@@ -8,6 +8,7 @@ Use cases
     [x] Comparison presets
     [ ] Option to show comparison graphs in search
   [x] What are the best sources of nutrient x?
+  [ ] Compose meals, choosing foods and their quantities.
   [ ] Do the above with food set x. (vegan, vegetarian, raw, natural, etc)
 */
 

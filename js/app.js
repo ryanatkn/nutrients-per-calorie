@@ -763,7 +763,7 @@ Use cases
           name: "vegetarian",
           size: "1.3mb",
           title: "Vegetarian database (ovo-lacto)",
-          text: "Plants, fungi, and meatless animal products."
+          text: "Plants, fungi, and meatless animal products. Send me any corrections!"
         }, {
           name: "raw"
         }, {

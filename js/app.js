@@ -760,8 +760,9 @@ Use cases
           text: "Plants, fungi, and meatless animal products."
         }, {
           name: "vegan",
+          size: "0.8mb",
           title: "Vegan database",
-          text: "Plants and fungi."
+          text: "Plants and fungi. Compiled by hand, so if you see an oversight please let me know!"
         }, {
           name: "paleo"
         }

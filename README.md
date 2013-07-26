@@ -26,6 +26,7 @@ To tinker with the uncompiled code, you'll need [Node](http://nodejs.org), [Coff
 
 
 :monkey: Get the raw data
+=========================
 
 The raw nutritional data can be downloaded [here at the USDA's website](http://www.ars.usda.gov/Services/docs.htm?docid=22771). I used the Access version and exported it to CSV after making a new table with the needed fields.
 

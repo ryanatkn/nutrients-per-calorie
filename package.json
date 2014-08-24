@@ -4,7 +4,7 @@
   "author": "Ryan Atkinson <ryanatkn@gmail.com>",
   "description": "a web interface to the nutritional data available at http://ndb.nal.usda.gov/",
   "scripts": {
-    "start": "bash ba.sh"
+    "start": "coffee -cwj js/app.js coffee/app.coffee coffee/data.coffee coffee/visuals.coffee & compass watch sass/main.scss & node server.js"
   },
   "repository": {
     "type": "git",

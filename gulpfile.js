@@ -12,10 +12,9 @@ var $ = require('gulp-load-plugins')({
 });
 
 var paths = {
+  dist: './dist',
   distFiles: './dist/**/*'
 };
-
-// coffee -cwj js/app.js coffee/app.coffee coffee/data.coffee coffee/visuals.coffee & compass watch sass/main.scss & node server.js
 
 gulp.task('default', ['server', 'scripts', 'watch']); // TODO 'styles' once scss is replaced with less
 
@@ -29,17 +28,15 @@ gulp.task('server', function() {
 gulp.task('scripts', function() {
   var bundler = watchify(browserify('./src/index.coffee', watchify.args));
 
-  // bundler.transform('brfs');
   bundler.transform(coffeeify);
 
   bundler.on('update', rebundle);
 
   function rebundle() {
     return bundler.bundle()
-      // log errors if they happen
       .on('error', $.util.log.bind($.util, 'Browserify Error'))
       .pipe(vinylSource('app.js'))
-      .pipe(gulp.dest('./dist'));
+      .pipe(gulp.dest(paths.dist));
   }
 
   return rebundle();
@@ -53,7 +50,6 @@ gulp.task('watch', ['server'], function() {
   // $.watch({glob: paths.css}, ['styles']); // TODO once scss is replaced with less
   $.livereload.listen(35729);
   $.watch({glob: paths.distFiles}).on('data', function(file) {
-    console.log('changed', file.path);
     $.livereload.changed(file.path);
   });
 });

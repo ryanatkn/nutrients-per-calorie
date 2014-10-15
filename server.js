@@ -1,11 +1,11 @@
-var express = require('express');
+var express    = require('express');
+var livereload = require('connect-livereload');
 
-var server = express();
+var app = express();
 
-server.configure(function() {
-  server.use(express.static(__dirname)); // self serving server at your service!
-});
+app.use(livereload({port: 35729}))
+app.use(express.static(__dirname)); // self serving app at your service!
 
-server.listen(1337);
+app.listen(1337);
 
 console.log("Serving food at localhost:1337");

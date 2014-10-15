@@ -4,14 +4,25 @@
   "author": "Ryan Atkinson <ryanatkn@gmail.com>",
   "description": "a web interface to the nutritional data available at http://ndb.nal.usda.gov/",
   "scripts": {
-    "start": "coffee -cwj js/app.js coffee/app.coffee coffee/data.coffee coffee/visuals.coffee & compass watch sass/main.scss & node server.js"
+    "start": "gulp"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ryanatkn/nutrients-per-calorie.git"
   },
-  "dependencies": {
-    "express":  "*"
-  },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^6.1.0",
+    "coffeeify": "^0.7.0",
+    "colors": "^1.0.3",
+    "connect-livereload": "^0.4.0",
+    "express": "^4.9.7",
+    "gulp": "^3.8.8",
+    "gulp-livereload": "^2.1.1",
+    "gulp-load-plugins": "^0.7.0",
+    "gulp-util": "^3.0.1",
+    "gulp-watch": "^0.6.10",
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^2.0.0"
+  }
 }

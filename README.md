@@ -5,8 +5,6 @@
 
 ###[Try it here!](http://ryanatkn.github.com/nutrients-per-calorie)###
 
-[Watch the introductory video](http://www.youtube.com/watch?v=1hKuiR-7h_Y)
-
 *made with [AngularJS](http://angularjs.org/) and [d3](http://d3js.org/)*
 
 

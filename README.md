@@ -19,6 +19,7 @@ This app attempts to help us make better food choices by putting the nutrition d
 
 To tinker with the uncompiled code, you'll need [Node](http://nodejs.org), [CoffeeScript](http://coffeescript.org/) and [Compass](http://compass-style.org/).
   
+    npm install -g gulp
     npm install
     npm start
 

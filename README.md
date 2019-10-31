@@ -3,7 +3,7 @@
 
 *a web interface to the nutritional data available at the [USDA National Nutrient Database](http://ndb.nal.usda.gov/)*
 
-###[Try it here!](http://ryanatkn.github.com/nutrients-per-calorie)###
+### [Try it here!](http://ryanatkn.github.com/nutrients-per-calorie)
 
 *made with [AngularJS](http://angularjs.org/) and [d3](http://d3js.org/)*
 

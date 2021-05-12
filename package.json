@@ -1,17 +1,35 @@
 {
   "name": "nutrients-per-calorie",
   "version": "0.1.0",
-  "author": "Ryan Atkinson <ryanatkn@gmail.com>",
+  "license": "Unlicense",
+  "author": {
+    "name": "Ryan Atkinson",
+    "email": "mail@ryanatkn.com",
+    "url": "https://www.ryanatkn.com"
+  },
   "description": "a web interface to the nutritional data available at http://ndb.nal.usda.gov/",
   "scripts": {
-    "start": "bash ba.sh"
+    "start": "gulp"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/ryanatkn/nutrients-per-calorie.git"
   },
-  "dependencies": {
-    "express":  "*"
+  "devDependencies": {
+    "browserify": "^6.1.0",
+    "coffeeify": "^0.7.0",
+    "colors": "^1.0.3",
+    "connect-livereload": "^0.4.0",
+    "express": "^4.9.7",
+    "gulp": "^3.8.8",
+    "gulp-livereload": "^2.1.1",
+    "gulp-load-plugins": "^0.7.0",
+    "gulp-util": "^3.0.1",
+    "gulp-watch": "^0.6.10",
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^2.0.0"
   },
-  "license": "MIT"
+  "engines": {
+    "node": "~10.17.0"
+  }
 }

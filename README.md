@@ -33,4 +33,4 @@ The raw nutritional data can be downloaded [here at the USDA's website](http://w
 :snake: License
 ===============
 
-MIT
+public domain ([The Unlicense](license))
